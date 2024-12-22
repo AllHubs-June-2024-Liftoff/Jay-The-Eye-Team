@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="~{fragments :: head}"> </head>
+<body>
+
+<div th:replace="~{fragments :: page-header}"></div>
+<div th:replace="~{fragments :: manage-menu-header}"></div>
+
+<table class="table-container-list">
+    <tr class="bold-v4">
+        <td><strong>Plate</strong></td>
+        <td><strong>Price</strong></td>
+        <td><strong>Discount</strong></td>
+        <td><strong></strong></td>
+        <td><strong></strong></td>
+    </tr>
+    <tr th:each="plate : ${plates}">
+        <td th:text="${plate.name}"></td>
+        <td th:text="'$' + ${plate.price}"></td>
+        <td th:text="${plate.discount} + '%'"></td>
+        <td>
+            <a th:href="@{/plates/edit/{id}(id=${plate.id})}">
+                <button>View</button>
+            </a>
+        </td>
+        <td>
+            <a th:href="@{/plates/edit/{id}(id=${plate.id})}">
+                <button>Edit</button>
+            </a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="~{fragments :: head}"> </head>
+<body>
+
+<div th:replace="~{fragments :: page-header}"></div>
+<div th:replace="~{fragments :: manage-menu-header}"></div>
+
+<div>
+    <table class="table-container-list">
+        <tr class="bold-v4">
+            <td><strong>Cuisine</strong></td>
+            <td><strong>Description</strong></td>
+            <td><strong> </strong></td>
+        </tr>
+        <tr th:each="cuisine : ${cuisines}">
+            <td>
+                <span class="view-mode" th:text="${cuisine.name}"></span>
+                <input type="text" class="edit-mode form-control" th:value="${cuisine.name}" />
+            </td>
+            <td>
+                <span class="view-mode" th:text="${cuisine.description}"></span>
+                <textarea class="edit-mode form-control" rows="3" th:text="${cuisine.description}"></textarea>
+            </td>
+            <td>
+                <button class="btn btn-primary edit-btn" onclick="toggleEditMode(this)">Edit</button>
+                <button class="btn btn-success save-btn edit-mode" onclick="saveChanges(this)">Save</button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    function toggleEditMode(button) {
+      // Find the row that the button belongs to
+      var row = button.closest('tr');
+
+      // Toggle between edit and view modes
+      row.querySelectorAll('.view-mode').forEach(function(el) {
+        el.style.display = 'none'; // Hide view mode
+      });
+      row.querySelectorAll('.edit-mode').forEach(function(el) {
+        el.style.display = 'block'; // Show edit mode
+      });
+
+      // Hide the "Edit" button and show the "Save" button
+      button.style.display = 'none';
+      row.querySelector('.save-btn').style.display = 'inline-block';
+    }
+
+    function saveChanges(button) {
+      // Find the row that the button belongs to
+      var row = button.closest('tr');
+
+      // Get the edited values
+      var name = row.querySelector('input[type="text"]').value;
+      var description = row.querySelector('textarea').value;
+
+      // Save the changes via AJAX or form submission (here we just log the changes)
+      console.log('Saving changes:', name, description);
+
+      // After saving, return to view mode
+      row.querySelectorAll('.edit-mode').forEach(function(el) {
+        el.style.display = 'none'; // Hide edit mode
+      });
+      row.querySelectorAll('.view-mode').forEach(function(el) {
+        el.style.display = 'block'; // Show view mode
+      });
+
+      // Hide the "Save" button and show the "Edit" button again
+      button.style.display = 'none';
+      row.querySelector('.edit-btn').style.display = 'inline-block';
+    }
+</script>
+
+</body>
+</html>
