@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+
+<nav th:replace="~{fragments :: page-header}"></nav>
+<div th:replace="~{fragments :: manage-menu-header}"></div>
+
+
+<div class="form-container">
+
+    <div class="form-container">
+        <div class="row">
+
+            <div class="form-container">
+                <form method="post">
+                    <div class="form-group">
+                        <label th:for="name">Name</label>
+                        <input class="form-control" th:field="${plate.name}"/>
+                        <span th:errors="${plate.name}" class="error"></span>
+                    </div>
+                    <div class="form-group">
+                        <label th:for="location">Price</label>
+                        <input class="form-control" th:field="${plate.price}"/>
+                        <span th:errors="${plate.price}" class="error"></span>
+                    </div>
+                    <div class="form-group">
+                        <label th:for="name">Name</label>
+                        <input class="form-control" th:field="${plate.name}"/>
+                        <span th:errors="${plate.name}" class="error"></span>
+                    </div>
+
+                    <div class="button-container-add">
+                        <div class="add-image-container">
+                            <img src="/images/cookingpot.png" alt="Plate Image"/>
+                        </div>
+                        <div>
+                            <input type="submit" value="Add Plate" class="button-add"/>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
