@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+
+<div th:replace="~{fragments :: page-header}"></div>
+
+<div class="page-title-container">
+    <div class="list-image-container" >
+        <img src="/images/cookbook.png" alt="Customer Image"/>
+    </div>
+    <div>
+        <p class="bold-v1-page-title"> Customer Directory </p>
+    </div>
+</div>
+
+<div>
+    <table class="table-container-list">
+        <tr class="bold-v4">
+            <td><strong>ID</strong></td>
+            <td><strong>Customer</strong></td>
+            <td><strong>First Name</strong></td>
+            <td><strong>Last Name</strong></td>
+            <td><strong>Email</strong></td>
+            <td><strong>Phone</strong></td>
+            <td><strong>Address</strong></td>
+        </tr>
+        <tr th:each="customer : ${customers}">
+            <td th:text="${customer.id}"></td>
+            <td th:text="${customer.name}"></td>
+            <td th:text="${customer.nameFirst}"></td>
+            <td th:text="${customer.nameLast}"></td>
+            <td th:text="${customer.email}"></td>
+            <td th:text="${customer.phone}"></td>
+            <td th:text="${customer.address}"></td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>

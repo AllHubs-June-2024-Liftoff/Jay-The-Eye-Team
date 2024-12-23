@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+
+<head th:fragment="head">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap stylesheets and script -->
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+    <link th:href="@{/css/recipedash.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.js}"></script>
+
+    <!-- Title -->
+    <title th:text="'Recipe Dash' + ${title == null ? '' : ' :: ' + title}"> Recipe Dash </title>
+
+    <!-- MOD: Select2 CSS and Select2 JS for dropdown filtering functionality -->
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet"/>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+
+    <script>
+        $(document).ready(function() {
+
+        // Initialize Select2
+        $('.select2').select2({
+            placeholder: "",
+            allowClear: true,  // Allow clearing the selection
+        });
+
+        // Trigger the search when the dropdown is opened
+        $('.select2').on('select2:open', function() {
+            var $searchField = $(this).data('select2').dropdown.$search;
+            if ($searchField) {
+                $searchField.focus();  // Focus the search field immediately
+            }
+        });
+    });
+    </script>
+
+</head>
+
+<body>
+
+<div th:fragment="page-header" class="navbar">
+    <div class="navbar">
+        <div class="navbar-header">
+            <a th:href="@{/}">
+            <img src="/images/reciepe-dash-white-yellow.png" alt="icon" class="logo-icon" />
+            </a>
+        </div>
+        <div class="navbar-brand">
+            <img src="/images/white-house-icon.png" alt="icon" class="home-icon" />
+            <a th:href="@{/}"> Chef Dashboard </a>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="manage-menu-header">
+
+    <div style="height: 30px;"></div>
+    <div class="button-container">
+        <div class="button-group-left">
+            <a href="/plates/add-plate">
+                <button>Add Plate</button>
+            </a>
+            <a href="/plates/list-plates">
+                <button>View Plates</button>
+            </a>
+        </div>
+        <div style="height: 10px;"></div>
+        <div class="button-group-right">
+            <a href="/cuisines/add-cuisine">
+                <button>Add Cuisine</button>
+            </a>
+            <a href="/cuisines/list-cuisines">
+                <button>View Cuisines</button>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+
+<nav th:replace="~{fragments :: page-header}"></nav>
+
+<div class="page-title-container">
+    <div class="list-image-container">
+        <img src="/images/cookbook.png" alt="Customer Image"/>
+    </div>
+    <div>
+        <p class="bold-v1-page-title"> Summary </p>
+    </div>
+</div>
+
+<div style="width: 80%; margin: 0 auto;">
+    <div class="text-summary">
+        <div class="button-summary">
+            <p class="text-summary-top">
+                <span th:text="${totalPlates}"></span>
+            </p>
+            <p class="text-summary-bottom"> plates on the menu </p>
+            <div class="list-image-container">
+                <img src="/images/meal.png" alt="plate"/>
+            </div>
+        </div>
+        <div class="button-summary">
+            <p class="text-summary-top">
+                <span th:text="${totalCuisines}"></span>
+            </p>
+            <p class="text-summary-bottom"> different cuisines </p>
+            <div class="list-image-container">
+                <img src="/images/cuisine.png" alt="cuisines"/>
+            </div>
+        </div>
+        <div class="button-summary">
+            <p class="text-summary-top">
+                <span th:text="${totalCustomers}"></span>
+            </p>
+            <p class="text-summary-bottom"> registered customers </p>
+            <div class="list-image-container">
+                <img src="/images/customer-review.png" alt="customers"/>
+            </div>
+        </div>
+        <div class="button-summary">
+            <p class="text-summary-top">
+                <span th:text="${totalDeliveries}"></span>
+            </p>
+            <p class="text-summary-bottom"> delivered orders </p>
+            <div class="list-image-container">
+                <img src="/images/delivery.png" alt="delivery"/>
+            </div>
+        </div>
+        <div class="button-summary">
+            <p class="text-summary-top">
+                <span th:text="'$' + ${totalPlates}"></span>
+            </p>
+            <p class="text-summary-bottom"> total revenue </p>
+            <div class="list-image-container">
+                <img src="/images/cashmoney.png" alt="Chef"/>
+            </div>
+        </div>
+    </div>
+
+    <p class="summary-v2-title "> Hall of Fame </p>
+    <hr>
+    <div class="summary-v2-grid">
+        <div><img class="summary-v2-buttons" src="/images/colin.jpg" alt="Colin"></div>
+        <div><img class="summary-v2-buttons" src="/images/terence.jpg" alt="Terence"></div>
+        <div><img class="summary-v2-buttons" src="/images/jay.png" alt="Jay"></div>
+        <div><img class="summary-v2-buttons" src="/images/emily.jpg" alt="Emily"></div>
+        <div><img class="summary-v2-buttons" src="/images/mattCat.jpg" alt="Matt Cat"></div>
+    </div>
+    <div class="summary-v2-grid">
+         <a class="summary-v2-buttons" target="_blank"  href="https://launchcode.org/">
+        <img src="/images/46684892.png" alt="LaunchCode">
+        </a>
+         <a class="summary-v2-buttons" target="_blank"  href="https://www.flaticon.com/free-icons/food-delivery">
+        <img src="/images/flaticon-8.png" alt="Flaticon Icons">
+        </a>
+         <a class="summary-v2-buttons" target="_blank"  href="https://chatgpt.com/">
+        <img src="/images/chatgpt.png" alt="ChatGPT">
+        </a>
+         <a class="summary-v2-buttons" target="_blank"  href="https://coolors.co/">
+        <img src="/images/Coolors-logo.png" alt="Coolors">
+        </a>
+         <a class="summary-v2-buttons" target="_blank"  href="https://www.dafont.com/foodpacker.font?text=%5BRecipeDash%5D&psize=l">
+        <img src="/images/dafont.png" alt="DaFont">
+        </a>
+         <a class="summary-v2-buttons" target="_blank"  href="https://www.freepik.com/">
+        <img src="/images/freepik_logo_icon_170123.png" alt="Freepik Icons">
+        </a>
+         <a class="summary-v2-buttons" target="_blank"  href="https://react.dev/learn">
+        <img src="/images/react.png" alt="React">
+        </a>
+         <a class="summary-v2-buttons" target="_blank"  href="https://mui.com/">
+            <img src="/images/mui.png" alt="MUI">
+        </a>
+         <a class="summary-v2-buttons" target="_blank"  href="https://spring.io/">
+        <img src="/images/spring.png" alt="Spring">
+        </a>
+         <a class="summary-v2-buttons" target="_blank"  href="https://www.mysql.com/">
+            <img src="/images/mysql.png" alt="Spring">
+        </a>
+         <a class="summary-v2-buttons" target="_blank"  href="https://www.canva.com/">
+            <img src="/images/canva.png" alt="Canva">
+        </a>
+         <a class="summary-v2-buttons" target="_blank"  href="https://draw.io/">
+            <img src="/images/drawio.png" alt="Drawio">
+        </a>
+         <a class="summary-v2-buttons" target="_blank"  href="https://trello.com/">
+            <img src="/images/trello.png" alt="Trello">
+        </a>
+    </div>
+</div>
+
+</body>
+</html>
