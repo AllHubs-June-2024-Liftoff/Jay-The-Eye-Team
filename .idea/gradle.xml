@@ -5,6 +5,11 @@
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/springboot-backend" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/springboot-backend" />
+          </set>
+        </option>
       </GradleProjectSettings>
     </option>
   </component>
