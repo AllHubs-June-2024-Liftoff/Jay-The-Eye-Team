@@ -1,10 +1,10 @@
-package org.launchcode.recipe_dash_mvc;
+package org.launchcode.springboot_backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class RecipeDashMvcApplicationTests {
+class SpringbootBackendApplicationTests {
 
 	@Test
 	void contextLoads() {

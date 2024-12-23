@@ -4,11 +4,10 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/recipe-dash-mvc" />
-        <option name="gradleJvm" value="openjdk-23" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/springboot-backend" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$/recipe-dash-mvc" />
+            <option value="$PROJECT_DIR$/springboot-backend" />
           </set>
         </option>
       </GradleProjectSettings>
