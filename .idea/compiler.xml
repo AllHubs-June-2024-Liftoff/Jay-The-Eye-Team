@@ -4,6 +4,9 @@
     <bytecodeTargetLevel>
       <module name="recipe-dash-mvc.main" target="17" />
       <module name="recipe-dash-mvc.test" target="17" />
+      <module name="techjobs-console-java" target="17" />
+      <module name="techjobs-console-java.main" target="17" />
+      <module name="techjobs-console-java.test" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
