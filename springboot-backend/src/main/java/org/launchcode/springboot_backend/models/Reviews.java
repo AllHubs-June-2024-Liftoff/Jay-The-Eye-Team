@@ -19,7 +19,7 @@ public class Reviews {
     private int id;
 
     @ManyToOne
-    private Plates plate;
+    private Plates plates;
 
     private String reviewText;
     private int reviewStars;
@@ -28,19 +28,19 @@ public class Reviews {
     public Reviews() {
     }
 
-    public Reviews(Plates plate, String reviewText, int reviewStars, String date) {
-        this.plate = plate;
+    public Reviews(Plates plates, String reviewText, int reviewStars, String date) {
+        this.plates = plates;
         this.reviewText = reviewText;
         this.reviewStars = reviewStars;
         this.date = date;
     }
 
-    public Plates getPlate() {
-        return plate;
+    public Plates getPlates() {
+        return plates;
     }
 
-    public void setPlate(Plates plate) {
-        this.plate = plate;
+    public void setPlates(Plates plates) {
+        this.plates = plates;
     }
 
     public String getReviewText() {
@@ -72,19 +72,19 @@ public class Reviews {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Reviews reviews = (Reviews) o;
-        return id == reviews.id && reviewStars == reviews.reviewStars && Objects.equals(plate, reviews.plate) && Objects.equals(reviewText, reviews.reviewText) && Objects.equals(date, reviews.date);
+        return id == reviews.id && reviewStars == reviews.reviewStars && Objects.equals(plates, reviews.plates) && Objects.equals(reviewText, reviews.reviewText) && Objects.equals(date, reviews.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, plate, reviewText, reviewStars, date);
+        return Objects.hash(id, plates, reviewText, reviewStars, date);
     }
 
     @Override
     public String toString() {
         return "Reviews{" +
                 "id=" + id +
-                ", plate=" + plate +
+                ", plate=" + plates +
                 ", reviewText='" + reviewText + '\'' +
                 ", reviewStars=" + reviewStars +
                 ", date='" + date + '\'' +
