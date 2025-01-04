@@ -1,4 +1,4 @@
-package org.launchcode.springboot_backend.data;
+package org.launchcode.springboot_backend.repositories;
 
 import org.launchcode.springboot_backend.models.User;
 import org.springframework.data.repository.CrudRepository;

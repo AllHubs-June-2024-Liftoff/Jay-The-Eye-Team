@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
-public class Favorites {
+public class Favorite {
 
 //    database columns:
 //    id
@@ -17,31 +17,31 @@ public class Favorites {
     private int id;
 
     @ManyToOne
-    private Users users;
+    private Customer customer;
 
     @ManyToOne
-    private Plates plates;
+    private Plate plates;
 
-    public Favorites() {}
+    public Favorite() {}
 
-    public Favorites(Users users, Plates plates) {
-        this.users = users;
+    public Favorite(Customer customer, Plate plates) {
+        this.customer = customer;
         this.plates = plates;
     }
 
-    public Users getUsers() {
-        return users;
+    public Customer getUsers() {
+        return customer;
     }
 
-    public void setUsers(Users users) {
-        this.users = users;
+    public void setUsers(Customer customer) {
+        this.customer = customer;
     }
 
-    public Plates getPlates() {
+    public Plate getPlates() {
         return plates;
     }
 
-    public void setPlates(Plates plates) {
+    public void setPlates(Plate plates) {
         this.plates = plates;
     }
 
@@ -49,20 +49,20 @@ public class Favorites {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Favorites favorites = (Favorites) o;
-        return id == favorites.id && Objects.equals(users, favorites.users) && Objects.equals(plates, favorites.plates);
+        Favorite favorites = (Favorite) o;
+        return id == favorites.id && Objects.equals(customer, favorites.customer) && Objects.equals(plates, favorites.plates);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, users, plates);
+        return Objects.hash(id, customer, plates);
     }
 
     @Override
     public String toString() {
         return "Favorites{" +
                 "id=" + id +
-                ", users=" + users +
+                ", users=" + customer +
                 ", plates=" + plates +
                 '}';
     }

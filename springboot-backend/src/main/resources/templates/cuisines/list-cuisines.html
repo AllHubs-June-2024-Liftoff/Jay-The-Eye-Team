@@ -6,72 +6,44 @@
 <div th:replace="~{fragments :: page-header}"></div>
 <div th:replace="~{fragments :: manage-menu-header}"></div>
 
-<div>
-    <table class="table-container-list">
-        <tr class="bold-v4">
-            <td><strong>Cuisine</strong></td>
-            <td><strong>Description</strong></td>
-            <td><strong> </strong></td>
-        </tr>
-        <tr th:each="cuisine : ${cuisines}">
-            <td>
-                <span class="view-mode" th:text="${cuisine.name}"></span>
-                <input type="text" class="edit-mode form-control" th:value="${cuisine.name}" />
-            </td>
-            <td>
-                <span class="view-mode" th:text="${cuisine.description}"></span>
-                <textarea class="edit-mode form-control" rows="3" th:text="${cuisine.description}"></textarea>
-            </td>
-            <td>
-                <button class="btn btn-primary edit-btn" onclick="toggleEditMode(this)">Edit</button>
-                <button class="btn btn-success save-btn edit-mode" onclick="saveChanges(this)">Save</button>
-            </td>
-        </tr>
-    </table>
+<div th:replace="~{fragments :: script-sort-by-column}"></div>
+<div th:replace="~{fragments :: script-edit-within-table}"></div>
+
+<div class="table-list-header">
+    <h5>
+        Sort the highlighted columns. Click on the specific field to edit.
+    </h5>
 </div>
 
-<script>
-    function toggleEditMode(button) {
-      // Find the row that the button belongs to
-      var row = button.closest('tr');
+<div style="display: flex; justify-content: center; align-items: center;">
+    <table class="table-container-list editable-table"
+           id="table-cuisine"
+           data-update-url="/cuisines/api"
+           style="max-width: 100%;">
 
-      // Toggle between edit and view modes
-      row.querySelectorAll('.view-mode').forEach(function(el) {
-        el.style.display = 'none'; // Hide view mode
-      });
-      row.querySelectorAll('.edit-mode').forEach(function(el) {
-        el.style.display = 'block'; // Show edit mode
-      });
+        <!--HEADERS-->
+        <tr class="bold-v4">
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(0, true)">ID</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(1, true)">Cuisine</a></strong></td>
+            <td style="width: 400px;"><strong><a href="javascript:void(0);" onclick="sortTable(2, true)">Description</a></strong></td>
+            <td><strong> </strong></td>
+        </tr>
 
-      // Hide the "Edit" button and show the "Save" button
-      button.style.display = 'none';
-      row.querySelector('.save-btn').style.display = 'inline-block';
-    }
+        <!-- ROWS PER ID-->
+        <tr th:each="cuisine : ${cuisines}" th:data-id="${cuisine.id}">
 
-    function saveChanges(button) {
-      // Find the row that the button belongs to
-      var row = button.closest('tr');
+            <td th:text="${cuisine.id}" style="font-weight: bold;"> </td>
 
-      // Get the edited values
-      var name = row.querySelector('input[type="text"]').value;
-      var description = row.querySelector('textarea').value;
+            <td class="editable" data-column="name" th:text="${cuisine.name}"> </td>
+            <td class="editable list-textarea" data-column="description" th:text="${cuisine.description}"> </td>
 
-      // Save the changes via AJAX or form submission (here we just log the changes)
-      console.log('Saving changes:', name, description);
+            <td> <!--Save button-->
+                <button class="btn btn-primary save-btn">Save</button>
+            </td>
+        </tr>
 
-      // After saving, return to view mode
-      row.querySelectorAll('.edit-mode').forEach(function(el) {
-        el.style.display = 'none'; // Hide edit mode
-      });
-      row.querySelectorAll('.view-mode').forEach(function(el) {
-        el.style.display = 'block'; // Show view mode
-      });
-
-      // Hide the "Save" button and show the "Edit" button again
-      button.style.display = 'none';
-      row.querySelector('.edit-btn').style.display = 'inline-block';
-    }
-</script>
+    </table>
+</div>
 
 </body>
 </html>
