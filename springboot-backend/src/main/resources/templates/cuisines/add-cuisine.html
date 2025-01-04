@@ -7,31 +7,32 @@
 <div th:replace="~{fragments :: manage-menu-header}"></div>
 
 <div class="form-container">
-    <div class="row">
+    <form method="POST" enctype="multipart/form-data" th:object="${cuisine}">
+        <div class="grid-container">
 
-        <!-- Form Column -->
-        <div class="form-container">
-            <form method="post">
+            <div>
                 <div class="form-group">
-                    <label for="name">Type of cuisine or diet</label>
-                    <input class="form-control" id="name" name="name" type="text" />
-                    <span class="error" style="color: red;"></span>
+                    <label for="name">Type of Cuisine</label>
+                    <input type="text" id="name" name="name" th:field="*{name}" required>
                 </div>
-
-                <div class="button-container-add">
-                    <div class="add-image-container">
-                        <img src="/images/catering.png" alt="Cuisine Image"/>
-                    </div>
-                    <div>
-                        <input type="submit" value="Add Cuisine" class="button-add" />
-                    </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" th:field="*{description}" rows="2" cols="50" required></textarea>
                 </div>
-
-            </form>
+            </div>
         </div>
-    </div>
-</div>
 
+        <!-- Button & Image -->
+        <div class="button-container-add">
+            <div class="add-image-container">
+                <img src="/images/catering.png" alt="Plate Image"/>
+            </div>
+            <div>
+                <input type="submit" value="Add Cuisine" class="button-add"/>
+            </div>
+        </div>
+    </form>
+</div>
 
 </body>
 </html>

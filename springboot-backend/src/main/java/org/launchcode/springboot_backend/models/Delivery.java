@@ -1,11 +1,14 @@
 package org.launchcode.springboot_backend.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class Orders {
+public class Delivery {
 
 //    database columns:
 //    id
@@ -14,17 +17,24 @@ public class Orders {
 //    plate_id
 //    status
 
+    // RELATIONAL
+    @ManyToOne
+    @JoinColumn(name = "customer", nullable = false)
+    @JsonManagedReference // Prevent recursion in api data
+    private Customer customer;
+
+    @ManyToMany
+    private List<Plate> plate;
+
+    // INDEPENDENT
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
-    private Users users;
-
-    private String dateCreated;
+    private LocalDateTime dateCreated;
 
     @ManyToOne
-    private Plates plates;
+    private Plate plates;
 
     public enum Status {
         NEW, PENDING, COMPLETED
@@ -33,43 +43,40 @@ public class Orders {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    public Orders() {}
+    // Constructors
+    public Delivery() {}
 
-    public Orders(Users users, String dateCreated, Plates plates, Status status) {
-        this.users = users;
+    public Delivery(Customer customer, LocalDateTime dateCreated, Plate plates, Status status) {
+        this.customer = customer;
         this.dateCreated = dateCreated;
         this.plates = plates;
         this.status = status;
     }
 
-    public Users getUsers() {
-        return users;
+    public Customer getUsers() {
+        return customer;
+    }
+    public void setUsers(Customer customer) {
+        this.customer = customer;
     }
 
-    public void setUsers(Users users) {
-        this.users = users;
-    }
-
-    public String getDateCreated() {
+    public LocalDateTime getDateCreated() {
         return dateCreated;
     }
-
-    public void setDateCreated(String dateCreated) {
+    public void setDateCreated(LocalDateTime dateCreated) {
         this.dateCreated = dateCreated;
     }
 
-    public Plates getPlates() {
+    public Plate getPlates() {
         return plates;
     }
-
-    public void setPlates(Plates plates) {
+    public void setPlates(Plate plates) {
         this.plates = plates;
     }
 
     public Status getStatus() {
         return status;
     }
-
     public void setStatus(Status status) {
         this.status = status;
     }
@@ -78,20 +85,20 @@ public class Orders {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Orders orders = (Orders) o;
-        return id == orders.id && Objects.equals(users, orders.users) && Objects.equals(dateCreated, orders.dateCreated) && Objects.equals(plates, orders.plates) && status == orders.status;
+        Delivery orders = (Delivery) o;
+        return id == orders.id && Objects.equals(customer, orders.customer) && Objects.equals(dateCreated, orders.dateCreated) && Objects.equals(plates, orders.plates) && status == orders.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, users, dateCreated, plates, status);
+        return Objects.hash(id, customer, dateCreated, plates, status);
     }
 
     @Override
     public String toString() {
         return "Orders{" +
                 "id=" + id +
-                ", users=" + users +
+                ", users=" + customer +
                 ", dateCreated='" + dateCreated + '\'' +
                 ", plates=" + plates +
                 ", status=" + status +

@@ -1,32 +1,40 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="~{fragments :: head}"></head>
+
 <body>
 
 <div th:replace="~{fragments :: page-header}"></div>
+<div th:replace="~{fragments :: script-sort-by-column}"></div>
 
 <div class="page-title-container">
-    <div class="list-image-container" >
-        <img src="/images/cookbook.png" alt="Customer Image"/>
+    <div class="list-image-container">
+        <img src="/images/people.png" alt="Customer Image"/>
     </div>
     <div>
         <p class="bold-v1-page-title"> Customer Directory </p>
     </div>
 </div>
 
+<div class="table-list-header">
+    <h5>
+        Sort the highlighted columns.
+    </h5>
+</div>
+
 <div>
     <table class="table-container-list">
-        <tr class="bold-v4">
-            <td><strong>ID</strong></td>
-            <td><strong>Customer</strong></td>
-            <td><strong>First Name</strong></td>
-            <td><strong>Last Name</strong></td>
-            <td><strong>Email</strong></td>
-            <td><strong>Phone</strong></td>
-            <td><strong>Address</strong></td>
+        <tr class=" bold-v4 list-sorted-header">
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(0, true)">ID</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(1, false)">Customer</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(2, false)">First Name</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(3, false)">Last Name</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(4, false)">Email</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(5, false)">Phone</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(6, false)">Address</a></strong></td>
         </tr>
         <tr th:each="customer : ${customers}">
-            <td th:text="${customer.id}"></td>
+            <td th:text="${customer.id}" style="font-weight: bold;"></td>
             <td th:text="${customer.name}"></td>
             <td th:text="${customer.nameFirst}"></td>
             <td th:text="${customer.nameLast}"></td>
