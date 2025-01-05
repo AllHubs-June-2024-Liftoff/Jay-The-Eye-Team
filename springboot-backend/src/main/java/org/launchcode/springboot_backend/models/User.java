@@ -1,57 +1,67 @@
 package org.launchcode.springboot_backend.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.Objects;
-
 @Entity
+@Table(name = "user")
 public class User {
 
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotNull
-    private String username;
+    @NotNull(message = "Email cannot be null")
+    @Email(message = "Invalid email format")
+    @Column(unique = true, nullable = false)
+    private String email;
 
-    @NotNull
+    @NotNull(message = "Password cannot be null")
     private String pwHash;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Customer customer;
 
     public User() {}
 
-    public User(String username, String password) {
-        this.username = username;
+    public User(String email, String password) {
+        this.email = email;
         this.pwHash = encoder.encode(password);
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     public int getId() {
         return id;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id == user.id;
+    public String getEmail() {
+        return email;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPwHash() {
+        return pwHash;
+    }
+
+    public void setPassword(String password) {
+        this.pwHash = encoder.encode(password);
     }
 
     public boolean isMatchingPassword(String password) {
-        return encoder.matches(password, pwHash);
+        return encoder.matches(password, this.pwHash);
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }

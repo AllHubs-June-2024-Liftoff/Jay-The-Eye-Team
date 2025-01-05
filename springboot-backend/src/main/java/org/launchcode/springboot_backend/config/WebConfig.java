@@ -1,4 +1,4 @@
-package org.launchcode.springboot_backend.controllers;
+package org.launchcode.springboot_backend.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -13,7 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
 
         // Allow CORS requests from the React app (usually localhost:3000 during development)
         registry.addMapping("/**") // Allow CORS on all endpoints
-                .allowedOrigins("http://localhost:3000") // Add the URL of your React app here
+                .allowedOrigins("http://localhost:5173") // Add the URL of your React app here
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allowed HTTP methods
                 .allowedHeaders("*") // Allow any header
                 .allowCredentials(true); // Allow credentials (cookies, authorization headers, etc.)
