@@ -1,14 +1,20 @@
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './App.css';
 
-import './App.css'
-import Navbar from './components/Navbar'
+// Components
+import Navbar from './components/Navbar';
+
+// Pages
+import Homepage from './pages/Homepage';
+import Plate from './pages/Plate';
 
 function App() {
   return (
     <>
-      <Navbar />
-
+        <Navbar />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

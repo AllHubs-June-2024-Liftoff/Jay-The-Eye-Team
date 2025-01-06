@@ -5,6 +5,10 @@ import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../store/userSlice";
 
+// Components
+import logo from '../assets/images/reciepe-dash-white-yellow.png';
+
+// Pages
 import Homepage from "../pages/Homepage";
 import About from "../pages/About";
 import Account from "../pages/Account";
@@ -16,6 +20,7 @@ import MenuItem from "../pages/MenuItem";
 import Register from "../pages/Register";
 import OrderComplete from "../pages/OrderComplete";
 import Reviews from "../pages/Reviews";
+import Plate from '../pages/Plate';
 
 function NavBar() {
   const dispatch = useDispatch();
@@ -34,7 +39,7 @@ function NavBar() {
       >
         <Container fluid>
           <Navbar.Brand as={Link} to="/">
-            Recipe Dash
+           <img src={logo} alt="Logo" style={{ height: 40 }} />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
@@ -110,6 +115,7 @@ function NavBar() {
           <Route path="/register" element={<Register />} />
           <Route path="/ordercomplete" element={<OrderComplete />} />
           <Route path="/reviews" element={<Reviews />} />
+          <Route path="/plate/:plateId" element={<Plate />} /> {/* The individual plate details page */}
         </Routes>
       </div>
     </Router>
