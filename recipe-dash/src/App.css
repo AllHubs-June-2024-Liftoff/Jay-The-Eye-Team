@@ -14,7 +14,6 @@
   pointer-events: none;
 }
 
-
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -26,8 +25,8 @@
   color: white;
 }
 
-.App-link {
-  color: #DAA520;
+a:hover {
+  color: #977316;
 }
 
 @media (prefers-reduced-motion: no-preference) {

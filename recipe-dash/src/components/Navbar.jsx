@@ -5,8 +5,10 @@ import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../store/userSlice";
 
+// Components
 import logo from '../assets/images/reciepe-dash-white-yellow.png';
 
+// Pages
 import Homepage from "../pages/Homepage";
 import About from "../pages/About";
 import Account from "../pages/Account";
