@@ -18,6 +18,7 @@ import MenuItem from "../pages/MenuItem";
 import Register from "../pages/Register";
 import OrderComplete from "../pages/OrderComplete";
 import Reviews from "../pages/Reviews";
+import Plate from '../pages/Plate';
 
 function NavBar() {
   const dispatch = useDispatch();
@@ -112,6 +113,7 @@ function NavBar() {
           <Route path="/register" element={<Register />} />
           <Route path="/ordercomplete" element={<OrderComplete />} />
           <Route path="/reviews" element={<Reviews />} />
+          <Route path="/plate/:plateId" element={<Plate />} /> {/* The individual plate details page */}
         </Routes>
       </div>
     </Router>
