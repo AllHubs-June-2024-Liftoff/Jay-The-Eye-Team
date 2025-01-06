@@ -5,6 +5,8 @@ import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../store/userSlice";
 
+import logo from '../assets/images/reciepe-dash-white-yellow.png';
+
 import Homepage from "../pages/Homepage";
 import About from "../pages/About";
 import Account from "../pages/Account";
@@ -34,7 +36,7 @@ function NavBar() {
       >
         <Container fluid>
           <Navbar.Brand as={Link} to="/">
-            Recipe Dash
+           <img src={logo} alt="Logo" style={{ height: 40 }} />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">

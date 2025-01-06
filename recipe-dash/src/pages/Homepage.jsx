@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { Container } from '@mui/material';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import Plate from "./Plate";
+import PlateList from '../components/plates/PlateList';
 
 const Homepage = () => {
     const isChef = useSelector((state) => state.user.isChef); // Check chef status from Redux
@@ -53,6 +58,7 @@ const Homepage = () => {
 
     return (
         <div className="container mt-5">
+
             <h2>Menu Items</h2>
             <table className="table table-bordered">
                 <thead>
@@ -161,6 +167,11 @@ const Homepage = () => {
                     ))}
                 </tbody>
             </table>
+
+            <Container sx={{ height: '100px' }} />
+            <Container>
+              <PlateList />
+            </Container>
         </div>
     );
 };
