@@ -29,6 +29,10 @@ public class Customer extends AbstractEntity {
     @OneToMany(mappedBy = "customer")
     private List<Favorite> favorites;
 
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private User user;
+
     // INDEPENDENT
     private boolean isChef;
 
@@ -133,4 +137,11 @@ public class Customer extends AbstractEntity {
         this.favorites = favorites;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

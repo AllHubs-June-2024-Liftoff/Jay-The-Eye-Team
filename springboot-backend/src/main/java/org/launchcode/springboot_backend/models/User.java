@@ -18,20 +18,20 @@ public class User {
     private int id;
 
     @NotNull
-    private String email;
+    private String username;
 
     @NotNull
     private String pwHash;
 
     public User() {}
 
-    public User(String email, String password) {
-        this.email = email;
+    public User(String username, String password) {
+        this.username = username;
         this.pwHash = encoder.encode(password);
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
     public int getId() {

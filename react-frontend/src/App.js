@@ -14,6 +14,7 @@ import Navbar from './components/Navbar';
 
 // Pages
 import Home from './pages/Home';
+import Plate from './pages/Plate';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <div className="content">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/plate/:plateId" element={<Plate />} /> {/* The individual plate details page */}
           </Routes>
         </div>
       </div>
