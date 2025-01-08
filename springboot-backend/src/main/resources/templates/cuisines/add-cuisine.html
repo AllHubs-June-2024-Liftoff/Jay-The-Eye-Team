@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="~{fragments :: head}"> </head>
+<body>
+
+<nav th:replace="~{fragments :: page-header}"></nav>
+<div th:replace="~{fragments :: manage-menu-header}"></div>
+
+<div class="form-container">
+    <form method="POST" enctype="multipart/form-data" th:object="${cuisine}">
+        <div class="grid-container">
+
+            <div>
+                <div class="form-group">
+                    <label for="name">Type of Cuisine</label>
+                    <input type="text" id="name" name="name" th:field="*{name}" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" th:field="*{description}" rows="2" cols="50" required></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button & Image -->
+        <div class="button-container-add">
+            <div class="add-image-container">
+                <img src="/images/catering.png" alt="Plate Image"/>
+            </div>
+            <div>
+                <input type="submit" value="Add Cuisine" class="button-add"/>
+            </div>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

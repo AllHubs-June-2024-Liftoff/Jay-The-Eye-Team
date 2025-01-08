@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+
+<div th:replace="~{fragments :: page-header}"></div>
+
+<div class="page-title-container">
+    <div class="list-image-container" >
+        <img src="/images/food-delivery-2.png" alt="Delivery Image"/>
+    </div>
+    <div>
+        <p class="bold-v1-page-title"> Review Deliveries </p>
+    </div>
+</div>
+
+<div>
+    <table class="table-container-list">
+        <tr class="bold-v4">
+            <td><strong>Delivery Number</strong></td>
+            <td><strong>Date</strong></td>
+            <td><strong>Customer</strong></td>
+            <td><strong>Status</strong></td>
+        </tr>
+        <tr th:each="delivery : ${deliveries}">
+            <td th:text="${delivery.id}"></td>
+            <td th:text="x"></td>
+            <td th:text="x"></td>
+            <td th:text="x"></td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>

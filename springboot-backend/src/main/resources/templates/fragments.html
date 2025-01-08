@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+
+<head th:fragment="head">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap stylesheets and script -->
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+    <link th:href="@{/css/recipedash.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/js/bootstrap.js}"></script>
+
+    <!-- Title -->
+    <title th:text="'Recipe Dash' + ${title == null ? '' : ' :: ' + title}"> Recipe Dash </title>
+
+    <!-- MOD: Select2 CSS and Select2 JS for dropdown filtering functionality -->
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet"/>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+        // Initialize Select2
+        $('.list-dropdown-select').select2({
+            allowClear: false,
+        });
+
+        // Trigger the search when the dropdown is opened
+        $('.select2').on('select2:open', function() {
+            var $searchField = $(this).data('select2').dropdown.$search;
+            if ($searchField) {
+                $searchField.focus();  // Focus the search field immediately
+            }
+        });
+    });
+    </script>
+
+</head>
+
+<body>
+
+<div th:fragment="page-header" class="navbar">
+    <div class="navbar">
+        <div class="navbar-header">
+            <a th:href="@{/}">
+                <img src="/images/reciepe-dash-white-yellow.png" alt="icon" class="logo-icon"/>
+            </a>
+        </div>
+        <div class="navbar-brand">
+            <img src="/images/white-house-icon.png" alt="icon" class="home-icon"/>
+            <a th:href="@{/}"> Chef Dashboard </a>
+        </div>
+    </div>
+</div>
+<div th:fragment="manage-menu-header">
+
+    <div style="height: 30px;"></div>
+    <div class="button-container">
+        <div>
+            <a href="/plates/add-plate" style="margin-right: 10px; text-decoration: none;">
+                <button class="button-menu-header" >Add Plate</button>
+            </a>
+            <a href="/plates/list-plates">
+                <button class="button-menu-header" style="background-color: #C05746;">Edit Plates</button>
+            </a>
+        </div>
+        <div></div>
+        <div>
+            <a href="/cuisines/add-cuisine" style="margin-right: 10px; text-decoration: none;">
+                <button class="button-menu-header" >Add Cuisine</button>
+            </a>
+            <a href="/cuisines/list-cuisines">
+                <button class="button-menu-header" style="background-color: #C05746;">Edit Cuisines</button>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<!--SCRIPTS-->
+<div th:fragment="script-sort-by-column">
+    <script>
+        let sortOrder = {};  // Keeps track of sorting direction for each column
+
+// Function to sort the table
+function sortTable(columnIndex) {
+    const table = document.querySelector(".table-container-list");
+    const rows = Array.from(table.rows).slice(1); // Skip the header row
+
+    const isNumeric = (value) => !isNaN(parseFloat(value)) && isFinite(value);
+
+    // Get the current sort direction or default to ascending
+    const currentSortOrder = sortOrder[columnIndex] || 'asc';
+    const newSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+    sortOrder[columnIndex] = newSortOrder;
+
+    // Sorting function based on column content
+    rows.sort((rowA, rowB) => {
+        const cellA = rowA.cells[columnIndex].textContent.trim();
+        const cellB = rowB.cells[columnIndex].textContent.trim();
+
+        // Handle numeric columns
+        if (isNumeric(cellA) && isNumeric(cellB)) {
+            return (parseFloat(cellA) - parseFloat(cellB)) * (newSortOrder === 'asc' ? 1 : -1);
+        }
+
+        // Handle non-numeric columns (like strings)
+        return (cellA.localeCompare(cellB)) * (newSortOrder === 'asc' ? 1 : -1);
+    });
+
+    // Append sorted rows back to the table body
+    rows.forEach(row => table.tBodies[0].appendChild(row));
+}
+
+    </script>
+</div>
+<div th:fragment="script-toggle-edit-mode">
+    <script>
+        function toggleEditMode(button) {
+
+          // Find the row that the button belongs to
+          var row = button.closest('tr');
+
+          // Toggle between edit and view modes
+          row.querySelectorAll('.view-mode').forEach(function(el) {
+            el.style.display = 'none'; // Hide view mode
+          });
+          row.querySelectorAll('.edit-mode').forEach(function(el) {
+            el.style.display = 'block'; // Show edit mode
+          });
+
+          // Hide the "Edit" button and show the "Save" button
+          button.style.display = 'none';
+          row.querySelector('.save-btn').style.display = 'inline-block';
+        }
+
+        function saveChanges(button) {
+      // Find the row that the button belongs to
+      var row = button.closest('tr');
+
+      // Get the edited values
+      var name = row.querySelector('input[type="text"]').value;
+      var description = row.querySelector('textarea').value;
+
+      // Get the ID of the cuisine from the data-id attribute (you must set it in your HTML)
+      var cuisineId = row.getAttribute('data-id');
+
+      // Create the data object to send to the backend
+      var updatedCuisine = {
+        name: name,
+        description: description
+      };
+
+      // Send the updated data to the backend using fetch
+      fetch(`/cuisines/api`, {
+        method: 'PUT', // Use PUT to update the resource
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedCuisine)
+      })
+      .then(response => {
+        if (response.ok) {
+          console.log('Changes saved successfully');
+        } else {
+          console.error('Error saving changes');
+        }
+
+        // After saving, return to view mode
+        row.querySelectorAll('.edit-mode').forEach(function(el) {
+          el.style.display = 'none'; // Hide edit mode
+        });
+        row.querySelectorAll('.view-mode').forEach(function(el) {
+          el.style.display = 'block'; // Show view mode
+        });
+
+        // Hide the "Save" button and show the "Edit" button again
+        button.style.display = 'none';
+        row.querySelector('.edit-btn').style.display = 'inline-block';
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
+    </script>
+</div>
+<div th:fragment="script-edit-within-table">
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            // Enable in-place editing for all tables with class 'editable'
+            $(".editable").click(function() {
+                var currentValue = $(this).text();
+                var inputField = $('<input>').val(currentValue);
+                $(this).html(inputField);
+
+                inputField.focus();
+
+                inputField.blur(function() {
+                    var newValue = $(this).val();
+                    // Only update the element if the value has changed
+                    if (newValue !== currentValue) {
+                        $(this).parent().text(newValue);
+                    } else {
+                        $(this).parent().text(currentValue);  // If no change, restore original value
+                    }
+                });
+            });
+
+            // Save button click for all tables
+            $(".save-btn").click(function() {
+                var row = $(this).closest("tr");
+                var table = $(this).closest("table");
+                var updateUrl = table.data("update-url"); // Get the update URL from the table's data attribute
+
+                var data = {};
+                row.find("td.editable").each(function() {
+                    var column = $(this).data("column");
+                    var value = $(this).find("input").val() || $(this).text(); // Handle both text and input
+                    data[column] = value; // Add the column value to the data object
+                });
+
+                // Get the ID from the first <td> in the row (assuming the ID is in the first cell)
+                var id = row.data("id");
+                data.id = parseInt(id, 10);   // Use the correct ID from the first cell
+
+                // Check if the data is formatted correctly (for debugging)
+                console.log('Data being sent:', JSON.stringify(data));
+
+                // Make an AJAX call to save the updated data
+                $.ajax({
+                    url: updateUrl, // From the table
+                    type: 'PUT',
+                    contentType: 'application/json;charset=UTF-8',
+                    data: JSON.stringify(data),  // Send the updated data in the correct format
+
+                    success: function(response) {
+                        // Log the exact JSON response to the console
+                        console.log("Success! Response data: ", response);
+
+                        // Include the updated data in the success message
+                        var updatedDataMessage = 'Data updated successfully!';
+                        for (var key in data) {
+                            if (data.hasOwnProperty(key)) {
+                                updatedDataMessage += '\n' + key + ': ' + data[key];
+                            }
+                        }
+
+                        // On success, refresh the page
+                        window.location.reload();
+
+                        // >>>>>>>>>>> SUPPRESSED ALERT
+                        // alert(updatedDataMessage);
+                    },
+                    error: function(xhr, status, error) {
+                        // Improved error handling
+                        alert('Error updating data: ' + xhr.responseText || 'An unknown error occurred.');
+                    }
+                });
+            });
+        });
+    </script>
+</div>
+<div th:fragment="script-select-cuisine-dropdown">
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            // Handle the change event for the dropdown
+            $(".list-dropdown-select").change(function() {
+                var row = $(this).closest("tr");  // Get the closest row
+                var table = $(this).closest("table");  // Get the closest table
+                var updateUrl = table.data("update-url-cuisine");  // Get the update URL from table's data attribute
+
+                // Prepare the data object for sending
+                var data = {};
+
+                // Get the selected value and column name from the dropdown
+                var selectedValue = $(this).val();
+                var columnName = $(this).data("column");
+
+                /// Ensure the selectedValue is converted to an integer before sending it
+                data[columnName] = parseInt(selectedValue, 10); // Convert to Integer
+
+                // Get the ID from the first <td>
+                var id = row.data("id");
+                data.id = parseInt(id, 10);  // Ensure the ID is an integer
+
+                // For debugging: Check the data being sent
+                console.log('Data being sent:', JSON.stringify(data));
+
+                // Make the AJAX PUT request
+                $.ajax({
+                    url: updateUrl,  // URL to send the data to
+                    type: 'PUT',
+                    contentType: 'application/json;charset=UTF-8',
+                    data: JSON.stringify(data),
+                    success: function(response) {
+
+                        // Include the updated data in the success message
+                        var updatedDataMessage = 'Data updated successfully!';
+                        for (var key in data) {
+                            if (data.hasOwnProperty(key)) {
+                                updatedDataMessage += '\n' + key + ': ' + data[key];
+                            }
+                        }
+
+                        updatedDataMessage += 'Update URL: ' + updateUrl;
+
+                        // >>>>>>>>>>> SUPPRESSED ALERT
+                         //alert(updatedDataMessage);
+                    },
+                    error: function(xhr, status, error) {
+                        // Improved error handling
+                       // alert('Error updating data: ' + (xhr.responseText || 'An unknown error occurred.'));
+                    }
+                });
+            });
+
+        });
+    </script>
+</div>
+
+<div th:fragment="script-delete-plate">
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            // Handle the delete button click event
+            $(".delete-btn").click(function() {
+                var row = $(this).closest("tr");
+                var table = $(this).closest("table");
+                var deleteUrl = table.data("update-url-delete");
+
+                // Get the ID from the row (assuming the ID is stored in the row's data-id attribute)
+                var plateId = row.data("id");
+
+                // Show a confirmation dialog
+                var confirmation = confirm("Are you sure you want to delete this plate?");
+
+                // If user confirms, proceed with deletion
+                if (confirmation) {
+                    // Make an AJAX call to delete the plate
+                    $.ajax({
+                        url: deleteUrl + "?id=" + plateId,  // Append the plate ID as a query parameter
+                        type: 'DELETE',
+                        success: function(response) {
+                            // Log success and reload the page to reflect the changes
+                            console.log("Successfully deleted plate with ID: " + plateId);
+                            window.location.reload();  // Refresh the page after successful deletion
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle any errors
+                            alert('Error deleting plate: ' + xhr.responseText || 'An unknown error occurred.');
+                        }
+                    });
+                } else {
+                    // If the user cancels, log or handle as needed
+                    console.log("Plate deletion cancelled.");
+                }
+            });
+
+        });
+    </script>
+</div>
+
+
+</body>
+</html>

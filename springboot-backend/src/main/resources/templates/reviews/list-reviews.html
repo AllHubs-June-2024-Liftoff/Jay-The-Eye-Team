@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="~{fragments :: head}"></head>
+
+<body>
+
+<div th:replace="~{fragments :: page-header}"></div>
+<div th:replace="~{fragments :: script-sort-by-column}"></div>
+
+<div class="page-title-container">
+    <div class="list-image-container">
+        <img src="/images/apprating.png" alt="Review Image"/>
+    </div>
+    <div>
+        <p class="bold-v1-page-title"> Menu Reviews </p>
+    </div>
+</div>
+
+<div style="display: flex; justify-content: center; align-items: center; width:90%;">
+
+    <table class="table-container-list" style="font-size:11px;">
+        <tr class=" bold-v4 list-sorted-header">
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(0, true)">ID</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(1, false)">Plate</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(2, false)">Date Created</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(3, false)">Rating</a></strong></td>
+            <td><strong>Description</strong></td>
+
+        </tr>
+        <tr th:each="review : ${reviews}">
+            <td th:text="${review.id}" style="font-weight:bold;"></td>
+            <td th:text="${review.plate}"></td>
+            <td th:text="${review.dateCreated}"></td>
+            <td th:text="${review.rating}"></td>
+            <td th:text="${review.description}"></td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+
+<!--FRAGMENTS-->
+<div th:replace="~{fragments :: page-header}"></div>
+<div th:replace="~{fragments :: manage-menu-header}"></div>
+<div th:replace="~{fragments :: script-sort-by-column}"></div>
+<div th:replace="~{fragments :: script-edit-within-table}"></div>
+<div th:replace="~{fragments :: script-select-cuisine-dropdown}"></div>
+<div th:replace="~{fragments :: script-delete-plate}"></div>
+
+<div class="table-list-header">
+    <h5>
+        Sort the highlighted columns. Click on the specific field to edit.
+    </h5>
+</div>
+
+<div style="display: flex; justify-content: center; align-items: center;">
+    <table class="table-container-list editable-table"
+           id="table-plate"
+           data-update-url="/plates/api"
+           data-update-url-cuisine="/plates/api-cuisine"
+           data-update-url-delete="/plates/api-delete"
+           style="max-width: 90%;">
+
+        <!--HEADERS-->
+        <tr class=" bold-v4 list-sorted-header">
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(0, true)">ID</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(1, true)">Plate</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(2, true)">Price</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(3, true)">Discount</a></strong></td>
+            <td style="max-width: 150px;"><strong><a href="javascript:void(0);" onclick="sortTable(4, true)">Cuisine</a></strong></td>
+
+            <td> <strong>Description</strong></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+
+        <!-- ROWS PER ID-->
+        <tr th:each="plate : ${plates}" th:data-id="${plate.id}">
+
+            <td th:text="${plate.id}" style="font-weight: bold;"></td>
+
+            <td class="editable" data-column="name" th:text="${plate.name}"></td>
+            <td class="editable" data-column="price" th:text="'$' + ${plate.price}"></td>
+            <td class="editable" data-column="discount" th:text="${plate.discount} + '%'"></td>
+
+            <!-- Cuisine dropdown -->
+            <td>
+                <select data-column="cuisine" th:value="${plate.cuisine.id}"
+                        class="list-dropdown-select" style="width: 150px;">
+
+                    <option value="" th:selected="${plate.cuisine == null}"
+                            disabled th:text="${plate.cuisine != null ? plate.cuisine.name : 'Choose Cuisine'}">
+                    </option>
+
+                    <option th:each="cuisine : ${cuisines}"
+                            th:value="${cuisine.id}"
+                            th:text="${cuisine.name}"
+                            th:selected="${plate.cuisine.id == cuisine.id}">
+                    </option>
+                </select>
+            </td>
+
+            <!--Description-->
+            <td style="font-size: 9px;" class="editable list-textarea" data-column="description" th:text="${plate.description}">
+            </td>
+
+            <td>  <!--Link-->
+                <a class="editable" href="#" th:href="${plate.plateImage}" target="_blank" style="color: blue;">
+                    Image </a>
+            </td>
+
+            <td>  <!--Save button-->
+                <button class="btn btn-primary save-btn" data-id="${plate.id}">Update</button>
+            </td>
+
+            <td>  <!--Delete button-->
+                <button class="btn btn-primary delete-btn" data-id="${plate.id}">Delete</button>
+            </td>
+
+            <td> <!--View-->
+                <a th:href="@{http://localhost:3000/plate/{id}(id=${plate.id})}" target="_blank">
+                    <button class="button-page-view">View Page</button>
+                </a>
+            </td>
+
+        </tr>
+    </table>
+</div>
+
+</body>
+
