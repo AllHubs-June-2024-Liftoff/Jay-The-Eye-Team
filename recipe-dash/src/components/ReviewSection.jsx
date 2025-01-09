@@ -100,12 +100,32 @@ const ReviewSection = () => {
 
   return (
     <Box>
+
+    <Divider sx={{
+            marginBottom: 2,
+            marginTop: 6,
+            borderWidth: 3,
+            borderColor: '#DAA520',
+            width: '100%',
+          }} />
+
       <Box sx={{ maxWidth: 600, margin: 'auto', padding: 2 }}>
 
-         <Box sx={{ alignItems: 'left', justifyContent: 'left', marginBottom: 2 }}>
-           <Typography component="legend" sx={{ marginRight: 1 }}>Your Rating:</Typography>
-           <Rating value={rating} onChange={handleRatingChange} sx={{ marginRight: 2 }} />
-         </Box>
+       <Box sx={{ alignItems: 'left', justifyContent: 'left', marginBottom: 2 }}>
+          <Typography component="legend" sx={{ marginBottom: `1`,  color: '#DAA520' }} >Add your review!</Typography>
+          <Rating
+            value={rating}
+            onChange={handleRatingChange}
+            sx={{
+              '& .MuiRating-iconFilled': {
+                color: '#DAA520',
+              },
+              '& .MuiRating-iconEmpty': {
+                color: 'lightgray',
+              }
+            }}
+          />
+        </Box>
 
         <TextField
           label="Comment (Required)"
@@ -139,30 +159,22 @@ const ReviewSection = () => {
             '&.Mui-disabled': { backgroundColor: 'lightgray' },
           }}
         >
-          {loading ? <CircularProgress size={24} color="inherit" /> : 'Submit Review'}
+          {loading ? <CircularProgress size={24} color="inherit" /> : 'Submit'}
         </Button>
       </Box>
 
-      <Divider sx={{
-        marginBottom: 2,
-        marginTop: 6,
-        borderWidth: 3,
-        borderColor: '#DAA520',
-        width: '100%',
-      }} />
-
       <Box sx={{ maxWidth: 1000, margin: 'auto', padding: 2 }}>
 
-        <Box sx={{ marginTop: 4 }}>
+        <Box sx={{ marginTop: 4, textAlign: 'left' }}>
           {loading ? (
             <CircularProgress size={50} color="inherit" sx={{ display: 'block', margin: 'auto' }} />
           ) : (
             reviews.map((review) => (
-              <Box key={review.id} sx={{ marginBottom: 2, padding: 2, border: '1px solid #ddd', borderRadius: 2 }}>
+              <Box key={review.id} sx={{ marginBottom: 2, padding: 2 }}>
                 <Rating value={review.rating} readOnly sx={{ marginBottom: 1 }} />
                 <Typography variant="body1">{review.description}</Typography>
 
-               <Typography variant="body2" sx={{ color: 'gray', marginTop: 1 }}>
+               <Typography variant="body2" sx={{ color: 'gray', marginTop: 1, fontSize: '11px' }}>
                  {format(new Date(review.dateCreated), 'h:mm a MMMM d, yyyy')}
                </Typography>
               </Box>

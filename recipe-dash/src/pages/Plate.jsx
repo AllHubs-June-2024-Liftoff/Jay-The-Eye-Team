@@ -91,11 +91,21 @@ const Plate = () => {
         </Grid>
 
         {/* First row - Right Column - Nutrition Stuff */}
-        <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start' }}>
-          <Typography>
-            Lorem ipsum dolor sit amet. Est ratione rerum est enim minima eos dolorem alias qui provident incidunt et facere sunt ex incidunt iste est maxime impedit? Est quisquam distinctio aut ipsam fugit ea necessitatibus aperiam ut dolores quidem. Sit repudiandae impedit et sunt veritatis sed fuga adipisci. Id sunt architecto nam nisi praesentium in Quis voluptatem id ullam excepturi.
+        <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+          <Typography variant="body2" color="text.primary" textAlign="center" sx={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '8px'  }}>
+            Notes
+          </Typography>
+          <Typography style={{ textAlign: 'left', fontSize: '11px', maxWidth:'300px'}}>
+            Lorem ipsum dolor sit amet.<br />
+            <br />
+            Est ratione rerum est enim minima eos dolorem alias qui provident incidunt et facere sunt ex incidunt iste est maxime impedit?<br />
+            <br />
+            Est quisquam distinctio aut ipsam fugit ea necessitatibus aperiam ut dolores quidem. Sit repudiandae impedit et sunt veritatis sed fuga adipisci.<br />
+            <br />
+            Id sunt architecto nam nisi praesentium in Quis voluptatem id ullam excepturi.
           </Typography>
         </Grid>
+
 
         {/* Second row */}
         <Grid item xs={12}>
