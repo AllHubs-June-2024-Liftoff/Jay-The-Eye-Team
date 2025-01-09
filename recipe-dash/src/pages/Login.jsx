@@ -35,7 +35,7 @@ const Login = () => {
 
         try {
             // API call to login the user
-            const response = await axios.post("http://localhost:8080/api/auth/login", formData);
+            const response = await axios.post("http://localhost:8080/api/login", formData);
 
             // Extract user data from the response
             const { nameFirst, email, isChef } = response.data;
