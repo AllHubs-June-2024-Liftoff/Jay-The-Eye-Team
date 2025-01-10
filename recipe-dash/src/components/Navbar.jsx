@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Link, Routes, Route } from "react-router-dom";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../store/userSlice";
+import { selectCartTotalQuantity } from "../store/cartSlice";
 
 // Components
 import logo from '../assets/images/reciepe-dash-white-yellow.png';
@@ -20,11 +21,13 @@ import MenuItem from "../pages/MenuItem";
 import Register from "../pages/Register";
 import OrderComplete from "../pages/OrderComplete";
 import Reviews from "../pages/Reviews";
-import Plate from '../pages/Plate';
+import Plate from "../pages/Plate";
+import Cart from "../pages/Cart";
 
 function NavBar() {
   const dispatch = useDispatch();
   const { loginStatus, email, nameFirst, isChef } = useSelector((state) => state.user);
+  const totalQuantity = useSelector(selectCartTotalQuantity); // Fetch total quantity from cart
 
   const handleLogout = () => {
     dispatch(logout());
@@ -39,7 +42,7 @@ function NavBar() {
       >
         <Container fluid>
           <Navbar.Brand as={Link} to="/">
-           <img src={logo} alt="Logo" style={{ height: 40 }} />
+            <img src={logo} alt="Logo" style={{ height: 40 }} />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
@@ -97,6 +100,31 @@ function NavBar() {
                   </NavDropdown.Item>
                 </NavDropdown>
               )}
+              {/* Add Cart Icon with Quantity */}
+              {!isChef && (
+                <Nav.Link as={Link} to="/cart" className="cart-icon">
+                  <div style={{ position: "relative", display: "inline-block" }}>
+                    <i className="fas fa-shopping-cart" style={{ fontSize: "1.5rem", color: "#fff" }}></i>
+                    {totalQuantity > 0 && (
+                      <span
+                        style={{
+                          position: "absolute",
+                          top: "-5px",
+                          right: "-10px",
+                          backgroundColor: "red",
+                          color: "white",
+                          borderRadius: "50%",
+                          padding: "3px 6px",
+                          fontSize: "0.75rem",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {totalQuantity}
+                      </span>
+                    )}
+                  </div>
+                </Nav.Link>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -115,7 +143,8 @@ function NavBar() {
           <Route path="/register" element={<Register />} />
           <Route path="/ordercomplete" element={<OrderComplete />} />
           <Route path="/reviews" element={<Reviews />} />
-          <Route path="/plate/:plateId" element={<Plate />} /> {/* The individual plate details page */}
+          <Route path="/plate/:plateId" element={<Plate />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
       </div>
     </Router>
