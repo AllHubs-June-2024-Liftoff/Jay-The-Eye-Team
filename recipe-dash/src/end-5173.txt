@@ -1,0 +1,20 @@
+In PowerShell, use the netstat command to find the process using the port:
+                netstat -ano | findstr :5173
+
+This will give you the PID (Process ID) of the process occupying port 5173. The output will look something like this:
+        TCP    [::]:5173              [::]:0                 LISTENING       12345
+Here, 12345 is the PID.
+
+2. Kill the process using Taskkill:
+Once you have the PID, you can stop the process with the following command:
+        taskkill /PID 12345 /F
+Make sure to replace 12345 with the actual PID from the previous step.
+
+3. Verify the port is free:
+After killing the process, you can verify that the port is free by running the netstat command again:
+        netstat -ano | findstr :5173
+If there's no output, that means the port is now free.
+
+4. Restart your Vite development server:
+Now you should be able to restart your Vite server by running:
+        npm run dev

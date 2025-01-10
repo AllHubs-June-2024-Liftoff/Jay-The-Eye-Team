@@ -1,11 +1,14 @@
 package org.launchcode.springboot_backend.models;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -22,24 +25,41 @@ public class ContactUs {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String comment;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    private LocalDateTime dateCreated;
+
+    @NotNull(message = "⚠\uFE0F Location cannot be empty")
+    @Size(min=1, max=255, message = "⚠\uFE0F Text length is out of bounds")
     private String name;
+
+    @NotNull(message = "⚠️ Email cannot be empty")
+    @Email(message = "⚠️ Invalid email format")
+    @Size(max = 255, message = "⚠️ Email length is out of bounds")
     private String email;
-    private String date;
+
+    @NotEmpty(message = "⚠️ Field cannot be empty")
+    @Size(min = 1, max = 1000, message = "Text length is out of bounds")
+    @Column(columnDefinition = "TEXT")
+    private String comment;
 
     public ContactUs() {}
 
-    public ContactUs(String comment, String name, String email, String date) {
+    public ContactUs(String name,String email, String comment) {
         this.comment = comment;
         this.name = name;
         this.email = email;
-        this.date = date;
+        this.dateCreated = LocalDateTime.now();
+    }
+
+    // Getter and Setter methods
+
+    public int getId() {
+        return id;
     }
 
     public String getComment() {
         return comment;
     }
-
     public void setComment(String comment) {
         this.comment = comment;
     }
@@ -47,7 +67,6 @@ public class ContactUs {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -55,30 +74,18 @@ public class ContactUs {
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ContactUs contactUs = (ContactUs) o;
-        return id == contactUs.id && Objects.equals(comment, contactUs.comment) && Objects.equals(name, contactUs.name) && Objects.equals(email, contactUs.email) && Objects.equals(date, contactUs.date);
+    public LocalDateTime getDateCreated() { return dateCreated; }
+    public void setDateCreated(LocalDateTime dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, comment, name, email, date);
+        return Objects.hash(id, comment, name, email, dateCreated);
     }
 
     @Override
@@ -88,7 +95,7 @@ public class ContactUs {
                 ", comment='" + comment + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", date='" + date + '\'' +
+                ", date='" + dateCreated + '\'' +
                 '}';
     }
 }

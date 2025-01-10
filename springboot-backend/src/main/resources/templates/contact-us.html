@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+
+<nav th:replace="~{fragments :: page-header}"></nav>
+<div th:replace="~{fragments :: script-sort-by-column}"></div>
+
+<div class="page-title-container">
+    <div class="list-image-container">
+        <img src="/images/chef-243-no-bg.png" alt="Chef"/>
+    </div>
+    <div>
+        <p class="bold-v1-page-title"> My Messages </p>
+    </div>
+</div>
+
+<div style="display: flex; justify-content: center; align-items: center; width:90%;">
+
+    <table class="table-container-list">
+        <tr class=" bold-v4 list-sorted-header">
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(0, true)">ID</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(1, false)">Date Created</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(2, false)">Name</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(3, false)">Email</a></strong></td>
+            <td><strong>Message</strong></td>
+
+        </tr>
+        <tr th:each="message : ${messages}">
+            <td th:text="${message.id}" style="font-weight:bold;"></td>
+            <td th:text="${message.dateCreated}"></td>
+            <td th:text="${message.name}"></td>
+            <td th:text="${message.email}"></td>
+            <td th:text="${message.comment}"></td>
+
+        </tr>
+    </table>
+</div>
+</body>
+</html>

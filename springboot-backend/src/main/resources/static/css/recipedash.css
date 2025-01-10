@@ -366,22 +366,29 @@ button, input[type="submit"] {
 
 .summary-v2-grid {
   display: grid;
-  justify-content: center;
-  align-items: center;
-  grid-template-columns: repeat(auto-fill, 100px);
-  grid-gap: 20px;
-  overflow: hidden;
-  position: relative;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
 }
 
 .summary-v2-buttons {
-  border: 3px solid var(--reddy);
-  border-radius: 20px;
+  border: 3px solid black;
+  border-radius: 10px;
   background-color: white;
-  width: 80px;
-  height: 80px;
+  width: 75px;
+  height: 75px;
   overflow: hidden;
   position: relative;
+  margin: 10px;
+}
+
+.summary-v2-buttons-people {
+  border: 3px solid black;
+  border-radius: 20px;
+  background-color: white;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  position: relative;
+  grid-gap: 100px;
 }
 
 .summary-v2-buttons img {
