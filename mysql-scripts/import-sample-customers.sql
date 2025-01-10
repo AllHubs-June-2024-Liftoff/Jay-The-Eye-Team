@@ -1,5 +1,4 @@
-use recipe_dash;
-INSERT INTO customer (id, name, address, email, name_first, name_last, phone, is_chef) VALUES
+INSERT INTO customer (id, name, address, email, name_first, name_last, phone, is_chef, user_id) VALUES
 (1, 'John Doe', '123 Maple St, St. Louis, MO 63101', 'johndoe@example.com', 'John', 'Doe', '314-555-1234', FALSE),
 (2, 'Jane Smith', '456 Oak St, St. Louis, MO 63102', 'janesmith@example.com', 'Jane', 'Smith', '314-555-2345', FALSE),
 (3, 'Robert Johnson', '789 Pine St, St. Louis, MO 63103', 'robertjohnson@example.com', 'Robert', 'Johnson', '314-555-3456', FALSE),
