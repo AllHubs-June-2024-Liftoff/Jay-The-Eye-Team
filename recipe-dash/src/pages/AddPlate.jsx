@@ -5,8 +5,7 @@ import axios from "axios";
 
 const AddPlate = () => {
     const navigate = useNavigate();
-    const isChef = useSelector((state) => state.user.isChef); // Get isChef from Redux
-
+    const isChef = useSelector((state) => state.user.isChef); 
     const [formData, setFormData] = useState({
         name: "",
         description: "",
@@ -27,15 +26,14 @@ const AddPlate = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post("http://localhost:8080/api/plates/add", formData);
+            const response = await axios.post("http://localhost:8080/plates/api/add", formData);
             setMessage(response.data);
-            navigate("/"); // Redirect to another page after successful addition
+            navigate("/");
         } catch (error) {
             setMessage(error.response?.data || "An error occurred.");
         }
     };
 
-    // Restrict access to chefs only
     if (!isChef) {
         return <h2>You are not authorized to access this page.</h2>;
     }

@@ -1,103 +1,121 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Box, Container, Typography, Grid } from '@mui/material';
-import { useParams } from 'react-router-dom'; // Use useParams to get the plateId from the URL
-
-import PlateApi from '../components/plates/PlateApi';
-import ReviewSection from '../components/ReviewSection';
+import React, { useMemo, useEffect, useState } from 'react';
+import { Box, Container, Typography, Grid, Button, TextField } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams, useNavigate } from 'react-router-dom';
+import { fetchMenu, selectMenuItems, selectMenuStatus } from '../store/menuSlice';
+import { addToCart } from '../store/cartSlice';
 import NutritionBox from '../components/NutritionBox';
+import ReviewSection from '../components/ReviewSection';
 
 const Plate = () => {
-  const { plateId } = useParams(); // Extract plateId from URL params
-  const [plates, setPlates] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true); // Loading state
+  const { plateId } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleFetchPlates = (data) => {
-    setPlates(data);
-    setLoading(false);
-  };
+  const plates = useSelector(selectMenuItems);
+  const menuStatus = useSelector(selectMenuStatus);
+  const [quantity, setQuantity] = useState(1);
 
-  const handleError = (errorMessage) => {
-    setError(errorMessage);
-    setLoading(false);
-  };
-
-  // Memoize the filtered plate based on the plateId from the URL
-  const filteredPlate = useMemo(() =>
-    plates?.find(plate => plate.id === Number(plateId)), [plates, plateId]);
-
+  // Fetch menu if not already loaded
   useEffect(() => {
-    setError(null); // Reset error when plateId changes
-    setLoading(true); // Reset loading when plateId changes
-  }, [plateId]);
+    if (menuStatus === 'idle') {
+      dispatch(fetchMenu());
+    }
+  }, [menuStatus, dispatch]);
+
+  // Find the plate by ID
+  const filteredPlate = useMemo(
+    () => plates.find((plate) => plate.id === Number(plateId)),
+    [plates, plateId]
+  );
+
+  const handleAddToCart = () => {
+    if (filteredPlate && quantity > 0) {
+      dispatch(addToCart({
+        id: filteredPlate.id,
+        name: filteredPlate.name,
+        price: filteredPlate.price,
+        quantity,
+        total: filteredPlate.price * quantity,
+      }));
+
+      navigate('/');
+    }
+  };
+
+  if (menuStatus === 'loading') {
+    return <Typography variant="h6" align="center">Loading...</Typography>;
+  }
+
+  if (!filteredPlate) {
+    return <Typography variant="h6" align="center">Plate not found</Typography>;
+  }
 
   return (
     <Container sx={{ marginTop: 5 }}>
-      <PlateApi onFetchPlates={handleFetchPlates} onError={handleError} />
-
-      {loading && <Typography variant="h6" align="center">Loading...</Typography>}
-      {error && <Typography variant="h6" color="error">{error}</Typography>}
-
       <Grid container spacing={2} alignItems="center">
-
-        {/* First row - Left Column - Display Plate*/}
         <Grid item xs={6} sx={{ margin: '0', padding: 2 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Container>
-                {/* Display the specific plate if it exists */}
-                {filteredPlate ? (
-                  <Grid container direction="column" spacing={1}>
-                    {/* Image */}
-                    <Grid item xs={12} style={{ display: 'flex', justifyContent: 'left' }}>
-                      <img
-                        src={filteredPlate.plateImage}
-                        alt={`${filteredPlate.name}`}
-                        style={{ width: '200px', height: '200px', objectFit: 'cover', borderRadius: '10px', display: 'block' }}
-                      />
-                    </Grid>
-
-                    {/* Details */}
-                    <Grid item xs={12}>
-                      <Typography variant="h4" component="div" gutterBottom style={{ textAlign: 'left' }}>
-                        {filteredPlate.name}
-                      </Typography>
-                      <Typography variant="p" component="div" gutterBottom style={{ marginTop: '1px', textAlign: 'left', fontStyle: 'italic' }}>
-                        {filteredPlate.description}
-                      </Typography>
-
-                      <Box display="flex" alignItems="center" marginTop="15px">
-                        <Typography variant="body2" color="text.primary" textAlign="right" marginRight="15px" sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
-                          ${filteredPlate.price}
-                        </Typography>
-
-                        <Box display="flex" alignItems="left">
-                          {filteredPlate.discount > 0 && (
-                            <Box bgcolor="black" color="#DAA520" p={0.75} display="flex" borderRadius={1} marginLeft="10px" alignItems="center" sx={{ fontSize: '0.9rem', textAlign: 'center', fontWeight: 'bold' }}>
-                              {filteredPlate.discount}% off
-                            </Box>
-                          )}
-                        </Box>
-
-                      </Box>
-
-                    </Grid>
+                <Grid container direction="column" spacing={1}>
+                  <Grid item xs={12} style={{ display: 'flex', justifyContent: 'left' }}>
+                    <img
+                      src={filteredPlate.plateImage}
+                      alt={`${filteredPlate.name}`}
+                      style={{ width: '200px', height: '200px', objectFit: 'cover', borderRadius: '10px', display: 'block' }}
+                    />
                   </Grid>
-                ) : (
-                  !loading && !error && <Typography variant="h6" align="center">Plate not found</Typography>
-                )}
+
+                  <Grid item xs={12}>
+                    <Typography variant="h4" gutterBottom style={{ textAlign: 'left' }}>
+                      {filteredPlate.name}
+                    </Typography>
+                    <Typography variant="p" gutterBottom style={{ textAlign: 'left', fontStyle: 'italic' }}>
+                      {filteredPlate.description}
+                    </Typography>
+
+                    <Box display="flex" alignItems="center" marginTop="15px">
+                      <Typography variant="body2" sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+                        ${filteredPlate.price}
+                      </Typography>
+
+                      {filteredPlate.discount > 0 && (
+                        <Box bgcolor="black" color="#DAA520" p={0.75} marginLeft="10px" borderRadius={1} sx={{ fontSize: '0.9rem', textAlign: 'center', fontWeight: 'bold' }}>
+                          {filteredPlate.discount}% off
+                        </Box>
+                      )}
+                    </Box>
+
+                    <Box marginTop="20px">
+                      <TextField
+                        label="Quantity"
+                        type="number"
+                        variant="outlined"
+                        size="small"
+                        value={quantity}
+                        onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))}
+                        sx={{ marginRight: 2 }}
+                      />
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleAddToCart}
+                      >
+                        Add to Cart
+                      </Button>
+                    </Box>
+                  </Grid>
+                </Grid>
               </Container>
             </Grid>
           </Grid>
         </Grid>
 
-        {/* First row - Right Column - Nutrition Stuff */}
         <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
           <NutritionBox plates={plates} />
         </Grid>
 
-
-        {/* Second row */}
         <Grid item xs={12}>
           <ReviewSection />
         </Grid>
@@ -107,3 +125,4 @@ const Plate = () => {
 };
 
 export default Plate;
+

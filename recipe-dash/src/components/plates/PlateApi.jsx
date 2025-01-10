@@ -8,19 +8,19 @@ const PlateApi = ({ onFetchPlates, onError }) => {
   useEffect(() => {
     axios
       .get('http://localhost:8080/plates/api')
-      .then(response => {
-        onFetchPlates(response.data);  // Pass fetched plates to the parent component
+      .then((response) => {
+        onFetchPlates(response.data); // Send data to parent component
         setLoading(false);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error fetching plates:', error);
-        const errorMessage = '[PlateAPi] Failed to load plates. Crosscheck you are on http://localhost:5173';
+        const errorMessage = 'Failed to load plates. Please check your connection.';
         setError(errorMessage);
+        onError?.(errorMessage); // Send error message to parent component
         setLoading(false);
-        onError(errorMessage);  // Pass error to parent component
       });
-  }, [onFetchPlates, onError]);
-
+  }, []);
+  
   if (loading) {
     return <div>Loading plates...</div>;
   }
@@ -33,3 +33,4 @@ const PlateApi = ({ onFetchPlates, onError }) => {
 };
 
 export default PlateApi;
+
