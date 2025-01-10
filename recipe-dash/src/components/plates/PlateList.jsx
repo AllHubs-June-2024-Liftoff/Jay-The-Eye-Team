@@ -19,9 +19,12 @@ const PlateList = () => {
       <PlateApi onFetchPlates={fetchPlates} />  {/* Fetch data from the API */}
 
       {loading && !error ? (
-        <CircularProgress size={70} color="#C05746" />
+        <CircularProgress
+          size={100}
+          sx={{ color: '#DAA520', margiTop: '30px' }}
+        />
       ) : error ? (
-        <div>{error}</div>
+        <Box sx={{ color: '#DAA520' }}> {error} </Box>
       ) : (
         <Grid container spacing={4}>
           {plates.map((plate) => (

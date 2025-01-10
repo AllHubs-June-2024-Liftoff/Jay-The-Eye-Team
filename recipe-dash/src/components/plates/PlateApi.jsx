@@ -14,7 +14,7 @@ const PlateApi = ({ onFetchPlates, onError }) => {
       })
       .catch(error => {
         console.error('Error fetching plates:', error);
-        const errorMessage = 'Failed to load plates. Please try again later.';
+        const errorMessage = '[PlateAPi] Failed to load plates. Crosscheck you are on http://localhost:5173';
         setError(errorMessage);
         setLoading(false);
         onError(errorMessage);  // Pass error to parent component
