@@ -1,3 +1,4 @@
+use recipe_dash;
 INSERT INTO review (id, date_created, rating, description, plate) VALUES
 (1, '2025-01-15T10:00:00', 4.5, 'The dish was delicious! The flavors complemented each other really well, and the presentation was beautiful. The seasoning was spot on, and the texture of the ingredients was perfect. A little more heat would have made it even better, but overall, it was a fantastic meal. Highly recommend!', 1),
 (2, '2025-01-15T10:15:00', 5.0, 'This dish exceeded my expectations! The flavors were bold and well-balanced, and the ingredients were fresh and perfectly cooked. The textures were fantastic, and the seasoning was just right. I will definitely be coming back for this one. Truly a top-tier dish!', 2),

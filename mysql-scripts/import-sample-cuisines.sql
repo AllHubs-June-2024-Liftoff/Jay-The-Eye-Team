@@ -1,3 +1,4 @@
+use recipe_dash;
 INSERT INTO cuisine (id, name, description) VALUES
 (1, 'Italian', 'Known for pasta, pizza, and rich flavors with olive oil and fresh ingredients'),
 (2, 'Chinese', 'Famous for stir-fries, dumplings, and a wide range of flavors from sweet to savory'),

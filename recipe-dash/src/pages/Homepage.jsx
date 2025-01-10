@@ -11,7 +11,7 @@ const Homepage = () => {
     useEffect(() => {
         const fetchPlates = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/plates/");
+                const response = await axios.get("http://localhost:8080/plates/api");
                 setPlates(response.data);
             } catch (error) {
                 console.error("Error fetching plates:", error);
@@ -70,7 +70,7 @@ const Homepage = () => {
                         <tr key={plate.id}>
                             <td>
                                 <img
-                                    src={plate.pictureLink}
+                                    src={plate.plateImage}
                                     alt={plate.name}
                                     style={{ width: "300px", height: "300px" }}
                                 />

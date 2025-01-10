@@ -1,3 +1,5 @@
+
+USE recipe_dash;
 INSERT INTO plate (id, name, description, discount, plate_image, price, cuisine) VALUES
 (1, 'Spaghetti Bolognese', 'Classic Italian pasta with rich meat sauce', 10, 'https://www.vickery.tv/wp-content/uploads/2020/12/SMGD-Spaghetti-Bolognese-500x500.jpg', 12.99, 1),
 (2, 'Tacos al Pastor', 'Mexican tacos with marinated pork and pineapple', 15, 'https://www.thespruceeats.com/thmb/wQd2RvxH1Lh9536W5LY1T_VSyT8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/tacos-al-pastor-recipe-4172074-hero-01-7fb1a4455397486b8485ac8ec2ca3c5a.jpg', 12.99, 2),

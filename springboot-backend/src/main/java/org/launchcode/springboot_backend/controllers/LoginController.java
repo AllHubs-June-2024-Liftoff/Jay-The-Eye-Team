@@ -1,4 +1,4 @@
-package org.launchcode.springboot_backend.api;
+package org.launchcode.springboot_backend.controllers;
 
 import org.launchcode.springboot_backend.models.Customer;
 import org.launchcode.springboot_backend.models.User;
