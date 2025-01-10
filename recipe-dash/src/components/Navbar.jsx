@@ -14,7 +14,7 @@ import About from "../pages/About";
 import Account from "../pages/Account";
 import AddPlate from "../pages/AddPlate";
 import Admin from "../pages/Admin";
-import Contact from "../pages/Contact";
+import ContactUs from "../pages/ContactUs";
 import Login from "../pages/Login";
 import MenuItem from "../pages/MenuItem";
 import Register from "../pages/Register";
@@ -50,7 +50,7 @@ function NavBar() {
               <Nav.Link as={Link} to="/about">
                 About
               </Nav.Link>
-              <Nav.Link as={Link} to="/contact">
+              <Nav.Link as={Link} to="/contact-us">
                 Contact
               </Nav.Link>
             </Nav>
@@ -109,7 +109,7 @@ function NavBar() {
           <Route path="/account" element={<Account />} />
           <Route path="/add_plate" element={<AddPlate />} />
           <Route path="/admin" element={<Admin />} />
-          <Route path="/contact" element={<Contact />} />
+          <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/login" element={<Login />} />
           <Route path="/menuitem" element={<MenuItem />} />
           <Route path="/register" element={<Register />} />
