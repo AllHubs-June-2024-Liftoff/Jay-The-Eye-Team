@@ -1,12 +1,12 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+
 import { selectCartItems, selectCartTotalPrice, updateQuantity, removeFromCart } from "../store/cartSlice";
 import { Grid, TextField, Button, Typography, Container } from "@mui/material";
 
 const Cart = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
   const cartItems = useSelector(selectCartItems);
   const totalPrice = useSelector(selectCartTotalPrice);
 
@@ -20,9 +20,6 @@ const Cart = () => {
     dispatch(removeFromCart({ id }));
   };
 
-  const handlePlaceOrder = () => {
-    navigate("/payment");
-  };
 
   return (
     <Container sx={{ marginTop: 5 }}>
@@ -60,7 +57,7 @@ const Cart = () => {
                   <Typography>${item.price.toFixed(2)}</Typography>
                 </Grid>
                 <Grid item xs={2}>
-                  <Typography>${(item.quantity * item.price).toFixed(2)}</Typography>
+
                 </Grid>
                 <Grid item xs={1}>
                   <Button
@@ -75,18 +72,6 @@ const Cart = () => {
             ))}
           </Grid>
 
-          <Typography variant="h5" align="right" sx={{ marginTop: 4 }}>
-            Total: ${totalPrice.toFixed(2)}
-          </Typography>
-
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ marginTop: 2, float: "right" }}
-            onClick={handlePlaceOrder}
-          >
-            Place Order
-          </Button>
         </>
       )}
     </Container>

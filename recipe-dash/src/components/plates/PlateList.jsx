@@ -36,7 +36,7 @@ const PlateList = () => {
   return (
     <Grid container spacing={4}>
       {plates.map((plate) => (
-        <Grid item key={plate.id} xs={12} sm={6} md={4}>
+
           <Link to={`/plate/${plate.id}`} style={{ textDecoration: 'none' }}>
             <PlateCard plate={plate} />
           </Link>

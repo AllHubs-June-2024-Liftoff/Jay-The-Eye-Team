@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchMenu, selectMenuItems, selectMenuStatus } from "../store/menuSlice";
 import PlateList from "../components/plates/PlateList";
 
+
 const Homepage = () => {
     const dispatch = useDispatch();
     const plates = useSelector(selectMenuItems);
@@ -15,9 +16,6 @@ const Homepage = () => {
         }
     }, [menuStatus, dispatch]);
 
-    return (
-        <div className="container mt-5">
-            <h2>Menu Items</h2>
             <PlateList plates={plates} />
             {menuStatus === "loading" && <p>Loading...</p>}
             {menuStatus === "failed" && <p>Error loading menu.</p>}

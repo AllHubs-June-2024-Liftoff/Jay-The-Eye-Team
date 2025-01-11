@@ -37,7 +37,6 @@ public class Plate extends AbstractEntity {
 
     @ManyToMany
     @JoinTable(
-            name = "delivery_plate",
             joinColumns = @JoinColumn(name = "plate_id"),
             inverseJoinColumns = @JoinColumn(name = "delivery_id")
     )
