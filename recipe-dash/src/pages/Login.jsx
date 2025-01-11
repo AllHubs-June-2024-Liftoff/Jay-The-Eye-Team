@@ -1,105 +1,201 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { Link } from 'react-router-dom';
-import axios from "axios";
-import { login } from "../store/userSlice"; // Import the login action from your Redux slice
+    import React, { useState } from "react";
+    import { useDispatch } from "react-redux";
+    import { useNavigate } from "react-router-dom";
+    import { Divider, Box, Button, Checkbox, Container, FormControlLabel, Grid, Paper, TextField, Typography, useTheme, useMediaQuery } from "@mui/material";
+    import { styled } from "@mui/system";
+    import { Link } from 'react-router-dom';
+    import axios from "axios";
+    import { login } from "../store/userSlice"; // Import the login action from your Redux slice
+    import logoImage from '../assets/images/reciepe-dash-black-yellow.png';
 
-const Login = () => {
-    const [formData, setFormData] = useState({
-        email: "",
-        password: "",
-    });
+    const StyledTextField = styled(TextField)(({ theme }) => ({
+      "& .MuiInputLabel-root": {
+        color: "black", // default color
+        "&.Mui-focused": {
+          color: "#DAA520", // change label color when focused
+        },
+      },
+      "& .MuiOutlinedInput-root": {
+        "&:hover fieldset": {
+          borderColor: "#DAA520", // border color on hover
+        },
+        "&.Mui-focused fieldset": {
+          borderColor: "#DAA520", // border color when focused
+        },
+      },
+      marginBottom: "1rem",
+    }));
 
-    const [errorMessage, setErrorMessage] = useState("");
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const Login = () => {
+        const [formData, setFormData] = useState({
+            email: "",
+            password: "",
+        });
 
-    
-    const handleChefLogin = () => {
-        dispatch(login({ nameFirst: "Chef", isChef: true }));
-        navigate("/");
-    };
-    const handleUserLogin = () => {
-        dispatch(login({ nameFirst: "John", isChef: false }));
-        navigate("/");
-    };
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
+        const [errorMessage, setErrorMessage] = useState("");
+        const dispatch = useDispatch();
+        const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setErrorMessage("");
 
-        try {
-            // API call to login the user
-            const response = await axios.post("http://localhost:8080/api/login", formData);
-
-            // Extract user data from the response
-            const { nameFirst, email, isChef } = response.data;
-
-            // Update Redux store
-            dispatch(
-                login({
-                    email,
-                    nameFirst,
-                    loginStatus: true,
-                    isChef,
-                })
-            );
-
-            // Redirect to the homepage
+        const handleChefLogin = () => {
+            dispatch(login({ nameFirst: "Chef", isChef: true }));
             navigate("/");
-        } catch (error) {
-            // Display error message on failure
-            setErrorMessage(
-                error.response?.data || "Invalid username or password. Please try again."
-            );
-        }
+        };
+        const handleUserLogin = () => {
+            dispatch(login({ nameFirst: "John", isChef: false }));
+            navigate("/");
+        };
+        const handleChange = (e) => {
+            const { name, value } = e.target;
+            setFormData({ ...formData, [name]: value });
+        };
+
+        const handleSubmit = async (e) => {
+            e.preventDefault();
+            setErrorMessage("");
+
+            try {
+                // API call to login the user
+                const response = await axios.post("http://localhost:8080/api/login", formData);
+
+                // Extract user data from the response
+                const { nameFirst, email, isChef } = response.data;
+
+                // Update Redux store
+                dispatch(
+                    login({
+                        email,
+                        nameFirst,
+                        loginStatus: true,
+                        isChef,
+                    })
+                );
+
+                // Redirect to the homepage
+                navigate("/");
+            } catch (error) {
+                // Display error message on failure
+                setErrorMessage(
+                    error.response?.data || "Invalid username or password. Please try again."
+                );
+            }
+        };
+
+        return (
+            <div className="container mt-5">
+                <Typography
+                      variant="h4"
+                      component="h1"
+                      align="center"
+                      gutterBottom
+                      sx={{
+                        fontWeight: "bold",
+                        color: "#DAA520",
+                        marginRight: 3,
+                        marginBottom: 3,
+                      }}
+                    > Login
+                </Typography>
+
+                <form onSubmit={handleSubmit}>
+
+                    <Grid>
+                        <StyledTextField
+                            fullWidth
+                            label="E-mail"
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                            variant="outlined"
+                        />
+                        <StyledTextField
+                            fullWidth
+                            label="Password"
+                            type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
+                            variant="outlined"
+                        />
+                    </Grid >
+
+                    {errorMessage && <p className="text-danger">{errorMessage}</p>}
+
+                   <Grid container spacing={1} justifyContent="center" alignItems="center" direction="row">
+                       <Grid item>
+                           <Button
+                               type="submit"
+                               variant="contained"
+                               sx={{
+                                 backgroundColor: "#DAA520",
+                                 "&:hover": {
+                                   backgroundColor: "black",
+                                 },
+                               }}
+                               size="large"
+                               width="200px"
+                           >Login
+                           </Button>
+                       </Grid>
+                   </Grid>
+
+                   <Grid item
+                        container
+                        direction="column"
+                        alignItems="center"
+                        justifyContent="center"
+                   >
+                       <Grid item>
+                           <img
+                               src={logoImage}
+                               alt="Logo"
+                               style={{
+                                   width: "150px",
+                                   display: "block",
+                                   marginTop: "30px",
+                               }}
+                           />
+                       </Grid>
+                       <Grid item>
+                           <div className="mt-3">
+                               <p>
+                                   Don’t have an account? <Link to="/register">Register here</Link>
+                               </p>
+                           </div>
+                       </Grid>
+                   </Grid>
+
+                    <Grid container justifyContent="center" alignItems="center" direction="column" >
+                      <Grid item xs={12}>
+                        <Divider
+                          sx={{
+                            marginTop: 3,
+                            marginBottom: 1,
+                            borderWidth: 3,
+                            borderColor: '#FF00FF',
+                            width: '300px',
+                          }}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} sx={{ textAlign: 'center', width: '100%' }}>
+                        <p style={{ color: '#FF00FF', fontWeight: 'bold' }}>
+                          Public User Logins - For Demo Only
+                        </p>
+                      </Grid>
+
+                      <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+                        <button onClick={handleChefLogin}>Login as Chef</button>
+                        <button onClick={handleUserLogin}>User Login</button>
+                      </Grid>
+                    </Grid>
+
+                </form>
+            </div>
+        );
     };
 
-    return (
-        <div className="container mt-5">
-            <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <label htmlFor="email" className="form-label">Email</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="password" className="form-label">Password</label>
-                    <input
-                        type="password"
-                        className="form-control"
-                        id="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                {errorMessage && <p className="text-danger">{errorMessage}</p>}
-                <button type="submit" className="btn btn-primary">Login</button>
-                <button onClick={handleChefLogin}>Login as Chef</button>
-                <button onClick={handleUserLogin}>User Login</button>
-                <div className="mt-3">
-                    <p>
-                        Don’t have an account? <Link to="/register">Register here</Link>
-                    </p>
-                </div>
-            </form>
-        </div>
-    );
-};
-
-export default Login;
+    export default Login;

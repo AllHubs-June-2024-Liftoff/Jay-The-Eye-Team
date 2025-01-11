@@ -25,13 +25,17 @@ import Plate from "../pages/Plate";
 import Cart from "../pages/Cart";
 import NotFound404 from "../pages/NotFound404";
 
+import ChiliDraft from "../pages/ChiliDraft";
+
 function NavBar() {
   const dispatch = useDispatch();
+
   const { loginStatus, email, nameFirst, isChef } = useSelector((state) => state.user);
   const totalQuantity = useSelector(selectCartTotalQuantity); // Fetch total quantity from cart
 
   const handleLogout = () => {
     dispatch(logout());
+    window.location.href = '/';
   };
 
   return (
@@ -90,9 +94,9 @@ function NavBar() {
                       <NavDropdown.Item as={Link} to="/reviews">
                         Reviews
                       </NavDropdown.Item>
-                      <NavDropdown.Item as={Link} to="/add_plate">
-                        Add Plate
-                      </NavDropdown.Item>
+{/*                       <NavDropdown.Item as={Link} to="/add_plate"> */}
+{/*                         Add Plate */}
+{/*                       </NavDropdown.Item> */}
                     </>
                   )}
                   <NavDropdown.Divider />
@@ -149,6 +153,7 @@ function NavBar() {
 
           {/* Catch-all route for 404 page */}
           <Route path="*" element={<NotFound404 />} />
+          <Route path="/chili" element={<ChiliDraft />} />
 
         </Routes>
       </div>

@@ -1,11 +1,20 @@
 import React, { useMemo, useEffect, useState } from 'react';
-import { Box, Container, Typography, Grid, Button, TextField } from '@mui/material';
+import { Divider, Box, Container, Typography, Grid, Button, TextField } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchMenu, selectMenuItems, selectMenuStatus } from '../store/menuSlice';
 import { addToCart } from '../store/cartSlice';
 import NutritionBox from '../components/NutritionBox';
-import ReviewSection from '../components/ReviewSection';
+import ReviewList from '../components/reviews/ReviewList';
+import ReviewAddByCustomer from '../components/reviews/ReviewAddByCustomer';
+
+const dividerGoldStyle = {
+    marginTop: 2,
+    marginBottom: 2,
+    borderWidth: 3,
+    borderColor: '#DAA520',
+    width: '100%',
+};
 
 const Plate = () => {
   const { plateId } = useParams();
@@ -53,19 +62,20 @@ const Plate = () => {
 
   return (
     <Container sx={{ marginTop: 5 }}>
-      <Grid container spacing={2} alignItems="center">
+      <Grid container spacing={2} alignItems="top">
         <Grid item xs={6} sx={{ margin: '0', padding: 2 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Container>
-                <Grid container direction="column" spacing={1}>
-                  <Grid item xs={12} style={{ display: 'flex', justifyContent: 'left' }}>
-                    <img
-                      src={filteredPlate.plateImage}
-                      alt={`${filteredPlate.name}`}
-                      style={{ width: '200px', height: '200px', objectFit: 'cover', borderRadius: '10px', display: 'block' }}
-                    />
-                  </Grid>
+                  <Divider sx={dividerGoldStyle} />
+                    <Grid container direction="column" spacing={1}>
+                      <Grid item xs={12} style={{ display: 'flex', justifyContent: 'left', marginTop: '20px' }}>
+                        <img
+                          src={filteredPlate.plateImage}
+                          alt={`${filteredPlate.name}`}
+                          style={{ width: '250px', height: '250px', objectFit: 'cover', borderRadius: '10px', display: 'block' }}
+                        />
+                      </Grid>
 
                   <Grid item xs={12}>
                     <Typography variant="h4" component="div" gutterBottom style={{ textAlign: 'left' }}>
@@ -87,6 +97,28 @@ const Plate = () => {
                       )}
                     </Box>
 
+                    <Box sx={{ display: 'flex', marginTop: '50px', justifyContent: 'right' }} >
+                          <TextField
+                            label="Quantity"
+                            type="number"
+                            variant="outlined"
+                            size="small"
+                            value={quantity}
+                            onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))}
+                            sx={{ marginRight: 3, width: '75px', '& .MuiInputBase-input': { textAlign: 'center' } }}
+                          />
+                          <Button
+                            variant="contained"
+                            sx={{ backgroundColor: 'black', marginBottom: '20px' }}
+                            onClick={handleAddToCart}
+                          >
+                            Add to Cart
+                          </Button>
+                    </Box>
+                    <Divider sx={dividerGoldStyle} />
+                    <Grid item xs={12}>
+                      <ReviewAddByCustomer />
+                    </Grid>
 
                   </Grid>
                 </Grid>
@@ -99,27 +131,8 @@ const Plate = () => {
           <NutritionBox plates={plates} />
         </Grid>
 
-        <Box sx={{ marginTop: '30px', marginLeft: '35px' }} >
-              <TextField
-                label="Quantity"
-                type="number"
-                variant="outlined"
-                size="small"
-                value={quantity}
-                onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))}
-                sx={{ marginRight: 3, width: '75px', '& .MuiInputBase-input': { textAlign: 'center' } }}
-              />
-              <Button
-                variant="contained"
-                sx={{ backgroundColor: 'black' }}
-                onClick={handleAddToCart}
-              >
-                Add to Cart
-              </Button>
-        </Box>
-
         <Grid item xs={12}>
-          <ReviewSection />
+          <ReviewList />
         </Grid>
       </Grid>
     </Container>
