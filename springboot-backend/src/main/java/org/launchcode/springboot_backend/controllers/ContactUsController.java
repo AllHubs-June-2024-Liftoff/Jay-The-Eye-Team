@@ -1,7 +1,7 @@
 package org.launchcode.springboot_backend.controllers;
 
+import org.launchcode.springboot_backend.models.ContactUs;
 import org.launchcode.springboot_backend.repositories.ContactUsRepository;
-import org.launchcode.springboot_backend.repositories.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("contact-us")
+@RequestMapping("messages")
 public class ContactUsController {
 
     @Autowired
@@ -18,8 +18,11 @@ public class ContactUsController {
 
     @GetMapping("")
     public String index(Model model) {
+
         Sort sort = Sort.by(Sort.Order.desc("id"));
-        model.addAttribute("messages", contactUsRepository.findAll(sort));
-        return "contact-us";
+        Iterable<ContactUs> messages = contactUsRepository.findAll(sort);
+        model.addAttribute("messages", messages);
+
+        return "contact-us/list-messages";
     }
 }

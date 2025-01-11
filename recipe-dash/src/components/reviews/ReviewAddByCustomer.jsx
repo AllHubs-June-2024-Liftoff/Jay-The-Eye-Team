@@ -3,7 +3,7 @@ import { Divider, TextField, Rating, Button, Box, Typography, Snackbar, Circular
 import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 
-const ReviewSection = () => {
+const ReviewAddByCustomer = () => {
   const { plateId } = useParams();  // Extract plateId from the URL
 
   const [rating, setRating] = useState(0);
@@ -28,7 +28,6 @@ const ReviewSection = () => {
       });
 
       if (response.ok) {
-        // setSuccessMessage(`Review submitted successfully! ${JSON.stringify(reviewData)}`);
         setSuccessMessage(`Review submitted successfully!`);
         setErrorMessage('');
         // Fetch updated reviews after successful submission
@@ -101,18 +100,10 @@ const ReviewSection = () => {
   return (
     <Box>
 
-    <Divider sx={{
-            marginBottom: 2,
-            marginTop: 6,
-            borderWidth: 3,
-            borderColor: '#DAA520',
-            width: '100%',
-          }} />
+      <Box sx={{ maxWidth: 600, margin: 'auto' }}>
 
-      <Box sx={{ maxWidth: 600, margin: 'auto', padding: 2 }}>
-
-       <Box sx={{ alignItems: 'left', justifyContent: 'left', marginBottom: 2 }}>
-          <Typography component="legend" sx={{ marginBottom: `1`,  color: '#DAA520' }} >Add your review!</Typography>
+        <Box sx={{ alignItems: 'left', justifyContent: 'left', marginBottom: 2 }}>
+          <Typography component="legend" sx={{ marginBottom: `1`, color: '#DAA520' }} >Add your review!</Typography>
           <Rating
             value={rating}
             onChange={handleRatingChange}
@@ -161,47 +152,28 @@ const ReviewSection = () => {
         >
           {loading ? <CircularProgress size={24} color="inherit" /> : 'Submit'}
         </Button>
-      </Box>
-
-      <Box sx={{ maxWidth: 1000, margin: 'auto', padding: 2 }}>
-
-        <Box sx={{ marginTop: 4, textAlign: 'left' }}>
-          {loading ? (
-            <CircularProgress size={50} color="inherit" sx={{ display: 'block', margin: 'auto' }} />
-          ) : (
-            reviews.map((review) => (
-              <Box key={review.id} sx={{ marginBottom: 2, padding: 2 }}>
-                <Rating value={review.rating} readOnly sx={{ marginBottom: 1 }} />
-                <Typography variant="body1">{review.description}</Typography>
-
-               <Typography variant="body2" sx={{ color: 'gray', marginTop: 1, fontSize: '11px' }}>
-                 {format(new Date(review.dateCreated), 'h:mm a MMMM d, yyyy')}
-               </Typography>
-              </Box>
-            ))
-          )}
-        </Box>
-
-        {/* Success and Error Snackbar */}
-        <Snackbar
-          open={Boolean(successMessage)}
-          autoHideDuration={6000}
-          onClose={() => setSuccessMessage('')}
-        >
-          <Alert severity="success">{successMessage}</Alert>
-        </Snackbar>
-
-        <Snackbar
-          open={Boolean(errorMessage)}
-          autoHideDuration={6000}
-          onClose={() => setErrorMessage('')}
-        >
-          <Alert severity="error">{errorMessage}</Alert>
-        </Snackbar>
 
       </Box>
+
+      {/* Success and Error Snackbar */}
+      <Snackbar
+        open={Boolean(successMessage)}
+        autoHideDuration={6000}
+        onClose={() => setSuccessMessage('')}
+      >
+        <Alert severity="success">{successMessage}</Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={Boolean(errorMessage)}
+        autoHideDuration={6000}
+        onClose={() => setErrorMessage('')}
+      >
+        <Alert severity="error">{errorMessage}</Alert>
+      </Snackbar>
+
     </Box>
   );
 };
 
-export default ReviewSection;
+export default ReviewAddByCustomer;

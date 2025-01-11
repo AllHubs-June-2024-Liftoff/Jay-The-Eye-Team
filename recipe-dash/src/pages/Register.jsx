@@ -1,6 +1,29 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Box, Button, Checkbox, Container, FormControlLabel, Grid, Paper, TextField, Typography, useTheme, useMediaQuery } from "@mui/material";
+import { styled } from "@mui/system";
+import logoImage from '../assets/images/reciepe-dash-black-yellow.png';
+
+
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  "& .MuiInputLabel-root": {
+    color: "black", // default color
+    "&.Mui-focused": {
+      color: "#DAA520", // change label color when focused
+    },
+  },
+  "& .MuiOutlinedInput-root": {
+    "&:hover fieldset": {
+      borderColor: "#DAA520", // border color on hover
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#DAA520", // border color when focused
+    },
+  },
+  marginBottom: "1rem",
+}));
+
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -32,6 +55,7 @@ const Register = () => {
         setErrorMessage("");
         setSuccessMessage("");
 
+        // Password matching validation
         if (formData.password !== formData.reEnterPassword) {
             setErrorMessage("Passwords do not match!");
             return;
@@ -57,111 +81,157 @@ const Register = () => {
     };
 
     return (
-        <div className="container mt-5">
-            <h2>Register</h2>
+        <Container maxWidth="md" >
+             <Typography
+                  variant="h4"
+                  component="h1"
+                  align="center"
+                  gutterBottom
+                  sx={{
+                    fontWeight: "bold",
+                    color: "#DAA520",
+                    marginRight: 3,
+                    marginBottom: 3,
+                  }}
+                > Create an Account
+            </Typography>
+
             <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <label htmlFor="nameFirst" className="form-label">First Name</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="nameFirst"
-                        name="nameFirst"
-                        value={formData.nameFirst}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="nameLast" className="form-label">Last Name</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="nameLast"
-                        name="nameLast"
-                        value={formData.nameLast}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="email" className="form-label">Email</label>
-                    <input
-                        type="email"
-                        className="form-control"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="password" className="form-label">Password</label>
-                    <input
-                        type="password"
-                        className="form-control"
-                        id="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="reEnterPassword" className="form-label">Re-enter Password</label>
-                    <input
-                        type="password"
-                        className="form-control"
-                        id="reEnterPassword"
-                        name="reEnterPassword"
-                        value={formData.reEnterPassword}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="address" className="form-label">Address</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="address"
-                        name="address"
-                        value={formData.address}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="phone" className="form-label">Phone</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="mb-3 form-check">
-                    <input
-                        type="checkbox"
-                        className="form-check-input"
-                        id="isChef"
-                        name="isChef"
-                        checked={formData.isChef}
-                        onChange={handleChange}
-                    />
-                    <label className="form-check-label" htmlFor="isChef">
-                        Register as a Chef
-                    </label>
-                </div>
-                {errorMessage && <p className="text-danger">{errorMessage}</p>}
-                {successMessage && <p className="text-success">{successMessage}</p>}
-                <button type="submit" className="btn btn-primary">Register</button>
+                <Grid container spacing={10}>
+                    {/* Left Grid*/}
+                    <Grid item xs={12} sm={6}>
+                        <StyledTextField
+                            fullWidth
+                            label="First Name"
+                            name="nameFirst"
+                            value={formData.nameFirst}
+                            onChange={handleChange}
+                            required
+                            variant="outlined"
+                        />
+                        <StyledTextField
+                            fullWidth
+                            label="Last Name"
+                            name="nameLast"
+                            value={formData.nameLast}
+                            onChange={handleChange}
+                            required
+                            variant="outlined"
+                        />
+                        <StyledTextField
+                            fullWidth
+                            label="Password"
+                            type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
+                            variant="outlined"
+                        />
+                        <StyledTextField
+                            fullWidth
+                            label="Verify Password"
+                            type="password"
+                            name="reEnterPassword"
+                            value={formData.reEnterPassword}
+                            onChange={handleChange}
+                            required
+                            variant="outlined"
+                        />
+                    </Grid>
+
+                    {/* Right Grid */}
+                    <Grid item xs={12} sm={6}>
+                        <StyledTextField
+                            fullWidth
+                            label="E-mail"
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                            variant="outlined"
+                        />
+                        <StyledTextField
+                            fullWidth
+                            label="Address"
+                            name="address"
+                            value={formData.address}
+                            onChange={handleChange}
+                            required
+                            variant="outlined"
+                            multiline
+                            rows={2}
+                        />
+                        <StyledTextField
+                            fullWidth
+                            label="Phone"
+                            type="tel"
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            required
+                            variant="outlined"
+                        />
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    name="isChef"
+                                    checked={formData.isChef}
+                                    onChange={handleChange}
+                                    sx={{
+                                        '&.Mui-checked': {
+                                            color: 'black',
+                                        },
+                                    }}
+                                />
+                            }
+                            label="Register as a Chef"
+                        />
+                    </Grid>
+
+                    {/* Error and Success Messages */}
+                    {errorMessage && (
+                        <Grid item xs={12}>
+                            <Typography color="error">{errorMessage}</Typography>
+                        </Grid>
+                    )}
+                    {successMessage && (
+                        <Grid item xs={12}>
+                            <Typography color="success">{successMessage}</Typography>
+                        </Grid>
+                    )}
+
+                    {/* Submit Button & Logo*/}
+                    <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            sx={{
+                              backgroundColor: "#DAA520",
+                              "&:hover": {
+                                backgroundColor: "black",
+                              },
+                            }}
+                            size="large"
+                            width="200px"
+                        >
+                            Register
+                        </Button>
+                        <img
+                            src={logoImage}
+                            alt="Logo"
+                            style={{
+                                width: "30%",
+                                display: "block",
+                                marginTop: "50px",
+                            }}
+                        />
+                    </Grid>
+
+                </Grid>
             </form>
-        </div>
+        </Container>
     );
 };
 

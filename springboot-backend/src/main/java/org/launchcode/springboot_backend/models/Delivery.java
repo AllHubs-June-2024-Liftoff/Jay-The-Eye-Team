@@ -24,7 +24,7 @@ public class Delivery {
     private Customer customer;
 
     @ManyToMany
-    private List<Plate> plate;
+    private List<Plate> plates;
 
     // INDEPENDENT
     @Id
@@ -32,9 +32,6 @@ public class Delivery {
     private int id;
 
     private LocalDateTime dateCreated;
-
-    @ManyToOne
-    private Plate plates;
 
     public enum Status {
         NEW, PENDING, COMPLETED
@@ -46,7 +43,7 @@ public class Delivery {
     // Constructors
     public Delivery() {}
 
-    public Delivery(Customer customer, LocalDateTime dateCreated, Plate plates, Status status) {
+    public Delivery(Customer customer, LocalDateTime dateCreated, List<Plate> plates, Status status) {
         this.customer = customer;
         this.dateCreated = dateCreated;
         this.plates = plates;
@@ -67,10 +64,10 @@ public class Delivery {
         this.dateCreated = dateCreated;
     }
 
-    public Plate getPlates() {
+    public List<Plate> getPlates() {
         return plates;
     }
-    public void setPlates(Plate plates) {
+    public void setPlates(List<Plate> plates) {
         this.plates = plates;
     }
 
