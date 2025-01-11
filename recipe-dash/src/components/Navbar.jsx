@@ -5,6 +5,8 @@ import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../store/userSlice";
 import { selectCartTotalQuantity } from "../store/cartSlice";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 // Components
 import logo from '../assets/images/reciepe-dash-white-yellow.png';
@@ -23,6 +25,9 @@ import OrderComplete from "../pages/OrderComplete";
 import Reviews from "../pages/Reviews";
 import Plate from "../pages/Plate";
 import Cart from "../pages/Cart";
+import PaymentForm from '../pages/PaymentForm';
+
+const stripePromise = loadStripe("pk_test_51QeHM9QxE4tRvHaYKsXUf3kQEgwFAGM8AbXwZT5FHS7CSHBLDRQcoML76uUBs6Vh5vj2LhioBzf8A1i1UGxr3GzH00odn3SeWM");
 
 function NavBar() {
   const dispatch = useDispatch();
@@ -145,6 +150,14 @@ function NavBar() {
           <Route path="/reviews" element={<Reviews />} />
           <Route path="/plate/:plateId" element={<Plate />} />
           <Route path="/cart" element={<Cart />} />
+          <Route
+            path="/payment"
+            element={
+              <Elements stripe={stripePromise}>
+                  <PaymentForm />
+              </Elements>
+            }
+          />
         </Routes>
       </div>
     </Router>
