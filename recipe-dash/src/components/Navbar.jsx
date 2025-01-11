@@ -23,9 +23,7 @@ import OrderComplete from "../pages/OrderComplete";
 import Reviews from "../pages/Reviews";
 import Plate from "../pages/Plate";
 import Cart from "../pages/Cart";
-import NotFound404 from "../pages/NotFound404";
 
-import ChiliDraft from "../pages/ChiliDraft";
 
 function NavBar() {
   const dispatch = useDispatch();
@@ -150,10 +148,6 @@ function NavBar() {
           <Route path="/reviews" element={<Reviews />} />
           <Route path="/plate/:plateId" element={<Plate />} />
           <Route path="/cart" element={<Cart />} />
-
-          {/* Catch-all route for 404 page */}
-          <Route path="*" element={<NotFound404 />} />
-          <Route path="/chili" element={<ChiliDraft />} />
 
         </Routes>
       </div>

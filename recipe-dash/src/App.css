@@ -72,3 +72,13 @@ a:hover {
 .read-the-docs {
   color: #888;
 }
+
+.stripe-input-container {
+  width: 400px;
+  max-width: 400px;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
