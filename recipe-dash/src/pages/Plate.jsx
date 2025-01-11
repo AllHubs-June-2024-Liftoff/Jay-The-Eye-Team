@@ -68,10 +68,10 @@ const Plate = () => {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Typography variant="h4" gutterBottom style={{ textAlign: 'left' }}>
+                    <Typography variant="h4" component="div" gutterBottom style={{ textAlign: 'left' }}>
                       {filteredPlate.name}
                     </Typography>
-                    <Typography variant="p" gutterBottom style={{ textAlign: 'left', fontStyle: 'italic' }}>
+                    <Typography variant="p" component="div" gutterBottom style={{ marginTop: '1px', textAlign: 'left', fontStyle: 'italic' }}>
                       {filteredPlate.description}
                     </Typography>
 
@@ -81,30 +81,13 @@ const Plate = () => {
                       </Typography>
 
                       {filteredPlate.discount > 0 && (
-                        <Box bgcolor="black" color="#DAA520" p={0.75} marginLeft="10px" borderRadius={1} sx={{ fontSize: '0.9rem', textAlign: 'center', fontWeight: 'bold' }}>
-                          {filteredPlate.discount}% off
+                        <Box color="#DAA520" p={0.75} marginLeft="15px" borderRadius={1} sx={{ fontSize: '0.9rem', textAlign: 'center', fontWeight: 'bold' }}>
+                          Order today and get {filteredPlate.discount}% off!
                         </Box>
                       )}
                     </Box>
 
-                    <Box marginTop="20px">
-                      <TextField
-                        label="Quantity"
-                        type="number"
-                        variant="outlined"
-                        size="small"
-                        value={quantity}
-                        onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))}
-                        sx={{ marginRight: 2 }}
-                      />
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleAddToCart}
-                      >
-                        Add to Cart
-                      </Button>
-                    </Box>
+
                   </Grid>
                 </Grid>
               </Container>
@@ -115,6 +98,25 @@ const Plate = () => {
         <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
           <NutritionBox plates={plates} />
         </Grid>
+
+        <Box sx={{ marginTop: '30px', marginLeft: '35px' }} >
+              <TextField
+                label="Quantity"
+                type="number"
+                variant="outlined"
+                size="small"
+                value={quantity}
+                onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))}
+                sx={{ marginRight: 3, width: '75px', '& .MuiInputBase-input': { textAlign: 'center' } }}
+              />
+              <Button
+                variant="contained"
+                sx={{ backgroundColor: 'black' }}
+                onClick={handleAddToCart}
+              >
+                Add to Cart
+              </Button>
+        </Box>
 
         <Grid item xs={12}>
           <ReviewSection />

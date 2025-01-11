@@ -28,10 +28,10 @@
         </tr>
         <tr th:each="message : ${messages}">
             <td th:text="${message.id}" style="font-weight:bold;"></td>
-            <td th:text="${message.dateCreated}"></td>
+            <td th:text="${#temporals.format(message.dateCreated, 'MMMM d, yyyy h:mm a')}" style="font-size:11px;" ></td>
             <td th:text="${message.name}"></td>
             <td th:text="${message.email}"></td>
-            <td th:text="${message.comment}"></td>
+            <td th:text="${message.comment}" style="font-size:11px;"></td>
 
         </tr>
     </table>

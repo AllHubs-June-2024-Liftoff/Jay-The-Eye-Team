@@ -103,7 +103,7 @@ const ReviewSection = () => {
 
     <Divider sx={{
             marginBottom: 2,
-            marginTop: 6,
+            marginTop: 1,
             borderWidth: 3,
             borderColor: '#DAA520',
             width: '100%',

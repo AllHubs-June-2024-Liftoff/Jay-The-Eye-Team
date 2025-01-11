@@ -1,6 +1,6 @@
 package org.launchcode.springboot_backend.controllers;
 
-
+import org.launchcode.springboot_backend.models.Review;
 import org.launchcode.springboot_backend.repositories.PlateRepository;
 import org.launchcode.springboot_backend.repositories.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +22,11 @@ public class ReviewController {
 
     @GetMapping("list-reviews")
     public String listAllReviews(Model model) {
+
         Sort sort = Sort.by(Sort.Order.desc("id"));
-        model.addAttribute("reviews", reviewRepository.findAll(sort));
+        Iterable<Review> reviews = reviewRepository.findAll(sort);
+        model.addAttribute("reviews", reviews);
+
         return "reviews/list-reviews";
     }
 

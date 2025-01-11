@@ -160,32 +160,13 @@ const NutritionBox = ({ plates }) => {
         </Box>
       ) : (
           <Container>
-                  <Box
-                        sx={{
-                          padding: 2,
-                          border: '1px solid #ddd',
-                          borderRadius: 2,
-                          width: '300px',
-                          fontFamily: 'Arial, sans-serif',
-                          backgroundColor: '#DAA520',
-                          lineHeight: '1.5',
-                        }}
-                      >
-                    <Typography variant="body1" sx={{ fontSize: '0.9rem', }}>
-                      Oops! We couldn't automatically generate the nutrition data for <br></br> <strong>{plateName}</strong>
-                    </Typography>
-
-                    <img
-                      src={chefsImage}
-                      alt="Chef"
-                      style={{ width: "40%", marginLeft: "auto", marginRight: "auto", display: "block" }}
-                    />
-
-                </Box>
-
-                <Typography variant="body1" sx={{ paddingTop: '20px', fontSize: '0.9rem', }}>
-                  Feel free to <a href="/contact-us" target="_blank" rel="noopener noreferrer" style={{ fontWeight: 'bold', color: '#DAA520' }}>contact us</a> for more info on this dish!
-                </Typography>
+                <div>
+                      <iframe
+                        src="https://www.nutritionix.com/i/nutritionix/ceviche-1-cup/5665af6c26bdc9355375b645"
+                        style={{ width: '110%', height: '500px', border: 'none' }}
+                        frameBorder="0"
+                      />
+                </div>
         </Container>
       )}
 
