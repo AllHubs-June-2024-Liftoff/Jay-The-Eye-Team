@@ -42,7 +42,7 @@ const Homepage = () => {
             </Typography>
 
             <Typography variant="body1" >
-                -- Filter and search here? --
+                -- Filter and search here --
             </Typography>
 
             <TextField
