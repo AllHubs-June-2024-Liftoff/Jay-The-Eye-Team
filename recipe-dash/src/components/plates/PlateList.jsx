@@ -28,7 +28,7 @@ const PlateList = () => {
   if (status === 'failed') {
     return (
       <Box sx={{ color: '#DAA520', textAlign: 'center', marginTop: '20px' }}>
-        Failed to load menu. Please try again later.
+        Failed to load menu. Please try again later!
       </Box>
     );
   }
