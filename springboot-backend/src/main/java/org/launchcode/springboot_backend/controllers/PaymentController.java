@@ -14,33 +14,46 @@ import java.util.Map;
 @RequestMapping("/api/payment")
 public class PaymentController {
 
-    // Inject the Stripe Secret Key from application.properties
     @Value("${stripe.secret-key}")
     private String stripeSecretKey;
 
     @PostMapping("/create-payment-intent")
     public ResponseEntity<Map<String, String>> createPaymentIntent(@RequestBody Map<String, Object> paymentInfo) {
         try {
-            // Initialize Stripe with the secret key
             Stripe.apiKey = stripeSecretKey;
+
+            // Validate the amount field
+            if (!paymentInfo.containsKey("amount") || !(paymentInfo.get("amount") instanceof Number)) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Invalid or missing amount"));
+            }
+
+            long amount = ((Number) paymentInfo.get("amount")).longValue();
+
+            if (amount <= 0) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Amount must be greater than zero"));
+            }
+
+            // Allow dynamic currency if provided
+            String currency = paymentInfo.getOrDefault("currency", "usd").toString();
 
             // Create payment intent parameters
             Map<String, Object> params = new HashMap<>();
-            params.put("amount", paymentInfo.get("amount")); // Amount in cents
-            params.put("currency", "usd");
+            params.put("amount", amount);
+            params.put("currency", currency);
             params.put("payment_method_types", new String[]{"card"});
 
             // Create PaymentIntent
             PaymentIntent paymentIntent = PaymentIntent.create(params);
 
-            // Send client_secret to frontend
+            // Respond with clientSecret
             Map<String, String> responseData = new HashMap<>();
             responseData.put("clientSecret", paymentIntent.getClientSecret());
 
             return ResponseEntity.ok(responseData);
+
         } catch (StripeException e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body(null);
+            return ResponseEntity.status(500).body(Map.of("error", "Payment processing failed. Please try again."));
         }
     }
 }
