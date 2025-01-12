@@ -1,21 +1,11 @@
 import React, { useEffect } from 'react';
 import { Grid, CircularProgress, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchMenu, selectMenuItems, selectMenuStatus } from '../../store/menuSlice';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { fetchMenu, selectMenuItems, selectMenuStatus } from '../../store/menuSlice';
 import PlateCard from './PlateCard';
 
-const PlateList = () => {
-  const dispatch = useDispatch();
-  const plates = useSelector(selectMenuItems);
-  const status = useSelector(selectMenuStatus);
-
-  // Fetch menu items on load
-  useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchMenu());
-    }
-  }, [status, dispatch]);
+const PlateList = ( {plates, status}) => {
 
   if (status === 'loading') {
     return (
@@ -29,6 +19,14 @@ const PlateList = () => {
     return (
       <Box sx={{ color: '#DAA520', textAlign: 'center', marginTop: '20px' }}>
         Failed to load menu. Please try again later!
+      </Box>
+    );
+  }
+
+  if (!plates.length) {
+    return (
+      <Box sx={{ color: '#DAA520', textAlign: 'center', marginTop: '20px' }}>
+        No plates found.
       </Box>
     );
   }
