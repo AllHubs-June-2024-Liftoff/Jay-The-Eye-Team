@@ -91,7 +91,8 @@ const Plate = () => {
                       </Typography>
 
                       {filteredPlate.discount > 0 && (
-                        <Box color="#DAA520" p={0.75} marginLeft="15px" borderRadius={1} sx={{ fontSize: '0.9rem', textAlign: 'center', fontWeight: 'bold' }}>
+                        <Box color="#DAA520" p={0.75} marginLeft="15px" borderRadius={1} sx={{ fontSize: '1rem',
+                            textAlign: 'center'}}>
                           Order today and get {filteredPlate.discount}% off!
                         </Box>
                       )}
