@@ -5,6 +5,8 @@ import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../store/userSlice";
 import { selectCartTotalQuantity } from "../store/cartSlice";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 // Components
 import logo from '../assets/images/reciepe-dash-white-yellow.png';
@@ -23,6 +25,7 @@ import OrderComplete from "../pages/OrderComplete";
 import Reviews from "../pages/Reviews";
 import Plate from "../pages/Plate";
 import Cart from "../pages/Cart";
+import PaymentForm from "../pages/PaymentForm"
 import NotFound404 from "../pages/NotFound404";
 
 import ChiliDraft from "../pages/ChiliDraft";
@@ -33,7 +36,7 @@ function NavBar() {
 
   const { loginStatus, email, nameFirst, isChef } = useSelector((state) => state.user);
   const totalQuantity = useSelector(selectCartTotalQuantity); // Fetch total quantity from cart
-
+  const stripePromise = loadStripe(import.meta.env.STRIPE_PUBLISHABLE_KEY);
   const handleLogout = () => {
     dispatch(logout());
     window.location.href = '/';
@@ -151,7 +154,7 @@ function NavBar() {
           <Route path="/reviews" element={<Reviews />} />
           <Route path="/plate/:plateId" element={<Plate />} />
           <Route path="/cart" element={<Cart />} />
-
+          <Route path="/payment" element={<Elements stripe={stripePromise}><PaymentForm /></Elements>} />
           {/* Catch-all route for 404 page */}
           <Route path="*" element={<NotFound404 />} />
           <Route path="/chili" element={<ChiliDraft />} />

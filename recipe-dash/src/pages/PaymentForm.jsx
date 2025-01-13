@@ -20,8 +20,8 @@ const PaymentForm = () => {
     const fetchPaymentIntent = async () => {
       try {
         const response = await axios.post("http://localhost:8080/api/payment/create-payment-intent", {
-          amount: Math.round(totalPrice * 100), // Convert to cents
-          items: cartItems, // Pass cart details to the backend if needed
+          amount: Math.round(totalPrice * 100),
+          items: cartItems,
         });
         setClientSecret(response.data.clientSecret);
       } catch (error) {
@@ -45,69 +45,70 @@ const PaymentForm = () => {
 
     const cardElement = elements.getElement(CardElement);
 
-    const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: cardElement,
-      },
-    });
+    try {
+      const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardElement,
+        },
+      });
 
-    if (error) {
-      setErrorMessage(error.message);
-    } else if (paymentIntent.status === "succeeded") {
-      setSuccessMessage("Payment successful! Thank you for your order.");
-    } else {
-      setErrorMessage("Payment failed. Please try again.");
+      if (error) {
+        setErrorMessage(error.message);
+      } else if (paymentIntent.status === "succeeded") {
+        setSuccessMessage("Payment successful! Thank you for your order.");
+      } else {
+        setErrorMessage("Payment failed. Please try again.");
+      }
+    } catch (error) {
+      setErrorMessage("An unexpected error occurred. Please try again.");
     }
 
     setIsProcessing(false);
   };
 
   return (
-    <Container sx={{ marginTop: 5, maxWidth: '500px' }}>
+    <Container sx={{ marginTop: 5, maxWidth: "500px" }}>
       <Typography variant="h4" gutterBottom>
         Payment
       </Typography>
 
       <form onSubmit={handleSubmit}>
-        {/* Total Price Section */}
         <Box sx={{ marginBottom: 3 }}>
           <Typography variant="h6">Order Summary</Typography>
           <Typography>Total: ${totalPrice.toFixed(2)}</Typography>
         </Box>
 
-        {/* Card Element */}
-        <Box sx={{ marginBottom: 3 }}>
-          <Typography variant="h6">Card Details</Typography>
-          <Box
-            sx={{
-              padding: '10px',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              backgroundColor: '#f9f9f9',
-            }}
-          >
-<CardElement
-  options={{
-    style: {
-      base: {
-        fontSize: "16px",
-        color: "#424770",
-        "::placeholder": {
-          color: "#aab7c4",
+        <Box
+  sx={{
+    padding: "20px",
+    border: "1px solid #ccc",
+    borderRadius: "8px",
+    backgroundColor: "#f9f9f9",
+    marginBottom: "20px",
+    width: "100%", // Ensure it takes up available space
+    maxWidth: "500px", // Optional: limit the width
+  }}
+>
+  <CardElement
+    options={{
+      style: {
+        base: {
+          fontSize: "16px",
+          color: "#424770",
+          "::placeholder": {
+            color: "#aab7c4",
+          },
+          padding: "12px",
+        },
+        invalid: {
+          color: "#9e2146",
         },
       },
-      invalid: {
-        color: "#9e2146",
-      },
-    },
-  }}
-  className="stripe-input-container"
-/>
+    }}
+  />
+</Box>
 
-          </Box>
-        </Box>
 
-        {/* Error and Success Messages */}
         {errorMessage && (
           <Typography color="error" sx={{ marginTop: 2 }}>
             {errorMessage}
@@ -119,8 +120,7 @@ const PaymentForm = () => {
           </Typography>
         )}
 
-        {/* Pay Button */}
-        <Box sx={{ marginTop: 3, textAlign: 'center' }}>
+        <Box sx={{ marginTop: 3, textAlign: "center" }}>
           <Button
             type="submit"
             variant="contained"
@@ -136,3 +136,4 @@ const PaymentForm = () => {
 };
 
 export default PaymentForm;
+
