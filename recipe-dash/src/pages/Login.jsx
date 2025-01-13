@@ -51,36 +51,36 @@
         };
 
         const handleSubmit = async (e) => {
-            e.preventDefault();
-            setErrorMessage("");
-
-            try {
-                // API call to login the user
-                const response = await axios.post("http://localhost:8080/api/login", formData);
-
-                // Extract user data from the response
-                const { nameFirst, email, isChef } = response.data;
-
-                // Update Redux store
-                dispatch(
-                    login({
-                        email,
-                        nameFirst,
-                        loginStatus: true,
-                        isChef,
-                    })
-                );
-
-                // Redirect to the homepage
-                navigate("/");
-            } catch (error) {
-                // Display error message on failure
-                setErrorMessage(
-                    error.response?.data || "Invalid username or password. Please try again."
-                );
-            }
+          e.preventDefault();
+          setErrorMessage("");
+        
+          try {
+            const response = await axios.post("http://localhost:8080/api/login", formData);
+        
+            // Extract user and customer details
+            const { user_id, customer_id, email, firstName, lastName, isChef } = response.data;
+        
+            // Update Redux store
+            dispatch(
+              login({
+                user_id,
+                customer_id,
+                email,
+                nameFirst: firstName,
+                nameLast: lastName,
+                isChef,
+                loginStatus: true,
+              })
+            );
+        
+            // Redirect to homepage
+            navigate("/");
+          } catch (error) {
+            setErrorMessage(error.response?.data || "Login failed. Please try again.");
+          }
         };
-
+        
+        
         return (
             <div className="container mt-5">
                 <Typography

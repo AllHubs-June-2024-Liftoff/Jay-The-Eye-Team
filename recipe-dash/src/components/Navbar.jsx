@@ -36,7 +36,7 @@ function NavBar() {
 
   const { loginStatus, email, nameFirst, isChef } = useSelector((state) => state.user);
   const totalQuantity = useSelector(selectCartTotalQuantity); // Fetch total quantity from cart
-  const stripePromise = loadStripe(import.meta.env.STRIPE_PUBLISHABLE_KEY);
+  const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
   const handleLogout = () => {
     dispatch(logout());
     window.location.href = '/';
@@ -150,7 +150,7 @@ function NavBar() {
           <Route path="/login" element={<Login />} />
           <Route path="/menuitem" element={<MenuItem />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/ordercomplete" element={<OrderComplete />} />
+          <Route path="/order-complete" element={<OrderComplete />} />
           <Route path="/reviews" element={<Reviews />} />
           <Route path="/plate/:plateId" element={<Plate />} />
           <Route path="/cart" element={<Cart />} />

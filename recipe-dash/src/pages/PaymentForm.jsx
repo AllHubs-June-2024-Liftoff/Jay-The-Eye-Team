@@ -16,11 +16,12 @@ const PaymentForm = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // Fetch Payment Intent from backend
   useEffect(() => {
     const fetchPaymentIntent = async () => {
       try {
         const response = await axios.post("http://localhost:8080/api/payment/create-payment-intent", {
-          amount: Math.round(totalPrice * 100),
+          amount: Math.round(totalPrice * 100), // Convert to cents
           items: cartItems,
         });
         setClientSecret(response.data.clientSecret);
@@ -32,6 +33,7 @@ const PaymentForm = () => {
     fetchPaymentIntent();
   }, [totalPrice, cartItems]);
 
+  // Handle Payment Submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
@@ -67,7 +69,18 @@ const PaymentForm = () => {
   };
 
   return (
-    <Container sx={{ marginTop: 5, maxWidth: "500px" }}>
+    <Container
+      sx={{
+        marginTop: 5,
+        width: "100%",
+        maxWidth: "600px",
+        padding: 4,
+        border: "1px solid #ccc",
+        borderRadius: "8px",
+        backgroundColor: "#f9f9f9",
+        textAlign: "center",
+      }}
+    >
       <Typography variant="h4" gutterBottom>
         Payment
       </Typography>
@@ -78,36 +91,35 @@ const PaymentForm = () => {
           <Typography>Total: ${totalPrice.toFixed(2)}</Typography>
         </Box>
 
-        <Box
-  sx={{
-    padding: "20px",
-    border: "1px solid #ccc",
-    borderRadius: "8px",
-    backgroundColor: "#f9f9f9",
-    marginBottom: "20px",
-    width: "100%", // Ensure it takes up available space
-    maxWidth: "500px", // Optional: limit the width
-  }}
->
-  <CardElement
-    options={{
-      style: {
-        base: {
-          fontSize: "16px",
-          color: "#424770",
-          "::placeholder": {
-            color: "#aab7c4",
-          },
-          padding: "12px",
-        },
-        invalid: {
-          color: "#9e2146",
-        },
-      },
-    }}
-  />
-</Box>
-
+        <Box sx={{ marginBottom: 3, textAlign: "left" }}>
+          <Typography variant="h6">Card Details</Typography>
+          <Box
+            sx={{
+              padding: "12px",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+              backgroundColor: "#fff",
+              width: "100%",
+            }}
+          >
+            <CardElement
+              options={{
+                style: {
+                  base: {
+                    fontSize: "16px",
+                    color: "#424770",
+                    "::placeholder": {
+                      color: "#aab7c4",
+                    },
+                  },
+                  invalid: {
+                    color: "#9e2146",
+                  },
+                },
+              }}
+            />
+          </Box>
+        </Box>
 
         {errorMessage && (
           <Typography color="error" sx={{ marginTop: 2 }}>
@@ -120,20 +132,18 @@ const PaymentForm = () => {
           </Typography>
         )}
 
-        <Box sx={{ marginTop: 3, textAlign: "center" }}>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            disabled={!stripe || isProcessing}
-          >
-            {isProcessing ? "Processing..." : "Pay Now"}
-          </Button>
-        </Box>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={!stripe || isProcessing}
+          sx={{ marginTop: 3 }}
+        >
+          {isProcessing ? "Processing..." : "Pay Now"}
+        </Button>
       </form>
     </Container>
   );
 };
 
 export default PaymentForm;
-
