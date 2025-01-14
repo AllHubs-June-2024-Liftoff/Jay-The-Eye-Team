@@ -71,24 +71,32 @@ const PaymentForm = () => {
   return (
     <Container
       sx={{
-        marginTop: 5,
-        width: "100%",
-        maxWidth: "600px",
         padding: 4,
-        border: "1px solid #ccc",
+        border: "1px solid #DAA520",
         borderRadius: "8px",
         backgroundColor: "#f9f9f9",
         textAlign: "center",
+        width: "100vw",
+        alignContent: "center",
       }}
     >
-      <Typography variant="h4" gutterBottom>
-        Payment
+      <Typography
+              variant="h5"
+              align="center"
+              gutterBottom
+              sx={{
+                fontWeight: 'bold',
+                color: '#DAA520',
+              }}
+            >
+        Enter Your Payment Details
       </Typography>
 
       <form onSubmit={handleSubmit}>
+
         <Box sx={{ marginBottom: 3 }}>
-          <Typography variant="h6">Order Summary</Typography>
-          <Typography>Total: ${totalPrice.toFixed(2)}</Typography>
+          <Typography variant="h6" component="span" sx={{ marginRight: 2 }}>Order Summary</Typography>
+          <Typography component="span">Total: ${totalPrice.toFixed(2)}</Typography>
         </Box>
 
         <Box sx={{ marginBottom: 3, textAlign: "left" }}>
@@ -99,7 +107,7 @@ const PaymentForm = () => {
               border: "1px solid #ccc",
               borderRadius: "4px",
               backgroundColor: "#fff",
-              width: "100%",
+              width: "80%",
             }}
           >
             <CardElement
