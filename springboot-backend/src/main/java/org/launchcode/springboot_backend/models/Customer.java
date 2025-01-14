@@ -6,46 +6,36 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import java.util.List;
 
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Customer extends AbstractEntity {
 
-//    database columns:
-//    id
-//    first_name
-//    last_name
-//    email
-//    isChef
-//    delivery
-//    favorites
-
     // RELATIONAL
-    @OneToMany
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Delivery> delivery;
+    private List<Delivery> delivery = new ArrayList<>();
 
-    @OneToMany(mappedBy = "customer")
-    private List<Favorite> favorites;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Favorite> favorites = new ArrayList<>();
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
     // INDEPENDENT
-    private boolean isChef;
-
-    @NotNull(message = "⚠\uFE0F Field cannot be empty")
-    @Size(min=1, max=255, message = "⚠\uFE0F Text length is out of bounds")
+    @NotNull(message = "⚠️ First name cannot be empty")
+    @Size(min = 1, max = 255, message = "⚠️ First name length must be between 1 and 255 characters")
     private String nameFirst;
 
-    @NotNull(message = "⚠\uFE0F Field cannot be empty")
-    @Size(min=1, max=255, message = "⚠\uFE0F Text length is out of bounds")
+    @NotNull(message = "⚠️ Last name cannot be empty")
+    @Size(min = 1, max = 255, message = "⚠️ Last name length must be between 1 and 255 characters")
     private String nameLast;
 
-    @NotNull(message = "⚠\uFE0F Location cannot be empty")
-    @Size(min=1, max=255, message = "⚠\uFE0F Text length is out of bounds")
+    @NotNull(message = "⚠️ Address cannot be empty")
+    @Size(min = 1, max = 255, message = "⚠️ Address length must be between 1 and 255 characters")
     private String address;
 
     @NotNull(message = "⚠️ Email cannot be empty")
@@ -57,11 +47,16 @@ public class Customer extends AbstractEntity {
     @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$", message = "⚠️ Invalid phone number format")
     private String phone;
 
-    // CONSTRUCTORS
-    public Customer() {}
+    private boolean isChef;
 
-    public Customer(String nameFirst, String nameLast, String address,
-                    String email, String phone, boolean isChef) {
+    // CONSTRUCTORS
+    public Customer() {
+        this.delivery = new ArrayList<>();
+        this.favorites = new ArrayList<>();
+    }
+
+    public Customer(String nameFirst, String nameLast, String address, String email, String phone, boolean isChef) {
+        this();
         this.nameFirst = nameFirst;
         this.nameLast = nameLast;
         this.address = address;
@@ -71,68 +66,18 @@ public class Customer extends AbstractEntity {
     }
 
     // GETTERS & SETTERS
-    public List<Delivery> getDeliveries() { return delivery; }
-
-    @Override
-    public void setName(String name) {
-        super.setName(getFullName());
-    }
-    public String getFullName() {
-        return nameFirst + " " + nameLast;
-    }
-
     public List<Delivery> getDelivery() {
         return delivery;
     }
+
     public void setDelivery(List<Delivery> delivery) {
         this.delivery = delivery;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail (String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getNameFirst() {
-        return nameFirst;
-    }
-    public void setNameFirst(String nameFirst) {
-        this.nameFirst = nameFirst;
-    }
-
-    public String getNameLast() {
-        return nameLast;
-    }
-    public void setNameLast(String nameLast) {
-        this.nameLast = nameLast;
-    }
-
-    public boolean isChef() {
-        return isChef;
-    }
-    public void setChef(boolean chef) {
-        isChef = chef;
     }
 
     public List<Favorite> getFavorites() {
         return favorites;
     }
+
     public void setFavorites(List<Favorite> favorites) {
         this.favorites = favorites;
     }
@@ -144,4 +89,57 @@ public class Customer extends AbstractEntity {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public String getNameFirst() {
+        return nameFirst;
+    }
+
+    public void setNameFirst(String nameFirst) {
+        this.nameFirst = nameFirst;
+    }
+
+    public String getNameLast() {
+        return nameLast;
+    }
+
+    public void setNameLast(String nameLast) {
+        this.nameLast = nameLast;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public boolean isChef() {
+        return isChef;
+    }
+
+    public void setChef(boolean chef) {
+        isChef = chef;
+    }
+
+    public String getFullName() {
+        return nameFirst + " " + nameLast;
+    }
 }
+

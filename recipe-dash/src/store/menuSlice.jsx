@@ -4,7 +4,9 @@ import axios from "axios";
 // Async thunk to fetch the menu from the backend
 export const fetchMenu = createAsyncThunk("menu/fetchMenu", async () => {
   const response = await axios.get("http://localhost:8080/plates/api");
-  return response.data;
+  return response.data.map((plate) => ({
+    ...plate
+  }));
 });
 
 const menuSlice = createSlice({
@@ -33,5 +35,4 @@ const menuSlice = createSlice({
 
 export const selectMenuItems = (state) => state.menu.items;
 export const selectMenuStatus = (state) => state.menu.status;
-
 export default menuSlice.reducer;
