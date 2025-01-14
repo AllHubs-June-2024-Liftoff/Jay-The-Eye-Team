@@ -24,17 +24,22 @@ public class LoginController {
             String email = payload.get("email");
             String password = payload.get("password");
 
+            // Fetch user by email
             Optional<User> optionalUser = userRepository.findByEmail(email);
 
             if (optionalUser.isPresent()) {
                 User user = optionalUser.get();
 
+                // Validate password
                 if (user.isMatchingPassword(password)) {
                     Customer customer = user.getCustomer();
 
+                    // Prepare response with necessary details
                     Map<String, Object> response = new HashMap<>();
+                    response.put("user_id", user.getId());
                     response.put("email", user.getEmail());
                     response.put("isChef", customer.isChef());
+                    response.put("customer_id", customer.getId());
                     response.put("firstName", customer.getNameFirst());
                     response.put("lastName", customer.getNameLast());
 
@@ -51,3 +56,4 @@ public class LoginController {
         }
     }
 }
+

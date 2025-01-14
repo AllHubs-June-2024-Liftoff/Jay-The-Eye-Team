@@ -41,13 +41,13 @@ const Plate = () => {
   const handleAddToCart = () => {
     if (filteredPlate && quantity > 0) {
       dispatch(addToCart({
-        id: filteredPlate.id,
+        plate_id: filteredPlate.id, // Use plate_id instead of id
         name: filteredPlate.name,
         price: filteredPlate.price,
         quantity,
         total: filteredPlate.price * quantity,
       }));
-
+  
       navigate('/');
     }
   };

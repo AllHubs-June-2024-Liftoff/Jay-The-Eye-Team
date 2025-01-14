@@ -16,12 +16,13 @@ const PaymentForm = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // Fetch Payment Intent from backend
   useEffect(() => {
     const fetchPaymentIntent = async () => {
       try {
         const response = await axios.post("http://localhost:8080/api/payment/create-payment-intent", {
           amount: Math.round(totalPrice * 100), // Convert to cents
-          items: cartItems, // Pass cart details to the backend if needed
+          items: cartItems,
         });
         setClientSecret(response.data.clientSecret);
       } catch (error) {
@@ -32,6 +33,7 @@ const PaymentForm = () => {
     fetchPaymentIntent();
   }, [totalPrice, cartItems]);
 
+  // Handle Payment Submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
@@ -45,69 +47,80 @@ const PaymentForm = () => {
 
     const cardElement = elements.getElement(CardElement);
 
-    const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: cardElement,
-      },
-    });
+    try {
+      const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardElement,
+        },
+      });
 
-    if (error) {
-      setErrorMessage(error.message);
-    } else if (paymentIntent.status === "succeeded") {
-      setSuccessMessage("Payment successful! Thank you for your order.");
-    } else {
-      setErrorMessage("Payment failed. Please try again.");
+      if (error) {
+        setErrorMessage(error.message);
+      } else if (paymentIntent.status === "succeeded") {
+        setSuccessMessage("Payment successful! Thank you for your order.");
+      } else {
+        setErrorMessage("Payment failed. Please try again.");
+      }
+    } catch (error) {
+      setErrorMessage("An unexpected error occurred. Please try again.");
     }
 
     setIsProcessing(false);
   };
 
   return (
-    <Container sx={{ marginTop: 5, maxWidth: '500px' }}>
+    <Container
+      sx={{
+        marginTop: 5,
+        width: "100%",
+        maxWidth: "600px",
+        padding: 4,
+        border: "1px solid #ccc",
+        borderRadius: "8px",
+        backgroundColor: "#f9f9f9",
+        textAlign: "center",
+      }}
+    >
       <Typography variant="h4" gutterBottom>
         Payment
       </Typography>
 
       <form onSubmit={handleSubmit}>
-        {/* Total Price Section */}
         <Box sx={{ marginBottom: 3 }}>
           <Typography variant="h6">Order Summary</Typography>
           <Typography>Total: ${totalPrice.toFixed(2)}</Typography>
         </Box>
 
-        {/* Card Element */}
-        <Box sx={{ marginBottom: 3 }}>
+        <Box sx={{ marginBottom: 3, textAlign: "left" }}>
           <Typography variant="h6">Card Details</Typography>
           <Box
             sx={{
-              padding: '10px',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              backgroundColor: '#f9f9f9',
+              padding: "12px",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+              backgroundColor: "#fff",
+              width: "100%",
             }}
           >
-<CardElement
-  options={{
-    style: {
-      base: {
-        fontSize: "16px",
-        color: "#424770",
-        "::placeholder": {
-          color: "#aab7c4",
-        },
-      },
-      invalid: {
-        color: "#9e2146",
-      },
-    },
-  }}
-  className="stripe-input-container"
-/>
-
+            <CardElement
+              options={{
+                style: {
+                  base: {
+                    fontSize: "16px",
+                    color: "#424770",
+                    "::placeholder": {
+                      color: "#aab7c4",
+                    },
+                  },
+                  invalid: {
+                    color: "#9e2146",
+                  },
+                },
+              }}
+            />
           </Box>
         </Box>
 
-        {/* Error and Success Messages */}
         {errorMessage && (
           <Typography color="error" sx={{ marginTop: 2 }}>
             {errorMessage}
@@ -119,17 +132,15 @@ const PaymentForm = () => {
           </Typography>
         )}
 
-        {/* Pay Button */}
-        <Box sx={{ marginTop: 3, textAlign: 'center' }}>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            disabled={!stripe || isProcessing}
-          >
-            {isProcessing ? "Processing..." : "Pay Now"}
-          </Button>
-        </Box>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={!stripe || isProcessing}
+          sx={{ marginTop: 3 }}
+        >
+          {isProcessing ? "Processing..." : "Pay Now"}
+        </Button>
       </form>
     </Container>
   );

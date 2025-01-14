@@ -5,12 +5,11 @@ import org.launchcode.springboot_backend.models.Plate;
 import org.launchcode.springboot_backend.repositories.CuisineRepository;
 import org.launchcode.springboot_backend.repositories.PlateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Map;
-import java.util.Optional;
+
+import java.util.*;
 
 @RestController
 @RequestMapping("plates")
@@ -25,8 +24,11 @@ public class PlateApi {
     // Get all plates with sorting by name in ascending order
     @RequestMapping("api")
     public Iterable<Plate> sendAPIdataForPlates() {
-        Sort sort = Sort.by(Sort.Order.asc("name"));
-        return plateRepository.findAll(sort);
+        List<Plate> plates = new ArrayList<>();
+        plateRepository.findAll().forEach(plates::add); // Collect all plates into a list
+
+        plates.sort(Comparator.comparing(Plate::getName)); // Sort by name in ascending order
+        return plates;
     }
 
     // Update an existing plate - No cuisine
