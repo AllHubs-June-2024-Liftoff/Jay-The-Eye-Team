@@ -88,9 +88,6 @@ function NavBar() {
                       <NavDropdown.Item as={Link} to="/checkout">
                         Checkout
                       </NavDropdown.Item>
-                      <NavDropdown.Item as={Link} to="/favorites">
-                        Favorites
-                      </NavDropdown.Item>
                     </>
                   )}
                   {isChef && (
