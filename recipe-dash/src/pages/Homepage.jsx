@@ -28,12 +28,10 @@ const Homepage = () => {
 
     // Filter plates based on the search query
     const filteredPlates = plates.filter(plate =>
-        plate.name.toLowerCase().includes(searchQuery) // Assuming plates have a 'name' property
+        plate.name.toLowerCase().includes(searchQuery) //
     );
 
-    useEffect(() => {
-      console.log("Filter loaded:", filteredPlates); // Check plates data
-  }, [filteredPlates]);
+
 
     return (
         <div>

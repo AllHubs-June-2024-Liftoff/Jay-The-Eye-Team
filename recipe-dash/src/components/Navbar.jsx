@@ -39,6 +39,8 @@ function NavBar() {
     window.location.href = '/';
   };
 
+  console.log("User state:", { loginStatus, email, nameFirst, isChef });
+
   return (
     <Router>
       <Navbar
