@@ -30,6 +30,7 @@ public class Customer extends AbstractEntity {
     private List<Favorite> favorites;
 
     @OneToOne
+    @JsonManagedReference
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 

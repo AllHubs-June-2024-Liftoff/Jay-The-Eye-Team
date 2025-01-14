@@ -91,7 +91,6 @@
                       sx={{
                         fontWeight: "bold",
                         color: "#DAA520",
-                        marginRight: 3,
                         marginBottom: 3,
                       }}
                     > Login
@@ -188,8 +187,8 @@
                       </Grid>
 
                       <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
-                        <button onClick={handleChefLogin}>Login as Chef</button>
-                        <button onClick={handleUserLogin}>User Login</button>
+                        <button onClick={handleChefLogin}>Log in as a chef</button>
+                        <button onClick={handleUserLogin}>Log in as a customer</button>
                       </Grid>
                     </Grid>
 

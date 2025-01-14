@@ -95,9 +95,17 @@ function NavBar() {
                       <NavDropdown.Item as={Link} to="/reviews">
                         Reviews
                       </NavDropdown.Item>
-{/*                       <NavDropdown.Item as={Link} to="/add_plate"> */}
-{/*                         Add Plate */}
-{/*                       </NavDropdown.Item> */}
+                      <NavDropdown.Divider />
+                      <NavDropdown.Item
+                        as={Link}
+                        to="http://localhost:8080"
+                        style={{
+                          fontWeight: 'bold',
+                          backgroundColor: 'black',
+                          color: '#DAA520',
+                        }}>
+                        Chef Dashboard
+                      </NavDropdown.Item>
                     </>
                   )}
                   <NavDropdown.Divider />
