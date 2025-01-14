@@ -1,5 +1,6 @@
 package org.launchcode.springboot_backend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -24,6 +25,7 @@ public class User {
     private String pwHash;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
     private Customer customer;
 
     public User() {}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, CircularProgress, Typography, Container } from '@mui/material';
+import { Link, Box, CircularProgress, Typography, Container } from '@mui/material';
 import { useParams } from 'react-router-dom'; // Import useParams to get the plateId from the URL
 
 const NutritionBox = ({ plates }) => {
@@ -65,16 +65,34 @@ const NutritionBox = ({ plates }) => {
   }
 
   return (
-    <Box sx={{ maxWidth: 800, margin: '0', padding: 2 }}>
-      <Container>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'top', maxWidth: 800, margin: '0', padding: 2
+        }}>
+        <Typography sx={{ fontSize: '15px'}} >
+            Source:
+            <Link href={`https://www.nutritionix.com/food/${plateName}`} target="_blank" rel="noopener noreferrer" sx={{
+                marginLeft: 1, color: '#DAA520', textDecoration: 'none' }}>
+               Nutritionix
+            </Link>
+        </Typography>
+
+      <Container sx={{ overflow: 'hidden', padding: 0 }}>
         <iframe
           src={`https://www.nutritionix.com/food/${plateName}`}
-          style={{ width: '110%', height: '740px', border: 'none' }}
+          style={{
+            width: '100%',
+            height: '750px',
+            border: 'none',
+            transform: 'translateY(-200px)', // Adjust this to crop the top part
+            pointerEvents: 'none',  // Disable interactions
+            overflow: 'hidden',
+          }}
           frameBorder="0"
           scrolling="no"
         />
       </Container>
+
     </Box>
+
   );
 };
 

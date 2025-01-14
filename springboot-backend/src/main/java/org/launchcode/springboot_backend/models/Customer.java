@@ -22,6 +22,7 @@ public class Customer extends AbstractEntity {
     private List<Favorite> favorites = new ArrayList<>();
 
     @OneToOne
+    @JsonManagedReference
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
