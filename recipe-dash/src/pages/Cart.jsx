@@ -17,6 +17,7 @@ import cartEmptyImage from '../assets/images/cartempt.jpg';
 const StyledHeaderTypography = styled(Typography)(({ theme }) => ({
   fontSize: '1rem',
   fontWeight: 600,
+  alignItems: 'left',
 }));
 
 const Cart = () => {
