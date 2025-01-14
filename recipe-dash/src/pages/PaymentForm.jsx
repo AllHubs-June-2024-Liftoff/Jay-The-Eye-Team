@@ -71,9 +71,7 @@ const PaymentForm = () => {
   return (
     <Container
       sx={{
-        marginTop: 5,
         width: "100%",
-        maxWidth: "600px",
         padding: 4,
         border: "1px solid #ccc",
         borderRadius: "8px",

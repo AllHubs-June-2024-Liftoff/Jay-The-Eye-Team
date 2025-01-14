@@ -1,13 +1,23 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Divider, Box, Grid, TextField, Button, Typography, Container } from "@mui/material";
+import { styled } from '@mui/system';
+
 import {
   selectCartItems,
   selectCartTotalPrice,
   updateQuantity,
   removeFromCart,
 } from "../store/cartSlice";
-import { Grid, TextField, Button, Typography, Container } from "@mui/material";
+
+import logoImage from '../assets/images/reciepe-dash-black-yellow.png';
+import cartEmptyImage from '../assets/images/cartempt.jpg';
+
+const StyledHeaderTypography = styled(Typography)(({ theme }) => ({
+  fontSize: '1rem',
+  fontWeight: 600,
+}));
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -31,33 +41,77 @@ const Cart = () => {
   };
 
   return (
-    <Container sx={{ marginTop: 5 }}>
-      <Typography variant="h4" gutterBottom>
-        Cart
+    <Container
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        padding: 1,
+        margin: 0,
+        height: '100vh',
+        width: '100%',
+        marginTop: 4,
+      }}
+    >
+      <Typography
+        variant="h4"
+        component="h1"
+        align="center"
+        gutterBottom
+        sx={{
+          fontWeight: 'bold',
+          color: '#DAA520',
+        }}
+      >
+        Review Your Cart
       </Typography>
 
       {cartItems.length === 0 ? (
-        <Typography variant="h6">Your cart is empty</Typography>
+        <Grid sx={{
+          justifyContent: 'center',
+          marginTop: 1,
+        }}>
+          <img
+            src={cartEmptyImage}
+            alt="Empty Cart"
+            style={{
+              width: "250px",
+              display: "block",
+            }}
+          />
+          <Typography variant="h5" align="center">
+            Your cart is empty!
+          </Typography>
+          <img
+            src={logoImage}
+            alt="Logo"
+            style={{
+              width: "250px",
+              display: "block",
+              marginTop: "30px",
+            }}
+          />
+        </Grid>
       ) : (
         <>
-          <Grid container spacing={2} sx={{ marginBottom: 4 }}>
+          <Grid container spacing={2} sx={{ padding: 1 }}>
             <Grid item xs={2}>
-              <Typography variant="h6">Image</Typography>
+              <StyledHeaderTypography> </StyledHeaderTypography>
             </Grid>
             <Grid item xs={3}>
-              <Typography variant="h6">Name</Typography>
+              <StyledHeaderTypography>Name</StyledHeaderTypography>
             </Grid>
             <Grid item xs={2}>
-              <Typography variant="h6">Quantity</Typography>
+              <StyledHeaderTypography>Quantity</StyledHeaderTypography>
             </Grid>
             <Grid item xs={2}>
-              <Typography variant="h6">Price</Typography>
+              <StyledHeaderTypography>Price</StyledHeaderTypography>
             </Grid>
             <Grid item xs={2}>
-              <Typography variant="h6">Total</Typography>
+              <StyledHeaderTypography>Total</StyledHeaderTypography>
             </Grid>
             <Grid item xs={1}>
-              <Typography variant="h6">Action</Typography>
+              <StyledHeaderTypography> </StyledHeaderTypography>
             </Grid>
           </Grid>
 
@@ -93,6 +147,15 @@ const Cart = () => {
                   variant="contained"
                   color="secondary"
                   onClick={() => handleRemove(item.id)}
+                  sx={{
+                    backgroundColor: 'black',
+                    '&:hover': {
+                      backgroundColor: '#DAA520',
+                    },
+                    fontSize: '0.65rem',
+                  }}
+                  size="medium"
+                  aria-label={`Remove ${item.name}`}
                 >
                   Remove
                 </Button>
@@ -100,18 +163,47 @@ const Cart = () => {
             </Grid>
           ))}
 
-          <Typography variant="h5" align="right" sx={{ marginTop: 4 }}>
-            Grand Total: ${totalPrice.toFixed(2)}
-          </Typography>
+          <Divider sx={{
+            marginTop: 4,
+            borderWidth: 3,
+            borderColor: 'black',
+            width: '100%',
+            borderStyle: 'solid',
+            opacity: 1,
+          }} />
 
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleCheckout}
-            sx={{ marginTop: 2, float: "right" }}
+          <Grid container justifyContent="flex-end" sx={{ marginTop: 3 }}>
+            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+              Grand Total: ${totalPrice.toFixed(2)}
+            </Typography>
+          </Grid>
+
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'right',
+              alignItems: 'center',
+              width: '100%',
+            }}
           >
-            Checkout
-          </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleCheckout}
+              sx={{
+                marginTop: 3,
+                backgroundColor: "#DAA520",
+                "&:hover": {
+                  backgroundColor: "black",
+                },
+                fontWeight: 'bold',
+                width: "200px",
+              }}
+              size="large"
+            >
+              Checkout
+            </Button>
+          </Box>
         </>
       )}
     </Container>
