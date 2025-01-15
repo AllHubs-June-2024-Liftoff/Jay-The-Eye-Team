@@ -50,7 +50,7 @@ const ReviewSection = () => {
   return (
     <Box>
 
-        <Box sx={{ marginTop: 6, textAlign: 'left' }}>
+        <Box sx={{ textAlign: 'left' }}>
           {loading ? (
                 <CircularProgress size={50} color="inherit" sx={{ display: 'block', margin: 'auto' }} />
               ) : (

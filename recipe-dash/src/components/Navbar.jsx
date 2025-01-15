@@ -7,6 +7,7 @@ import { logout } from "../store/userSlice";
 import { selectCartTotalQuantity } from "../store/cartSlice";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import { styled } from '@mui/system';
 
 // Components
 import logo from '../assets/images/reciepe-dash-white-yellow.png';
@@ -30,6 +31,15 @@ import NotFound404 from "../pages/NotFound404";
 
 import ChiliDraft from "../pages/ChiliDraft";
 
+const StyledNavLink = styled(Nav.Link)`
+  text-decoration: none;
+  color: white;
+  padding: 10px;
+  &:hover {
+    font-weight: bold;
+    color: #DAA520;
+  }
+`;
 
 function NavBar() {
   const dispatch = useDispatch();
@@ -56,21 +66,25 @@ function NavBar() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link as={Link} to="/">
+              <StyledNavLink as={Link} to="/">
                 Home
-              </Nav.Link>
-              <Nav.Link as={Link} to="/about">
+              </StyledNavLink>
+              <StyledNavLink as={Link} to="/about">
                 About
-              </Nav.Link>
-              <Nav.Link as={Link} to="/contact-us">
+              </StyledNavLink>
+              <StyledNavLink as={Link} to="/contact-us">
                 Contact
-              </Nav.Link>
+              </StyledNavLink>
             </Nav>
             <Nav className="ms-auto">
               {!loginStatus ? (
-                <Nav.Link as={Link} to="/login">
+                <StyledNavLink
+                  as={Link}
+                  to="/login"
+                  sx={{ marginRight: '1rem' }}
+                >
                   Login
-                </Nav.Link>
+                </StyledNavLink>
               ) : (
                 <NavDropdown
                   title={`Hi, ${nameFirst}`}

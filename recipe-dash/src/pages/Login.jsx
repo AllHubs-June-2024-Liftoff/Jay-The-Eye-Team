@@ -82,18 +82,28 @@
         
         
         return (
-            <div className="container mt-5">
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'column',
+                minHeight: '100vh',
+                padding: '0',
+                margin: '0',
+                justifyContent: 'flex-start',
+              }}
+            >
                 <Typography
-                      variant="h4"
-                      component="h1"
-                      align="center"
-                      gutterBottom
-                      sx={{
-                        fontWeight: "bold",
-                        color: "#DAA520",
-                        marginBottom: 3,
-                      }}
-                    > Login
+                    variant="h4"
+                    component="h1"
+                    align="center"
+                    gutterBottom
+                    sx={{
+                      fontWeight: 'bold',
+                      color: '#DAA520',
+                    }}
+                  >
+                       Login
                 </Typography>
 
                 <form onSubmit={handleSubmit}>
@@ -171,7 +181,7 @@
                       <Grid item xs={12}>
                         <Divider
                           sx={{
-                            marginTop: 3,
+                            marginTop: 5,
                             marginBottom: 1,
                             borderWidth: 3,
                             borderColor: '#FF00FF',

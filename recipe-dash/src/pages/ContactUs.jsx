@@ -117,7 +117,7 @@ const ContactUs = () => {
   };
 
 return (
-    <Container maxWidth="md" sx={{ py: 8 }}>
+    <Container maxWidth="md">
       <StyledPaper elevation={0}>
        <Box
          sx={{
@@ -159,7 +159,8 @@ return (
         </Typography>
 
         <form onSubmit={handleSubmit}>
-          <Grid container spacing={3}>
+          <Grid container spacing={1} sx={{ maxWidth: '80%', margin: '0 auto' }} alignItems="center"
+          justifyContent="center">
             <Grid item xs={12}>
               <StyledTextField
                 fullWidth
@@ -218,6 +219,8 @@ return (
             </Grid>
           </Grid>
         </form>
+
+
 
         {successMessage && <Typography variant="body1" sx={{ color: "green", mt: 2 }}>{successMessage}</Typography>}
         {errorMessage && <Typography variant="body1" sx={{ color: "red", mt: 2 }}>{errorMessage}</Typography>}
