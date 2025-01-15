@@ -36,7 +36,6 @@ const About = () => {
       <GlobalStyles
         styles={{
           body: {
-            //  backgroundColor: "#DAA520",
             margin: 0,
             padding: 0,
           },
@@ -48,7 +47,7 @@ const About = () => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
+          alignItems: "flex-start",
           gap: "1.5rem",
         }}
       >

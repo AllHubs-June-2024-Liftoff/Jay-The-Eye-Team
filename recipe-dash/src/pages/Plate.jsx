@@ -62,8 +62,8 @@ const Plate = () => {
 
   return (
     <Container sx={{ marginTop: 5 }}>
-      <Grid container spacing={2} alignItems="top">
-        <Grid item xs={6} sx={{ margin: '0', padding: 2 }}>
+      <Grid container spacing={1} alignItems="top">
+        <Grid item xs={6} sx={{ margin: '0', padding: 1 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Container>

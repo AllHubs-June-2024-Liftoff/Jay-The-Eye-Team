@@ -2,20 +2,25 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Divider, TextField, Rating, Button, Box, Typography, Snackbar, CircularProgress, Alert } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
+import { useSelector } from 'react-redux';
 
+
+// For logged in users only
 const ReviewAddByCustomer = () => {
-  const { plateId } = useParams();  // Extract plateId from the URL
+    const loginStatus = useSelector(state => state.user.loginStatus);
 
-  const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState('');
-  const [reviews, setReviews] = useState([]);
+    const { plateId } = useParams();  // Extract plateId from the URL
 
-  const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
-  const [loading, setLoading] = useState(false);
+    const [rating, setRating] = useState(0);
+    const [comment, setComment] = useState('');
+    const [reviews, setReviews] = useState([]);
 
-  const handleRatingChange = (event, newValue) => setRating(newValue);
-  const handleCommentChange = (event) => setComment(event.target.value);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const handleRatingChange = (event, newValue) => setRating(newValue);
+    const handleCommentChange = (event) => setComment(event.target.value);
 
   // Submit the review to the backend
   const submitReviewToBackend = async (reviewData) => {
@@ -98,81 +103,92 @@ const ReviewAddByCustomer = () => {
   }, [plateId, fetchReviews]); // Re-fetch reviews if plateId changes
 
   return (
-    <Box>
 
-      <Box sx={{ maxWidth: 600, margin: 'auto' }}>
+    <div>
 
-        <Box sx={{ alignItems: 'left', justifyContent: 'left', marginBottom: 2 }}>
-          <Typography component="legend" sx={{ marginBottom: `1`, color: '#DAA520' }} >Add your review!</Typography>
-          <Rating
-            value={rating}
-            onChange={handleRatingChange}
-            sx={{
-              '& .MuiRating-iconFilled': {
-                color: '#DAA520',
-              },
-              '& .MuiRating-iconEmpty': {
-                color: 'lightgray',
-              }
-            }}
-          />
-        </Box>
+    {!loginStatus && (
+        <Typography component="legend" sx={{ marginBottom: `1`}} >
+            Log in to leave a review!
+            </Typography>
+      )}
 
-        <TextField
-          label="Comment (Required)"
-          multiline
-          rows={3}
-          variant="outlined"
-          fullWidth
-          value={comment}
-          onChange={handleCommentChange}
-          sx={{
-            marginBottom: 2,
-            '& .MuiOutlinedInput-root': {
-              '&:hover fieldset': { borderColor: '#DAA520' },
-              '&.Mui-focused fieldset': { borderColor: '#DAA520' },
-            },
-            '& .MuiInputLabel-root': {
-              color: 'lightgray',
-              '&.Mui-focused': { color: '#DAA520' },
-            },
-          }}
-        />
+      {loginStatus && (
+        <Box>
+              <Box sx={{ maxWidth: 600, margin: 'auto' }}>
 
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleSubmitReview}
-          disabled={!rating || !comment || loading}
-          sx={{
-            backgroundColor: '#DAA520',
-            '&:hover': { backgroundColor: 'black' },
-            '&.Mui-disabled': { backgroundColor: 'lightgray' },
-          }}
-        >
-          {loading ? <CircularProgress size={24} color="inherit" /> : 'Submit'}
-        </Button>
+                <Box sx={{ alignItems: 'left', justifyContent: 'left', marginBottom: 2 }}>
+                  <Typography component="legend" sx={{ marginBottom: `1`, color: '#DAA520' }} >Add your review!</Typography>
+                  <Rating
+                    value={rating}
+                    onChange={handleRatingChange}
+                    sx={{
+                      '& .MuiRating-iconFilled': {
+                        color: '#DAA520',
+                      },
+                      '& .MuiRating-iconEmpty': {
+                        color: 'lightgray',
+                      }
+                    }}
+                  />
+                </Box>
 
-      </Box>
+                <TextField
+                  label="Comment (Required)"
+                  multiline
+                  rows={3}
+                  variant="outlined"
+                  fullWidth
+                  value={comment}
+                  onChange={handleCommentChange}
+                  sx={{
+                    marginBottom: 2,
+                    '& .MuiOutlinedInput-root': {
+                      '&:hover fieldset': { borderColor: '#DAA520' },
+                      '&.Mui-focused fieldset': { borderColor: '#DAA520' },
+                    },
+                    '& .MuiInputLabel-root': {
+                      color: 'lightgray',
+                      '&.Mui-focused': { color: '#DAA520' },
+                    },
+                  }}
+                />
 
-      {/* Success and Error Snackbar */}
-      <Snackbar
-        open={Boolean(successMessage)}
-        autoHideDuration={6000}
-        onClose={() => setSuccessMessage('')}
-      >
-        <Alert severity="success">{successMessage}</Alert>
-      </Snackbar>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleSubmitReview}
+                  disabled={!rating || !comment || loading}
+                  sx={{
+                    backgroundColor: '#DAA520',
+                    '&:hover': { backgroundColor: 'black' },
+                    '&.Mui-disabled': { backgroundColor: 'lightgray' },
+                  }}
+                >
+                  {loading ? <CircularProgress size={24} color="inherit" /> : 'Submit'}
+                </Button>
 
-      <Snackbar
-        open={Boolean(errorMessage)}
-        autoHideDuration={6000}
-        onClose={() => setErrorMessage('')}
-      >
-        <Alert severity="error">{errorMessage}</Alert>
-      </Snackbar>
+              </Box>
 
-    </Box>
+              {/* Success and Error Snackbar */}
+              <Snackbar
+                open={Boolean(successMessage)}
+                autoHideDuration={6000}
+                onClose={() => setSuccessMessage('')}
+              >
+                <Alert severity="success">{successMessage}</Alert>
+              </Snackbar>
+
+              <Snackbar
+                open={Boolean(errorMessage)}
+                autoHideDuration={6000}
+                onClose={() => setErrorMessage('')}
+              >
+                <Alert severity="error">{errorMessage}</Alert>
+              </Snackbar>
+
+            </Box>
+      )}
+    </div>
   );
 };
 
