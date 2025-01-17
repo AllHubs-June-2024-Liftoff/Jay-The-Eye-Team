@@ -32,48 +32,52 @@ public class DeliveryController {
     @PostMapping("/submit-order")
     public ResponseEntity<?> submitOrder(@RequestBody Map<String, Object> orderData) {
         try {
-            // Extract customerId and items from the request payload
-            int customerId = (int) orderData.get("customerId");
+            System.out.println("Received orderData: " + orderData);
+
+            Integer customerId = (Integer) orderData.get("customerId");
             List<Map<String, Object>> items = (List<Map<String, Object>>) orderData.get("items");
 
-            // Validate customer existence
+            if (customerId == null) {
+                return ResponseEntity.badRequest().body("Customer ID is required.");
+            }
+
+            if (items == null || items.isEmpty()) {
+                return ResponseEntity.badRequest().body("Items cannot be empty.");
+            }
+
             Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
             if (optionalCustomer.isEmpty()) {
-                return ResponseEntity.status(404).body("Customer not found");
+                return ResponseEntity.status(404).body("Customer not found.");
             }
 
             Customer customer = optionalCustomer.get();
 
-            // Create new Delivery object
             Delivery delivery = new Delivery();
             delivery.setCustomer(customer);
             delivery.setDateCreated(LocalDateTime.now());
             delivery.setStatus(Delivery.Status.NEW);
 
-            // Add plates to the delivery
-            List<Plate> plates = fetchPlatesFromItems(items);
+            List<Plate> plates = items.stream()
+                    .map(item -> {
+                        Integer plateId = (Integer) item.get("plateId");
+                        return plateRepository.findById(plateId)
+                                .orElseThrow(() -> new RuntimeException("Plate not found for ID: " + plateId));
+                    })
+                    .collect(Collectors.toList());
             delivery.setPlates(plates);
 
-            // Save the delivery
             deliveryRepository.save(delivery);
-
-            return ResponseEntity.ok("Order submitted successfully");
+            return ResponseEntity.ok("Order submitted successfully.");
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(400).body("Invalid data: " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Failed to submit order");
+            return ResponseEntity.status(500).body("Failed to submit order.");
         }
     }
-
-    private List<Plate> fetchPlatesFromItems(List<Map<String, Object>> items) {
-        // Fetch Plate objects based on plateId in the items
-        return items.stream()
-                .map(item -> {
-                    int plateId = (int) item.get("plateId");
-                    return plateRepository.findById(plateId)
-                            .orElseThrow(() -> new RuntimeException("Plate not found for ID: " + plateId));
-                })
-                .collect(Collectors.toList());
-    }
 }
+
+
 
 
