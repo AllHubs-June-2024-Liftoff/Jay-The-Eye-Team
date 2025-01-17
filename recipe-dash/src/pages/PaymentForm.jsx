@@ -75,7 +75,7 @@ const PaymentForm = () => {
           };
   
           console.log("Submitting order payload:", payload);
-          await axios.post("http://localhost:8080/api/delivery/submit-order", payload);
+          await axios.post("http://localhost:8080/deliveries/submit-order", payload);
   
           // Clear the cart state
           dispatch(clearCart());

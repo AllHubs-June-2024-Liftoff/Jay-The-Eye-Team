@@ -5,35 +5,39 @@
 
 <!--FRAGMENTS-->
 <div th:replace="~{fragments :: page-header}"></div>
-
-<div class="page-title-container">
-    <div class="list-image-container" >
-        <img src="/images/food-delivery-2.png" alt="Delivery Image"/>
-    </div>
-    <div>
-        <p class="bold-v1-page-title"> Track Deliveries </p>
-    </div>
-</div>
+<div th:replace="~{fragments :: script-sort-by-column}"></div>
 
 <!--SEARCH-->
-<div th:replace="~{fragments :: search-box-for-table-no-edit}"></div>
+<div class="page-title-container">
+    <div style="display: flex; align-items: center; margin-right: 50px;">
+        <div class="list-image-container">
+            <img src="/images/food-delivery-2.png" alt="Delivery Image"/>
+        </div>
+        <div>
+            <p class="bold-v1-page-title"> Track Deliveries </p>
+        </div>
+    </div>
+    <div th:replace="~{fragments :: search-box-for-table-edit}"></div>
+</div>
 
+<!--TABLE-->
 <div>
     <table class="table-container-list">
-        <tr class="bold-v4">
-            <td><strong>Delivery Number</strong></td>
-            <td><strong>Date</strong></td>
-            <td><strong>Customer</strong></td>
-            <td><strong>Status</strong></td>
+
+        <tr class=" bold-v4 list-sorted-header">
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(0, true)">ID</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(1, false)">Date Created</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(2, false)">Customer</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(3, false)">Status</a></strong></td>
         </tr>
         <tr th:each="delivery : ${deliveries}">
-            <td th:text="${delivery.id}"></td>
-            <td th:text="x"></td>
-            <td th:text="x"></td>
-            <td th:text="x"></td>
+            <td th:text="${delivery.id}" style="font-weight: bold;"></td>
+            <td th:text="${#temporals.format(delivery.dateCreated, 'MMMM d, yyyy h:mm a')}" style="font-size:11px;"></td>
+            <td th:text="${delivery.customer}"></td>
+            <td th:text="${delivery.status}"></td>
         </tr>
     </table>
 </div>
 
 </body>
-</html>
+</html></html>

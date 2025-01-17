@@ -1,5 +1,6 @@
 package org.launchcode.springboot_backend.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,6 +14,7 @@ public class Delivery {
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
+    @JsonManagedReference // Prevent recursion in api data
     private Customer customer; // Proper relationship with Customer
 
     @ManyToMany
