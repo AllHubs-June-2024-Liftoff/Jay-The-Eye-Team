@@ -3,18 +3,27 @@
 <head th:replace="~{fragments :: head}"></head>
 <body>
 
+<!--FRAGMENTS-->
 <nav th:replace="~{fragments :: page-header}"></nav>
 <div th:replace="~{fragments :: script-sort-by-column}"></div>
+<div th:replace="~{fragments :: script-search-table}"></div>
 
+
+<!--SEARCH-->
 <div class="page-title-container">
-    <div class="list-image-container">
-        <img src="/images/chef-243-no-bg.png" alt="Chef"/>
+    <div style="display: flex; align-items: center; margin-right: 50px;">
+        <div class="list-image-container">
+            <img src="/images/chef-243-no-bg.png" alt="Chef"/>
+        </div>
+        <div>
+            <p class="bold-v1-page-title"> My Messages </p>
+        </div>
     </div>
-    <div>
-        <p class="bold-v1-page-title"> My Messages </p>
-    </div>
+    <div th:replace="~{fragments :: search-box-for-table-edit}"></div>
 </div>
 
+
+<!--TABLE-->
 <div style="display: flex; justify-content: center; align-items: center; width:90%;">
 
     <table class="table-container-list">
@@ -28,12 +37,14 @@
         </tr>
         <tr th:each="message : ${messages}">
             <td th:text="${message.id}" style="font-weight:bold;"></td>
-            <td th:text="${#temporals.format(message.dateCreated, 'MMMM d, yyyy h:mm a')}" style="font-size:11px;" ></td>
+            <td th:text="${#temporals.format(message.dateCreated, 'MMMM d, yyyy h:mm a')}" style="font-size:11px;"></td>
             <td th:text="${message.name}"></td>
-            <td th:text="${message.email}"></td>
+            <td>
+                <a th:href="'mailto:' + ${message.email}" th:text="${message.email}" style="color: blue;"></a>
+            </td>
             <td th:text="${message.comment}" style="font-size:11px;"></td>
-
         </tr>
+
     </table>
 </div>
 </body>

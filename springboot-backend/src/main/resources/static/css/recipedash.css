@@ -199,11 +199,12 @@ button, input[type="submit"] {
 
 .button-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   padding: 0 20px;
   gap: 50px;
-  margin: 0px 10px;
+  margin-right: 50px;
+  width: 100%;
 }
 
 .button-container button:hover {
@@ -408,18 +409,19 @@ button, input[type="submit"] {
 
 .page-title-container {
   margin-top: 5px;
-  margin-left: 15px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
-  width: 60%;
+  width: 100%;
 }
 
 .bold-v1-page-title {
   font-weight: bold;
   font-size: 2em;
   color: var(--bluey);
-  text-align: center;
+  text-align: left;
+  white-space: nowrap;
+  align-items: center;
 }
 
 .bold-v2 {
@@ -461,6 +463,11 @@ button, input[type="submit"] {
 }
 
 /*----------------- LIST --------------------- */
+
+.table-container {
+    overflow: hidden;
+}
+
 .table-container-list {
   display: grid;
   grid-auto-rows: auto;
@@ -493,12 +500,12 @@ table.table-container-list td {
   justify-content: center;
   display: flex;
   margin-top: 5px;
-  color: var(--reddy);
+  color: white;
 }
 
 .list-image-container img {
   width: 90px;
-  justify-content: center;
+  justify-content: flex-end;
   align-content: center;
 }
 
@@ -526,6 +533,22 @@ table.table-container-list td {
 .list-dropdown-select select, option {
     font-size: 10px;
      max-width: 100%;
+}
+
+.list-table-search-intro{
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   text-align: center;
+}
+
+.searchInput {
+    width: 300px;
+    border-radius: 12px;
+    padding: 10px;
+    text-align: center;
+    border: none;
 }
 
 /*----------------- GENERAL --------------------- */

@@ -1,22 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="~{fragments :: head}"></head>
-
 <body>
 
+<!--FRAGMENTS-->
 <div th:replace="~{fragments :: page-header}"></div>
 <div th:replace="~{fragments :: script-sort-by-column}"></div>
+<div th:replace="~{fragments :: script-search-table}"></div>
 
+<!--SEARCH-->
 <div class="page-title-container">
-    <div class="list-image-container">
-        <img src="/images/apprating.png" alt="Review Image"/>
+    <div style="display: flex; align-items: center; margin-right: 50px;">
+        <div class="list-image-container">
+            <img src="/images/apprating.png" alt="Review Image"/>
+        </div>
+        <div>
+            <p class="bold-v1-page-title"> Menu Reviews </p>
+        </div>
     </div>
-    <div>
-        <p class="bold-v1-page-title"> Menu Reviews </p>
-    </div>
+    <div th:replace="~{fragments :: search-box-for-table-edit}"></div>
 </div>
 
-<div style="display: flex; justify-content: center; align-items: center; width:90%;">
+<!--TABLE-->
+<div style="display: flex; justify-content: center; align-items: center; width:90%; margin-left: 60px;">
 
     <table class="table-container-list" style="font-size:11px;">
         <tr class=" bold-v4 list-sorted-header">

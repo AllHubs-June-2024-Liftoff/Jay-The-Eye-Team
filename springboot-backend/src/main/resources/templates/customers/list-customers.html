@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="~{fragments :: head}"></head>
-
 <body>
 
+<!--FRAGMENTS-->
 <div th:replace="~{fragments :: page-header}"></div>
 <div th:replace="~{fragments :: script-sort-by-column}"></div>
 
+<!--SEARCH-->
 <div class="page-title-container">
-    <div class="list-image-container">
-        <img src="/images/people.png" alt="Customer Image"/>
+    <div style="display: flex; align-items: center; margin-right: 50px;">
+        <div class="list-image-container">
+            <img src="/images/people.png" alt="Customer Image"/>
+        </div>
+        <div>
+            <p class="bold-v1-page-title"> Customer Directory </p>
+        </div>
     </div>
-    <div>
-        <p class="bold-v1-page-title"> Customer Directory </p>
-    </div>
+    <div th:replace="~{fragments :: search-box-for-table-edit}"></div>
 </div>
 
-<div class="table-list-header">
-    <h5>
-        Sort the highlighted columns.
-    </h5>
-</div>
-
+<!--TABLE-->
 <div>
     <table class="table-container-list">
+
         <tr class=" bold-v4 list-sorted-header">
             <td><strong><a href="javascript:void(0);" onclick="sortTable(0, true)">ID</a></strong></td>
             <td><strong><a href="javascript:void(0);" onclick="sortTable(1, false)">Customer</a></strong></td>

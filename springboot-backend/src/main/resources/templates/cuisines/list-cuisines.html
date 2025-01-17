@@ -3,19 +3,21 @@
 <head th:replace="~{fragments :: head}"> </head>
 <body>
 
+<!--FRAGMENTS-->
 <div th:replace="~{fragments :: page-header}"></div>
-<div th:replace="~{fragments :: manage-menu-header}"></div>
-
 <div th:replace="~{fragments :: script-sort-by-column}"></div>
 <div th:replace="~{fragments :: script-edit-within-table}"></div>
+<div th:replace="~{fragments :: script-search-table}"></div>
+<div th:replace="~{fragments :: script-table-rows-limit}"></div>
 
-<div class="table-list-header">
-    <h5>
-        Sort the highlighted columns. Click on the specific field to edit.
-    </h5>
+<!--SEARCH-->
+<div class="page-title-container">
+    <div th:replace="~{fragments :: manage-menu-header}"></div>
+    <div th:replace="~{fragments :: search-box-for-table-edit}"></div>
 </div>
 
-<div style="display: flex; justify-content: center; align-items: center;">
+<!--TABLE-->
+<div class="table-container" style="display: flex; justify-content: center; align-items: center;">
     <table class="table-container-list editable-table"
            id="table-cuisine"
            data-update-url="/cuisines/api"

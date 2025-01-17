@@ -3,7 +3,7 @@
 
 <head th:fragment="head">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
     <!-- Bootstrap stylesheets and script -->
     <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
     <link th:href="@{/css/recipedash.css}" rel="stylesheet"/>
@@ -57,9 +57,8 @@
 </div>
 <div th:fragment="manage-menu-header">
 
-    <div style="height: 30px;"></div>
     <div class="button-container">
-        <div>
+        <div style="display: flex; white-space: nowrap;">
             <a href="/plates/add-plate" style="margin-right: 10px; text-decoration: none;">
                 <button class="button-menu-header" >Add Plate</button>
             </a>
@@ -68,7 +67,7 @@
             </a>
         </div>
         <div></div>
-        <div>
+        <div style="display: flex; white-space: nowrap;">
             <a href="/cuisines/add-cuisine" style="margin-right: 10px; text-decoration: none;">
                 <button class="button-menu-header" >Add Cuisine</button>
             </a>
@@ -192,7 +191,7 @@ function sortTable(columnIndex) {
         $(document).ready(function() {
 
             // Enable in-place editing for all tables with class 'editable'
-            $(".editable").click(function() {
+            $(".editable").dblclick(function() {
                 var currentValue = $(this).text();
                 var inputField = $('<input>').val(currentValue);
                 $(this).html(inputField);
@@ -322,7 +321,6 @@ function sortTable(columnIndex) {
         });
     </script>
 </div>
-
 <div th:fragment="script-delete-plate">
     <script type="text/javascript">
         $(document).ready(function() {
@@ -364,7 +362,107 @@ function sortTable(columnIndex) {
         });
     </script>
 </div>
+<div th:fragment="script-table-rows-limit">
+    <script>
+        function adjustTableRows() {
+            const table = document.querySelector('.table-container-list');
 
+            // Ensure the table exists and has rows
+            if (!table || table.rows.length === 0) {
+                console.log("Table is empty or not found.");
+                return;
+            }
+
+            // Get the height of the viewport
+            const viewportHeight = window.innerHeight;
+
+            // Calculate the height of a single row (assuming all rows have the same height)
+            const rowHeight = table.rows[0].offsetHeight;
+
+            // Calculate the number of visible rows based on the viewport height
+            const visibleRowCount = Math.floor(viewportHeight / rowHeight);
+
+            console.log("Viewport height: " + viewportHeight);
+            console.log("Row height: " + rowHeight);
+            console.log("Visible rows: " + visibleRowCount);
+
+            // Loop through all rows and hide those that do not fit in the viewport
+            for (let i = 0; i < table.rows.length; i++) {
+                if (i < visibleRowCount) {
+                    table.rows[i].style.display = ''; // Show row
+                } else {
+                    table.rows[i].style.display = 'none'; // Hide row
+                }
+            }
+        }
+
+        // Call the function on page load and on window resize
+        window.addEventListener('load', adjustTableRows);
+        window.addEventListener('resize', adjustTableRows);
+    </script>
+</div>
+
+<div th:fragment="script-search-table">
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const table = document.querySelector(".table-container-list");
+            const searchInput = document.querySelector(".searchInput");
+
+            // Event listener for the input field to filter the table
+            searchInput.addEventListener("input", function() {
+                const filter = searchInput.value.toLowerCase();
+                const rows = table.querySelectorAll("tr");
+
+                rows.forEach(row => {
+                    // Skip the header row with class 'list-sorted-header'
+                    if (row.classList.contains("list-sorted-header") || row.classList.contains("bold-v4")) {
+                        row.style.display = ""; // Keep header visible
+                        return; // Skip filtering for header
+                    }
+
+                    const cells = row.querySelectorAll("td");
+                    let match = false;
+
+                    cells.forEach(cell => {
+                        if (cell.textContent.toLowerCase().includes(filter)) {
+                            match = true;
+                        }
+                    });
+
+                    if (match) {
+                        row.style.display = "";
+                    } else {
+                        row.style.display = "none";
+                    }
+                });
+            });
+        });
+    </script>
+</div>
+<div th:fragment="search-box-for-table-edit">
+    <div class="list-table-search-intro">
+        <div class="table-list-header">
+            <h6>
+                Sort the highlighted columns  |  Double-click on the specific field to edit
+            </h6>
+        </div>
+        <div style="width: 100%; display: flex; justify-content: center; ">
+            <input type="text" class="searchInput" placeholder="Search">
+        </div>
+    </div>
+</div>
+<div th:fragment="search-box-for-table-no-edit">
+    <div class="list-table-search-intro">
+        <div class="table-list-header">
+            <h6>
+                Sort the highlighted columns
+            </h6>
+        </div>
+        <div style="width: 100%; display: flex; justify-content: center; ">
+            <input type="text" class="searchInput" placeholder="Search">
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
