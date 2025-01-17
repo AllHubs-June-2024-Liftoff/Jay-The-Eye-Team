@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchMenu, selectMenuItems, selectMenuStatus } from "../store/menuSlice";
 import PlateList from "../components/plates/PlateList";
-import { Box, Divider, Typography, TextField } from '@mui/material';
+import { Box, Divider, Typography, TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { styled } from "@mui/system";
 import logoImage from '../assets/images/reciepe-dash-black-yellow.png';
 
@@ -40,7 +40,8 @@ const Homepage = () => {
     const dispatch = useDispatch();
     const plates = useSelector(selectMenuItems);
     const menuStatus = useSelector(selectMenuStatus);
-    const [searchQuery, setSearchQuery] = useState(""); // State to hold the search input
+    const [searchQuery, setSearchQuery] = useState("");
+     const [selectedCuisine, setSelectedCuisine] = useState("all");
 
     // Fetch the menu only if the state is empty
     useEffect(() => {
@@ -53,15 +54,24 @@ const Homepage = () => {
         console.log("Plates loaded:", plates); // Check plates data
     }, [plates]);
 
+       const cuisineTypes = ["all", ...new Set(plates.map((plate) => plate.cuisine))];
+
     // Handle search input change
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value.toLowerCase());
     };
 
+    const handleCuisineChange = (event) => {
+        setSelectedCuisine(event.target.value);
+    };
+
     // Filter plates based on the search query
-    const filteredPlates = plates.filter(plate =>
-        plate.name.toLowerCase().includes(searchQuery) // Assuming plates have a 'name' property
-    );
+    const filteredPlates = plates.filter((plate) => {
+        const matchesQuery = plate.name.toLowerCase().includes(searchQuery); // Assuming plates have a 'name' property
+        const matchesCuisine = selectedCuisine === "all" || plate.cuisine === selectedCuisine;
+
+        return matchesQuery && matchesCuisine;
+    });
 
     useEffect(() => {
       console.log("Filter loaded:", filteredPlates); // Check plates data
@@ -129,6 +139,21 @@ const Homepage = () => {
                 onChange={handleSearchChange} // Bind the search input
               />
             </Box>
+
+            <FormControl sx={{ mt: 3, width: "350px" }}>
+                    <InputLabel id="cuisine-select-label">Filter by Cuisine</InputLabel>
+                    <Select
+                      labelId="cuisine-select-label"
+                      value={selectedCuisine}
+                      onChange={handleCuisineChange}
+                    >
+                      {cuisineTypes.map((cuisine) => (
+                        <MenuItem key={cuisine} value={cuisine}>
+                          {cuisine}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
 
             <Divider sx={{
                 marginTop: 4,
