@@ -1,5 +1,6 @@
 package org.launchcode.springboot_backend.controllers;
 
+import org.launchcode.springboot_backend.models.Delivery;
 import org.launchcode.springboot_backend.repositories.DeliveryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -18,6 +19,7 @@ public class DeliveryController {
     public String listAllDeliveries(Model model) {
         Sort sort = Sort.by(Sort.Order.asc("dateCreated"));
         model.addAttribute("deliveries", deliveryRepository.findAll(sort));
+        model.addAttribute("statusOptions", Delivery.Status.values());
         return "deliveries/list-deliveries";
     }
 

@@ -321,6 +321,62 @@ function sortTable(columnIndex) {
         });
     </script>
 </div>
+<div th:fragment="script-select-status-dropdown">
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            // Handle the change event for the dropdown
+            $(".list-dropdown-select").change(function() {
+                var row = $(this).closest("tr");  // Get the closest row
+                var table = $(this).closest("table");  // Get the closest table
+                var updateUrl = table.data("update-url-status");  // Get the update URL from table's data attribute
+
+                // Prepare the data object for sending
+                var data = {};
+
+                // Get the selected value and column name from the dropdown
+                var selectedValue = $(this).val();
+                var columnName = $(this).data("column");
+                data[columnName] = selectedValue;
+
+                // Get the ID from the first <td>
+                var id = row.data("id");
+                data.id = parseInt(id, 10);  // Ensure the ID is an integer
+
+                // For debugging: Check the data being sent
+                console.log('Data being sent:', JSON.stringify(data));
+
+                // Make the AJAX PUT request
+                $.ajax({
+                    url: updateUrl,  // URL to send the data to
+                    type: 'PUT',
+                    contentType: 'application/json;charset=UTF-8',
+                    data: JSON.stringify(data),
+                    success: function(response) {
+
+                        // Include the updated data in the success message
+                        var updatedDataMessage = 'Data updated successfully!';
+                        for (var key in data) {
+                            if (data.hasOwnProperty(key)) {
+                                updatedDataMessage += '\n' + key + ': ' + data[key];
+                            }
+                        }
+
+                        updatedDataMessage += 'Update URL: ' + updateUrl;
+
+                        // >>>>>>>>>>> SUPPRESSED ALERT
+                         //alert(updatedDataMessage);
+                    },
+                    error: function(xhr, status, error) {
+                        // Improved error handling
+                       // alert('Error updating data: ' + (xhr.responseText || 'An unknown error occurred.'));
+                    }
+                });
+            });
+
+        });
+    </script>
+</div>
 <div th:fragment="script-delete-plate">
     <script type="text/javascript">
         $(document).ready(function() {

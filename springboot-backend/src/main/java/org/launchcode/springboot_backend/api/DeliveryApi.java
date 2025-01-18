@@ -1,5 +1,6 @@
 package org.launchcode.springboot_backend.api;
 
+import org.launchcode.springboot_backend.models.Cuisine;
 import org.launchcode.springboot_backend.models.Customer;
 import org.launchcode.springboot_backend.models.Delivery;
 import org.launchcode.springboot_backend.models.Plate;
@@ -8,6 +9,7 @@ import org.launchcode.springboot_backend.repositories.DeliveryRepository;
 import org.launchcode.springboot_backend.repositories.PlateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -84,6 +86,27 @@ public class DeliveryApi {
                             .orElseThrow(() -> new RuntimeException("Plate not found for ID: " + plateId));
                 })
                 .collect(Collectors.toList());
+    }
+
+    // Update an existing delivery - Status only
+    @PutMapping("api-status")
+    public ResponseEntity<Delivery> updateDeliveryStatusOnly(@RequestBody Map<String, Object> requestBody) {
+
+        Optional<Delivery> existingDelivery = deliveryRepository.findById((Integer) requestBody.get("id"));
+
+        if (existingDelivery.isPresent()) {
+            Delivery updatedDelivery = existingDelivery.get();
+
+            String statusString = (String) requestBody.get("status");
+            Delivery.Status updatedStatus = Delivery.Status.valueOf(statusString);
+            updatedDelivery.setStatus(updatedStatus);
+
+            deliveryRepository.save(updatedDelivery);
+            return ResponseEntity.ok(updatedDelivery);
+
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);  // Plate not found
+        }
     }
 }
 

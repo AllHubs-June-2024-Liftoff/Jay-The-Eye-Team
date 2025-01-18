@@ -6,6 +6,7 @@
 <!--FRAGMENTS-->
 <div th:replace="~{fragments :: page-header}"></div>
 <div th:replace="~{fragments :: script-sort-by-column}"></div>
+<div th:replace="~{fragments :: script-select-status-dropdown}"></div>
 
 <!--SEARCH-->
 <div class="page-title-container">
@@ -14,7 +15,7 @@
             <img src="/images/food-delivery-2.png" alt="Delivery Image"/>
         </div>
         <div>
-            <p class="bold-v1-page-title"> Track Deliveries </p>
+            <p class="bold-v1-page-title"> Manage Deliveries </p>
         </div>
     </div>
     <div th:replace="~{fragments :: search-box-for-table-edit}"></div>
@@ -22,7 +23,9 @@
 
 <!--TABLE-->
 <div>
-    <table class="table-container-list">
+    <table class="table-container-list editable-table"
+           id="table-delivery"
+           data-update-url-status="/deliveries/api-status">
 
         <tr class=" bold-v4 list-sorted-header">
             <td><strong><a href="javascript:void(0);" onclick="sortTable(0, true)">ID</a></strong></td>
@@ -30,14 +33,35 @@
             <td><strong><a href="javascript:void(0);" onclick="sortTable(2, false)">Customer</a></strong></td>
             <td><strong><a href="javascript:void(0);" onclick="sortTable(3, false)">Status</a></strong></td>
         </tr>
-        <tr th:each="delivery : ${deliveries}">
+
+        <!-- ROWS PER ID-->
+        <tr th:each="delivery : ${deliveries}" th:data-id="${delivery.id}">
+
             <td th:text="${delivery.id}" style="font-weight: bold;"></td>
+
             <td th:text="${#temporals.format(delivery.dateCreated, 'MMMM d, yyyy h:mm a')}" style="font-size:11px;"></td>
             <td th:text="${delivery.customer}"></td>
-            <td th:text="${delivery.status}"></td>
+
+            <!-- Status dropdown -->
+            <td>
+                <select data-column="status" th:value="${delivery.status}"
+                        class="list-dropdown-select" style="width: 150px;">
+
+                    <option value="" th:selected="${delivery.status == null}" disabled
+                            th:text="${delivery.status == null ? 'Select Status' : ''}">
+                    </option>
+
+                    <option th:each="statusOption : ${statusOptions}"
+                            th:value="${statusOption}"
+                            th:text="${#strings.capitalize(statusOption.name().toLowerCase())}"
+                            th:selected="${delivery.status == statusOption}">
+                    </option>
+                </select>
+            </td>
+
         </tr>
     </table>
 </div>
 
 </body>
-</html></html>
+</html>
