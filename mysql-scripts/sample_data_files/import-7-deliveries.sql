@@ -36,3 +36,5 @@ INSERT INTO delivery (id, date_created, status, customer_id) VALUES
 (35, '2025-01-16 12:50:00', 'PENDING', 5),
 (36, '2025-01-16 12:55:00', 'COMPLETED', 6),
 (37, '2025-01-16 13:00:00', 'NEW', 7);
+
+

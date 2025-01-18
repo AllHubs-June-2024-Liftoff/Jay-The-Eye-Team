@@ -22,3 +22,6 @@ INSERT INTO review (id, date_created, rating, description, plate) VALUES
 (21, '2025-01-15T15:00:00', 5.0, 'This dish was amazing! The flavors were bold, the meat was tender, and the presentation was beautiful. Everything came together perfectly. I loved the combination of spices and the textures were spot on. One of the best meals I’ve had in a long time!', 1),
 (22, '2025-01-15T15:15:00', 4.6, 'Very good! The dish had great flavors, and the portion was just right. The meat was tender, and the vegetables were fresh. I did feel it could have used a bit more seasoning or spice, but overall, it was a very satisfying and delicious meal.', 2),
 (23, '2025-01-15T15:30:00', 3.4, 'The dish was decent, but a little underwhelming. The flavors were fine, but I felt it lacked some complexity. The meat was cooked well, but the sauce didn’t quite hit the mark for me. It was an okay meal, but I expected a little more excitement.', 3);
+
+
+

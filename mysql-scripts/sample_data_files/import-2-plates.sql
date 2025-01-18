@@ -4,7 +4,7 @@ DELETE FROM plate WHERE id IS NOT NULL;
 SET SQL_SAFE_UPDATES = 1;
 */
 
-INSERT INTO plate  (`id`, `name`, `description`, `discount`, `plate_image`, `price`, `cuisine`) VALUES
+INSERT INTO plate  (id, name, description, discount, plate_image, price, cuisine) VALUES
 (1,'Spaghetti Bolognese','Classic Italian pasta with rich meat sauce',10,'https://www.vickery.tv/wp-content/uploads/2020/12/SMGD-Spaghetti-Bolognese-500x500.jpg',12.99,1),
 (2,'Tacos al Pastor','Mexican tacos with marinated pork and pineapple',15,'https://www.thespruceeats.com/thmb/wQd2RvxH1Lh9536W5LY1T_VSyT8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/tacos-al-pastor-recipe-4172074-hero-01-7fb1a4455397486b8485ac8ec2ca3c5a.jpg',12.99,2),
 (3,'Butter Chicken','Indian curry with tender chicken in a creamy tomato sauce',0,'https://foodal.com/wp-content/uploads/2021/04/Quick-and-Easy-Butter-Chicken.jpg',14.99,3),
@@ -63,3 +63,7 @@ INSERT INTO plate  (`id`, `name`, `description`, `discount`, `plate_image`, `pri
 (54,'Churrasco','A Brazilian style of barbecue, typically featuring skewers of grilled meat, often served with rice and beans.',10,'https://www.goya.com/media/7017/churrasco-con-chimichurri-grilled-skirt-steak.jpg?quality=80',22.5,24),
 (55,'Cajun Crab','A flavorful Southern American dish featuring crab cooked in a spicy Cajun seasoning mix with garlic, onion, and bell peppers, often served with rice or bread.',12,'https://img.cdn4dd.com/cdn-cgi/image/fit=cover,width=600,height=400,format=auto,quality=80/https://doordash-static.s3.amazonaws.com/media/store/header/bfe51c91-0bda-4a07-9928-422608eb0f68.jpg',20.5,20),
 (56,'Tom Yum','A Thai hot and sour soup made with shrimp, lemongrass, lime leaves, and chili paste.',15,'https://hot-thai-kitchen.com/wp-content/uploads/2013/03/tom-yum-goong-blog.jpg',11.5,22);
+
+
+
+
