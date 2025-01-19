@@ -88,9 +88,19 @@ const Homepage = () => {
               paddingTop: '10px'
             }}
           >
-            <Typography variant="subtitle1" align="center" sx={{ mb: 2, color: "black" }}>
+            <Typography variant="subtitle1" align="center" sx={{color: "black",}}>
                 Skip the hassle of cooking and let us bring the warmth of homemade food to you—wholesome, tasty, and delivered with care!
             </Typography>
+
+            <Divider sx={{
+                marginTop: 2,
+                marginBottom: 3,
+                borderWidth: 3,
+                borderColor: 'black',
+                width: '100%',
+                borderStyle: 'solid',
+                opacity: 1,
+            }} />
 
             <Box
               sx={{
@@ -127,7 +137,7 @@ const Homepage = () => {
                     fontWeight: "bold",
                     fontSize: "20px",
                     color: "#DAA520",
-                    marginRight: 3,
+                    marginRight: 10,
                   }}
                 >
                   plate
@@ -136,27 +146,50 @@ const Homepage = () => {
               <StyledTextField
                 label="Search by plate name"
                 value={searchQuery}
-                onChange={handleSearchChange} // Bind the search input
+                onChange={handleSearchChange}
               />
+
+                {/* Search by cuisine */}
+               <FormControl sx={{ marginLeft: 10, width: "200px", backgroundColor: "#DAA520", }}>
+
+                 <InputLabel
+                   id="cuisine-select-label"
+                   sx={{
+                     color: "black",
+                     backgroundColor: "transparent",
+                     fontWeight: "bold",
+                     position: "absolute",
+                     top: "-10px",  // Adjust to position the label above
+                     left: "0",
+                   }}
+                   shrink={true}  // Ensure the label shrinks and stays above the input
+                 >
+                   Filter by cuisine
+                 </InputLabel>
+
+                 <Select
+                   labelId="cuisine-select-label"
+                   value={selectedCuisine}
+                   onChange={handleCuisineChange}
+                   sx={{
+                     backgroundColor: "#DAA520",
+                     color: "white",
+                     fontWeight: "bold",
+                     "& .MuiSelect-icon": { color: "black" },
+                   }}
+                 >
+                   {cuisineTypes.sort().map((cuisine) => (
+                    <MenuItem key={cuisine} value={cuisine} sx={{ color: "black" }}>
+                      {cuisine.charAt(0).toUpperCase() + cuisine.slice(1).toLowerCase()}
+                    </MenuItem>
+                   ))}
+                 </Select>
+               </FormControl>
+
             </Box>
 
-            <FormControl sx={{ mt: 3, width: "350px" }}>
-                    <InputLabel id="cuisine-select-label">Filter by Cuisine</InputLabel>
-                    <Select
-                      labelId="cuisine-select-label"
-                      value={selectedCuisine}
-                      onChange={handleCuisineChange}
-                    >
-                      {cuisineTypes.map((cuisine) => (
-                        <MenuItem key={cuisine} value={cuisine}>
-                          {cuisine}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-
             <Divider sx={{
-                marginTop: 4,
+                marginTop: 2,
                 marginBottom: 5,
                 borderWidth: 3,
                 borderColor: 'black',

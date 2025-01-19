@@ -4,6 +4,8 @@
 <head th:fragment="head">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+
     <!-- Bootstrap stylesheets and script -->
     <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
     <link th:href="@{/css/recipedash.css}" rel="stylesheet"/>
@@ -57,24 +59,34 @@
 </div>
 <div th:fragment="manage-menu-header">
 
-    <div style="height: 30px;"></div>
     <div class="button-container">
-        <div>
-            <a href="/plates/add-plate" style="margin-right: 10px; text-decoration: none;">
-                <button class="button-menu-header" >Add Plate</button>
-            </a>
-            <a href="/plates/list-plates">
-                <button class="button-menu-header" style="background-color: #C05746;">Edit Plates</button>
-            </a>
+
+        <div class="div-menu-header">
+            <div style="display: flex; align-items: center;">
+
+                <a href="/plates/add-plate" style="text-decoration: none;">
+                    <button class="button-menu-header">Add Plate</button>
+                </a>
+                <img src="/images/platebg.png" alt="plate" style="width: 50px; height: auto;"/>
+                <a href="/plates/list-plates">
+                    <button class="button-menu-header" style="background-color: #C05746;">Edit Plates</button>
+                </a>
+
+            </div>
         </div>
-        <div></div>
-        <div>
-            <a href="/cuisines/add-cuisine" style="margin-right: 10px; text-decoration: none;">
-                <button class="button-menu-header" >Add Cuisine</button>
-            </a>
-            <a href="/cuisines/list-cuisines">
-                <button class="button-menu-header" style="background-color: #C05746;">Edit Cuisines</button>
-            </a>
+
+        <div class="div-menu-header">
+            <div style="display: flex; align-items: center;">
+
+                <a href="/cuisines/add-cuisine" style="text-decoration: none;">
+                    <button class="button-menu-header">Add Cuisines</button>
+                </a>
+                <img src="/images/cuisinebg.png" alt="plate" style="width: 50px; height: auto;"/>
+                <a href="/cuisines/list-cuisines">
+                    <button class="button-menu-header" style="background-color: #C05746;">Edit Cuisines</button>
+                </a>
+
+            </div>
         </div>
     </div>
 
@@ -85,35 +97,64 @@
     <script>
         let sortOrder = {};  // Keeps track of sorting direction for each column
 
-// Function to sort the table
-function sortTable(columnIndex) {
-    const table = document.querySelector(".table-container-list");
-    const rows = Array.from(table.rows).slice(1); // Skip the header row
+        // Function to sort the table
+        function sortTable(columnIndex, dropdownValue = null) {
+            const table = document.querySelector(".table-container-list");
+            const rows = Array.from(table.rows).slice(1); // Skip the header row
 
-    const isNumeric = (value) => !isNaN(parseFloat(value)) && isFinite(value);
+            const isNumeric = (value) => !isNaN(parseFloat(value)) && isFinite(value);
 
-    // Get the current sort direction or default to ascending
-    const currentSortOrder = sortOrder[columnIndex] || 'asc';
-    const newSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
-    sortOrder[columnIndex] = newSortOrder;
+            // Get the current sort direction or default to ascending
+            const currentSortOrder = sortOrder[columnIndex] || 'asc';
+            const newSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+            sortOrder[columnIndex] = newSortOrder;
 
-    // Sorting function based on column content
-    rows.sort((rowA, rowB) => {
-        const cellA = rowA.cells[columnIndex].textContent.trim();
-        const cellB = rowB.cells[columnIndex].textContent.trim();
+            // Sorting function based on column content
+            rows.sort((rowA, rowB) => {
+                const cellA = rowA.cells[columnIndex].textContent.trim();
+                const cellB = rowB.cells[columnIndex].textContent.trim();
 
-        // Handle numeric columns
-        if (isNumeric(cellA) && isNumeric(cellB)) {
-            return (parseFloat(cellA) - parseFloat(cellB)) * (newSortOrder === 'asc' ? 1 : -1);
+                // Handle numeric columns
+                if (isNumeric(cellA) && isNumeric(cellB)) {
+                    return (parseFloat(cellA) - parseFloat(cellB)) * (newSortOrder === 'asc' ? 1 : -1);
+                }
+
+                // Handle non-numeric columns (like strings)
+                return (cellA.localeCompare(cellB)) * (newSortOrder === 'asc' ? 1 : -1);
+            });
+
+            // Append sorted rows back to the table body
+            rows.forEach(row => table.tBodies[0].appendChild(row));
+
+            // If a dropdown value is selected, trigger sorting for that column
+            const dropdown = document.querySelector('.list-dropdown-select');
+            if (dropdown) {
+                dropdown.addEventListener('change', function () {
+                    sortByDropdown(this);
+                });
+            }
         }
 
-        // Handle non-numeric columns (like strings)
-        return (cellA.localeCompare(cellB)) * (newSortOrder === 'asc' ? 1 : -1);
-    });
+        // Function to handle sorting based on dropdown value
+        function sortByDropdown(dropdownValue) {
+            const dropdown = document.querySelector(".list-dropdown-select");
+            const columnIndex = dropdown.selectedIndex;
 
-    // Append sorted rows back to the table body
-    rows.forEach(row => table.tBodies[0].appendChild(row));
-}
+            if (columnIndex > 0) {
+                sortTable(columnIndex - 1); // Adjust because dropdown starts from index 1
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            const dropdown = document.querySelector('.list-dropdown-select');
+
+            if (dropdown) {
+                dropdown.addEventListener('change', function() {
+                    sortByDropdown(this);
+                });
+            }
+        });
 
     </script>
 </div>
@@ -192,7 +233,7 @@ function sortTable(columnIndex) {
         $(document).ready(function() {
 
             // Enable in-place editing for all tables with class 'editable'
-            $(".editable").click(function() {
+            $(".editable").dblclick(function() {
                 var currentValue = $(this).text();
                 var inputField = $('<input>').val(currentValue);
                 $(this).html(inputField);
@@ -264,6 +305,7 @@ function sortTable(columnIndex) {
         });
     </script>
 </div>
+
 <div th:fragment="script-select-cuisine-dropdown">
     <script type="text/javascript">
         $(document).ready(function() {
@@ -322,6 +364,85 @@ function sortTable(columnIndex) {
         });
     </script>
 </div>
+<div th:fragment="script-select-status-dropdown">
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            // Handle the change event for the dropdown
+            $(".list-dropdown-select").change(function() {
+                var row = $(this).closest("tr");  // Get the closest row
+                var table = $(this).closest("table");  // Get the closest table
+                var updateUrl = table.data("update-url-status");  // Get the update URL from table's data attribute
+
+                // Prepare the data object for sending
+                var data = {};
+
+                // Get the selected value and column name from the dropdown
+                var selectedValue = $(this).val();
+                var columnName = $(this).data("column");
+                data[columnName] = selectedValue;
+
+                // Get the ID from the first <td>
+                var id = row.data("id");
+                data.id = parseInt(id, 10);  // Ensure the ID is an integer
+
+                // For debugging: Check the data being sent
+                console.log('Data being sent:', JSON.stringify(data));
+
+                // Make the AJAX PUT request
+                $.ajax({
+                    url: updateUrl,  // URL to send the data to
+                    type: 'PUT',
+                    contentType: 'application/json;charset=UTF-8',
+                    data: JSON.stringify(data),
+                    success: function(response) {
+
+                        // Include the updated data in the success message
+                        var updatedDataMessage = 'Data updated successfully!';
+                        for (var key in data) {
+                            if (data.hasOwnProperty(key)) {
+                                updatedDataMessage += '\n' + key + ': ' + data[key];
+                            }
+                        }
+
+                        updatedDataMessage += 'Update URL: ' + updateUrl;
+
+                        // >>>>>>>>>>> SUPPRESSED ALERT
+                         //alert(updatedDataMessage);
+                    },
+                    error: function(xhr, status, error) {
+                        // Improved error handling
+                       // alert('Error updating data: ' + (xhr.responseText || 'An unknown error occurred.'));
+                    }
+                });
+            });
+
+        });
+    </script>
+</div>
+<div th:fragment="script-select-status-color">
+    <script type="text/javascript">
+        function updateStatusClass(selectElement) {
+        // Get the selected value (status)
+        var selectedStatus = selectElement.value.toLowerCase();
+
+        // Get the parent <td> element
+        var tdElement = selectElement.closest('td');
+
+        // Clear any previous status classes
+        tdElement.classList.remove('status-new', 'status-pending', 'status-complete');
+
+        // Add the class based on the selected status
+        if (selectedStatus === 'new') {
+            tdElement.classList.add('status-new');
+        } else if (selectedStatus === 'pending') {
+            tdElement.classList.add('status-pending');
+        } else if (selectedStatus === 'completed') {
+            tdElement.classList.add('status-completed');
+        }
+    }
+    </script>
+</div>
 
 <div th:fragment="script-delete-plate">
     <script type="text/javascript">
@@ -365,6 +486,80 @@ function sortTable(columnIndex) {
     </script>
 </div>
 
+<div th:fragment="script-search-table">
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const table = document.querySelector(".table-container-list");
+            const searchInput = document.querySelector(".searchInput");
+
+            // Event listener for the input field to filter the table
+            searchInput.addEventListener("input", function() {
+                const filter = searchInput.value.toLowerCase();
+                const rows = table.querySelectorAll("tr");
+
+                rows.forEach(row => {
+                    // Skip the header row with class 'list-sorted-header' and bold rows
+                    if (row.classList.contains("list-sorted-header") || row.classList.contains("bold-v4")) {
+                        row.style.display = ""; // Keep header visible
+                        return; // Skip filtering for header
+                    }
+
+                    const cells = row.querySelectorAll("td");
+                    let match = false;
+
+                    cells.forEach(cell => {
+                        // Check if the cell contains text or a select dropdown with a selected value
+                        const cellText = cell.textContent.toLowerCase();
+                        const selectElement = cell.querySelector("select");
+
+                        // If there's a select dropdown, check its selected value
+                        if (selectElement) {
+                            const selectedValue = selectElement.options[selectElement.selectedIndex]?.text.toLowerCase();
+                            if (selectedValue && selectedValue.includes(filter)) {
+                                match = true;
+                            }
+                        } else {
+                            // Check if the cell text matches the filter
+                            if (cellText.includes(filter)) {
+                                match = true;
+                            }
+                        }
+                    });
+
+                    if (match) {
+                        row.style.display = "";
+                    } else {
+                        row.style.display = "none";
+                    }
+                });
+            });
+        });
+    </script>
+</div>
+<div th:fragment="search-box-for-table-edit">
+    <div class="list-table-search-intro">
+        <div class="table-list-header">
+            <h6>
+                Sort the highlighted columns  |  Double-click on the specific field to edit
+            </h6>
+        </div>
+        <div style="width: 100%; display: flex; justify-content: center; ">
+            <input type="text" class="searchInput" placeholder="Search">
+        </div>
+    </div>
+</div>
+<div th:fragment="search-box-for-table-no-edit">
+    <div class="list-table-search-intro">
+        <div class="table-list-header">
+            <h6>
+                Sort the highlighted columns
+            </h6>
+        </div>
+        <div style="width: 100%; display: flex; justify-content: center; ">
+            <input type="text" class="searchInput" placeholder="Search">
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

@@ -25,3 +25,5 @@ INSERT INTO cuisine (id, name, description) VALUES
 (24, 'Egyptian', 'Koshari, falafel, and dishes rich in beans, rice, and herbs'),
 (25, 'Indonesian', 'Satay, rendang, and rice-based dishes with coconut milk and spices'),
 (26, 'Jamaican','Bold, flavorful dishes featuring jerk, seafood, rice, peas, and spices.');
+
+

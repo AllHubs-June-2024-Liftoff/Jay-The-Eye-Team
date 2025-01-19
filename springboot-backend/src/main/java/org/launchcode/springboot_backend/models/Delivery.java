@@ -1,5 +1,6 @@
 package org.launchcode.springboot_backend.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -7,21 +8,10 @@ import java.util.List;
 @Entity
 public class Delivery {
 
+    // INDEPENDENT
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer; // Proper relationship with Customer
-
-    @ManyToMany
-    @JoinTable(
-            name = "delivery_plates",
-            joinColumns = @JoinColumn(name = "delivery_id"),
-            inverseJoinColumns = @JoinColumn(name = "plate_id")
-    )
-    private List<Plate> plates;
 
     private LocalDateTime dateCreated;
 
@@ -31,6 +21,20 @@ public class Delivery {
     public enum Status {
         NEW, PENDING, COMPLETED
     }
+
+    // RELATIONAL
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
+    @JsonManagedReference // Prevent recursion in api data
+    private Customer customer;
+
+    @ManyToMany
+    @JoinTable(
+            name = "delivery_plates",
+            joinColumns = @JoinColumn(name = "plate_id"),
+            inverseJoinColumns = @JoinColumn(name = "delivery_id"))
+    @JsonManagedReference // Prevent recursion in api data
+    private List<Plate> plates;
 
     // Getters and Setters
     public int getId() {

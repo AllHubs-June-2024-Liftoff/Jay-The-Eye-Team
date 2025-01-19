@@ -5,35 +5,37 @@
 
 <!--FRAGMENTS-->
 <div th:replace="~{fragments :: page-header}"></div>
-<div th:replace="~{fragments :: manage-menu-header}"></div>
+
 <div th:replace="~{fragments :: script-sort-by-column}"></div>
 <div th:replace="~{fragments :: script-edit-within-table}"></div>
 <div th:replace="~{fragments :: script-select-cuisine-dropdown}"></div>
 <div th:replace="~{fragments :: script-delete-plate}"></div>
+<div th:replace="~{fragments :: script-search-table}"></div>
 
-<div class="table-list-header">
-    <h5>
-        Sort the highlighted columns. Click on the specific field to edit.
-    </h5>
+<!--SEARCH-->
+<div class="page-title-container">
+    <div th:replace="~{fragments :: manage-menu-header}"></div>
+    <div th:replace="~{fragments :: search-box-for-table-edit}"></div>
 </div>
 
-<div style="display: flex; justify-content: center; align-items: center;">
+<!--TABLE-->
+<div class="table-container">
+
     <table class="table-container-list editable-table"
            id="table-plate"
            data-update-url="/plates/api"
            data-update-url-cuisine="/plates/api-cuisine"
-           data-update-url-delete="/plates/api-delete"
-           style="max-width: 90%;">
+           data-update-url-delete="/plates/api-delete">
 
         <!--HEADERS-->
-        <tr class=" bold-v4 list-sorted-header">
+        <tr class="list-sorted-header">
             <td><strong><a href="javascript:void(0);" onclick="sortTable(0, true)">ID</a></strong></td>
             <td><strong><a href="javascript:void(0);" onclick="sortTable(1, true)">Plate</a></strong></td>
             <td><strong><a href="javascript:void(0);" onclick="sortTable(2, true)">Price</a></strong></td>
             <td><strong><a href="javascript:void(0);" onclick="sortTable(3, true)">Discount</a></strong></td>
             <td style="max-width: 150px;"><strong><a href="javascript:void(0);" onclick="sortTable(4, true)">Cuisine</a></strong></td>
 
-            <td> <strong>Description</strong></td>
+            <td><span class="bold-v5">Description</span></td>
             <td></td>
             <td></td>
             <td></td>

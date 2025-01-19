@@ -32,3 +32,5 @@ INSERT INTO contact_us (`id`, `comment`, `date_created`, `email`, `name`) VALUES
 (31, 'Can you update the recipe section for holiday meals?', '2025-01-09T19:00:00.765432', 'daniel.mitchell@example.com', 'Daniel Mitchell'),
 (32, 'I would like a feature to track my cooking progress.', '2025-01-09T19:15:00.987654', 'isla.carter@example.com', 'Isla Carter'),
 (33, 'I would love to see more step-by-step photo instructions.', '2025-01-09T19:30:00.123890', 'ethan.sanchez@example.com', 'Ethan Sanchez');
+
+

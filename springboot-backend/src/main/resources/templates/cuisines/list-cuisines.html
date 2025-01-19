@@ -3,29 +3,30 @@
 <head th:replace="~{fragments :: head}"> </head>
 <body>
 
+<!--FRAGMENTS-->
 <div th:replace="~{fragments :: page-header}"></div>
-<div th:replace="~{fragments :: manage-menu-header}"></div>
-
 <div th:replace="~{fragments :: script-sort-by-column}"></div>
 <div th:replace="~{fragments :: script-edit-within-table}"></div>
+<div th:replace="~{fragments :: script-search-table}"></div>
 
-<div class="table-list-header">
-    <h5>
-        Sort the highlighted columns. Click on the specific field to edit.
-    </h5>
+<!--SEARCH-->
+<div class="page-title-container">
+    <div th:replace="~{fragments :: manage-menu-header}"></div>
+    <div th:replace="~{fragments :: search-box-for-table-edit}"></div>
 </div>
 
-<div style="display: flex; justify-content: center; align-items: center;">
+<!--TABLE-->
+<div class="table-container" style="width:70%">
+
     <table class="table-container-list editable-table"
            id="table-cuisine"
-           data-update-url="/cuisines/api"
-           style="max-width: 100%;">
+           data-update-url="/cuisines/api">
 
         <!--HEADERS-->
-        <tr class="bold-v4">
+        <tr class="list-sorted-header">
             <td><strong><a href="javascript:void(0);" onclick="sortTable(0, true)">ID</a></strong></td>
             <td><strong><a href="javascript:void(0);" onclick="sortTable(1, true)">Cuisine</a></strong></td>
-            <td style="width: 400px;"><strong><a href="javascript:void(0);" onclick="sortTable(2, true)">Description</a></strong></td>
+            <td><span class="bold-v5" style="width: 400px;">Description</span></td>
             <td><strong> </strong></td>
         </tr>
 

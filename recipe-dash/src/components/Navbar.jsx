@@ -91,11 +91,11 @@ function NavBar() {
                   id="user-dropdown"
                   align="end"
                 >
-                  <NavDropdown.Item as={Link} to="/account">
-                    Account
-                  </NavDropdown.Item>
                   {!isChef && (
                     <>
+                    <NavDropdown.Item as={Link} to="/account">
+                        Account
+                    </NavDropdown.Item>
                       <NavDropdown.Item as={Link} to="/cart">
                         Cart
                       </NavDropdown.Item>
@@ -106,17 +106,11 @@ function NavBar() {
                   )}
                   {isChef && (
                     <>
-                      <NavDropdown.Item as={Link} to="/reviews">
-                        Reviews
-                      </NavDropdown.Item>
-                      <NavDropdown.Divider />
                       <NavDropdown.Item
                         as={Link}
                         to="http://localhost:8080"
                         style={{
                           fontWeight: 'bold',
-                          backgroundColor: 'black',
-                          color: '#DAA520',
                         }}>
                         Chef Dashboard
                       </NavDropdown.Item>

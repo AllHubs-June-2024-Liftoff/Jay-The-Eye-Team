@@ -35,11 +35,8 @@ public class Plate extends AbstractEntity {
     @JsonBackReference
     private List<Review> review = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(
-            joinColumns = @JoinColumn(name = "plate_id"),
-            inverseJoinColumns = @JoinColumn(name = "delivery_id")
-    )
+    @ManyToMany(mappedBy = "plates")
+    @JsonManagedReference
     private List<Delivery> delivery = new ArrayList<>();
 
     // INDEPENDENT
