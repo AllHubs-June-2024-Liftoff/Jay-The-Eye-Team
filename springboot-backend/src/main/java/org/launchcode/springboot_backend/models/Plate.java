@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -13,33 +11,26 @@ import java.util.Objects;
 @Entity
 public class Plate extends AbstractEntity {
 
-//    database columns:
-//    id
-//    name
-//    description
-//    cuisine_tag
-//    price
-//    discount
-//    picture_link
-//    orders
-//    favorites
-//    review
-
-    // RELATIONAL
+    // RELATIONAL MAPPINGS
     @ManyToOne
     @JoinColumn(name = "cuisine", nullable = false)
-    @JsonManagedReference // Prevent recursion in api data
+    @JsonBackReference("plate-cuisine")  // Prevent infinite recursion when serializing
     private Cuisine cuisine;
 
-    @OneToMany(mappedBy = "plate", cascade = CascadeType.ALL)
-    @JsonBackReference
+    @OneToMany(mappedBy = "plate", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("plate-review")  // Allow serialization of reviews
     private List<Review> review = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "plates")
-    @JsonManagedReference
-    private List<Delivery> delivery = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(
+            name = "delivery_plates",
+            joinColumns = @JoinColumn(name = "plate_id"),
+            inverseJoinColumns = @JoinColumn(name = "delivery_id")
+    )
+    @JsonBackReference("plate-delivery")  // Prevent recursion when serializing deliveries
+    private List<Delivery> deliveries = new ArrayList<>();
 
-    // INDEPENDENT
+    // INDEPENDENT FIELDS
     private float price;
     private int discount;
     private String plateImage;
@@ -92,9 +83,50 @@ public class Plate extends AbstractEntity {
         this.cuisine = cuisine;
     }
 
-    // Custom getter for Cuisine to only return its name in JSON
+    public List<Review> getReview() {
+        return review;
+    }
+    public void setReview(List<Review> review) {
+        this.review = review;
+    }
+
+    public List<Delivery> getDeliveries() {
+        return deliveries;
+    }
+    public void setDeliveries(List<Delivery> deliveries) {
+        this.deliveries = deliveries;
+    }
+
+    // Custom getter for Cuisine to only return its name in JSON response
     @JsonGetter("cuisine")
     public String getCuisineName() {
         return this.cuisine != null ? this.cuisine.getName() : null;
     }
+
+    // OVERRIDE EQUALS AND HASHCODE TO AVOID ISSUES IN COLLECTIONS
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Plate plate = (Plate) obj;
+        return getId() == plate.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "Plate{" +
+                "id=" + getId() +
+                ", name='" + getName() + '\'' +
+                ", price=" + price +
+                ", discount=" + discount +
+                ", description='" + description + '\'' +
+                ", cuisine=" + (cuisine != null ? cuisine.getName() : "None") +
+                '}';
+    }
 }
+
