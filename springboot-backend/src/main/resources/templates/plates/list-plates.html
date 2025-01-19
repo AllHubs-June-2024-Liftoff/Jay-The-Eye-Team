@@ -19,23 +19,23 @@
 </div>
 
 <!--TABLE-->
-<div style="display: flex; justify-content: center; align-items: center;">
+<div class="table-container">
+
     <table class="table-container-list editable-table"
            id="table-plate"
            data-update-url="/plates/api"
            data-update-url-cuisine="/plates/api-cuisine"
-           data-update-url-delete="/plates/api-delete"
-           style="max-width: 90%;">
+           data-update-url-delete="/plates/api-delete">
 
         <!--HEADERS-->
-        <tr class=" bold-v4 list-sorted-header">
+        <tr class="list-sorted-header">
             <td><strong><a href="javascript:void(0);" onclick="sortTable(0, true)">ID</a></strong></td>
             <td><strong><a href="javascript:void(0);" onclick="sortTable(1, true)">Plate</a></strong></td>
             <td><strong><a href="javascript:void(0);" onclick="sortTable(2, true)">Price</a></strong></td>
             <td><strong><a href="javascript:void(0);" onclick="sortTable(3, true)">Discount</a></strong></td>
             <td style="max-width: 150px;"><strong><a href="javascript:void(0);" onclick="sortTable(4, true)">Cuisine</a></strong></td>
 
-            <td> <strong>Description</strong></td>
+            <td><span class="bold-v5">Description</span></td>
             <td></td>
             <td></td>
             <td></td>

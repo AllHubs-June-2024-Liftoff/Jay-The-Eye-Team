@@ -6,9 +6,10 @@
 <!--FRAGMENTS-->
 <div th:replace="~{fragments :: page-header}"></div>
 <div th:replace="~{fragments :: script-sort-by-column}"></div>
+<div th:replace="~{fragments :: script-search-table}"></div>
 
 <!--SEARCH-->
-<div class="page-title-container">
+<div class="page-title-container"  style="width:70%">
     <div style="display: flex; align-items: center; margin-right: 50px;">
         <div class="list-image-container">
             <img src="/images/people.png" alt="Customer Image"/>
@@ -17,28 +18,30 @@
             <p class="bold-v1-page-title"> Customer Directory </p>
         </div>
     </div>
-    <div th:replace="~{fragments :: search-box-for-table-edit}"></div>
+    <div th:replace="~{fragments :: search-box-for-table-no-edit}"></div>
 </div>
 
 <!--TABLE-->
-<div>
+<div class="table-container">
     <table class="table-container-list">
 
-        <tr class=" bold-v4 list-sorted-header">
+        <tr class="list-sorted-header">
             <td><strong><a href="javascript:void(0);" onclick="sortTable(0, true)">ID</a></strong></td>
-            <td><strong><a href="javascript:void(0);" onclick="sortTable(1, false)">Customer</a></strong></td>
-            <td><strong><a href="javascript:void(0);" onclick="sortTable(2, false)">First Name</a></strong></td>
-            <td><strong><a href="javascript:void(0);" onclick="sortTable(3, false)">Last Name</a></strong></td>
-            <td><strong><a href="javascript:void(0);" onclick="sortTable(4, false)">Email</a></strong></td>
-            <td><strong><a href="javascript:void(0);" onclick="sortTable(5, false)">Phone</a></strong></td>
-            <td><strong><a href="javascript:void(0);" onclick="sortTable(6, false)">Address</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(1, true)">Customer</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(2, true)">First Name</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(3, true)">Last Name</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(4, true)">Email</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(5, true)">Phone</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(6, true)">Address</a></strong></td>
         </tr>
         <tr th:each="customer : ${customers}">
             <td th:text="${customer.id}" style="font-weight: bold;"></td>
             <td th:text="${customer.name}"></td>
             <td th:text="${customer.nameFirst}"></td>
             <td th:text="${customer.nameLast}"></td>
-            <td th:text="${customer.email}"></td>
+            <td>
+                <a th:href="'mailto:' + ${customer.email}" th:text="${customer.email}" style="color: blue;"></a>
+            </td>
             <td th:text="${customer.phone}"></td>
             <td th:text="${customer.address}"></td>
         </tr>

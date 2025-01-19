@@ -4,10 +4,9 @@
 <body>
 
 <!--FRAGMENTS-->
-<nav th:replace="~{fragments :: page-header}"></nav>
+<div th:replace="~{fragments :: page-header}"></div>
 <div th:replace="~{fragments :: script-sort-by-column}"></div>
 <div th:replace="~{fragments :: script-search-table}"></div>
-
 
 <!--SEARCH-->
 <div class="page-title-container">
@@ -19,22 +18,24 @@
             <p class="bold-v1-page-title"> My Messages </p>
         </div>
     </div>
-    <div th:replace="~{fragments :: search-box-for-table-edit}"></div>
+    <div th:replace="~{fragments :: search-box-for-table-no-edit}"></div>
 </div>
 
-
 <!--TABLE-->
-<div style="display: flex; justify-content: center; align-items: center; width:90%;">
+<div class="table-container"  style="width:70%">
 
     <table class="table-container-list">
-        <tr class=" bold-v4 list-sorted-header">
-            <td><strong><a href="javascript:void(0);" onclick="sortTable(0, true)">ID</a></strong></td>
-            <td><strong><a href="javascript:void(0);" onclick="sortTable(1, false)">Date Created</a></strong></td>
-            <td><strong><a href="javascript:void(0);" onclick="sortTable(2, false)">Name</a></strong></td>
-            <td><strong><a href="javascript:void(0);" onclick="sortTable(3, false)">Email</a></strong></td>
-            <td><strong>Message</strong></td>
 
+        <!--HEADERS-->
+        <tr class="list-sorted-header">
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(0, true)">ID</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(1, true)">Date Created</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(2, true)">Name</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(3, true)">Email</a></strong></td>
+            <td><span class="bold-v5">Message</span></td>
         </tr>
+
+        <!-- ROWS PER ID-->
         <tr th:each="message : ${messages}">
             <td th:text="${message.id}" style="font-weight:bold;"></td>
             <td th:text="${#temporals.format(message.dateCreated, 'MMMM d, yyyy h:mm a')}" style="font-size:11px;"></td>
@@ -44,8 +45,9 @@
             </td>
             <td th:text="${message.comment}" style="font-size:11px;"></td>
         </tr>
-
     </table>
+
 </div>
+
 </body>
 </html>

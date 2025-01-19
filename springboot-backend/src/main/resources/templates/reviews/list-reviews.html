@@ -18,20 +18,23 @@
             <p class="bold-v1-page-title"> Menu Reviews </p>
         </div>
     </div>
-    <div th:replace="~{fragments :: search-box-for-table-edit}"></div>
+    <div th:replace="~{fragments :: search-box-for-table-no-edit}"></div>
 </div>
 
 <!--TABLE-->
-<div style="display: flex; justify-content: center; align-items: center; width:90%; margin-left: 60px;">
+<div class="table-container"  style="width:70%">
 
     <table class="table-container-list" style="font-size:11px;">
-        <tr class=" bold-v4 list-sorted-header">
+
+        <!--HEADERS-->
+        <tr class="list-sorted-header">
             <td><strong><a href="javascript:void(0);" onclick="sortTable(0, true)">ID</a></strong></td>
-            <td><strong><a href="javascript:void(0);" onclick="sortTable(1, false)">Plate</a></strong></td>
-            <td><strong><a href="javascript:void(0);" onclick="sortTable(2, false)">Date Created</a></strong></td>
-            <td><strong><a href="javascript:void(0);" onclick="sortTable(3, false)">Rating</a></strong></td>
-            <td><strong>Description</strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(1, true)">Plate</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(2, true)">Date Created</a></strong></td>
+            <td><strong><a href="javascript:void(0);" onclick="sortTable(3, true)">Rating</a></strong></td>
+            <td><span class="bold-v5">Description</span></td>
         </tr>
+
         <tr th:each="review : ${reviews}">
             <td th:text="${review.id}" style="font-weight:bold;"></td>
             <td th:text="${review.plate}"></td>
