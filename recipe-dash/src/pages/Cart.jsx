@@ -11,8 +11,8 @@ import {
   removeFromCart,
 } from "../store/cartSlice";
 
-import logoImage from '../assets/images/reciepe-dash-black-yellow.png';
 import cartEmptyImage from '../assets/images/cartempt.jpg';
+import defaultPlaceholder from '../assets/images/default-placeholder.jpg';
 
 const StyledHeaderTypography = styled(Typography)(({ theme }) => ({
   fontSize: '1rem',
@@ -27,14 +27,14 @@ const Cart = () => {
   const cartItems = useSelector(selectCartItems);
   const totalPrice = useSelector(selectCartTotalPrice);
 
-  const handleQuantityChange = (id, quantity) => {
+  const handleQuantityChange = (plate_id, quantity) => {
     if (quantity > 0) {
-      dispatch(updateQuantity({ id, quantity }));
+      dispatch(updateQuantity({ plate_id, quantity }));
     }
   };
 
-  const handleRemove = (id) => {
-    dispatch(removeFromCart({ id }));
+  const handleRemove = (plate_id) => {
+    dispatch(removeFromCart({ plate_id }));
   };
 
   const handleCheckout = () => {
@@ -83,21 +83,12 @@ const Cart = () => {
           <Typography variant="h5" align="center">
             Your cart is empty!
           </Typography>
-          <img
-            src={logoImage}
-            alt="Logo"
-            style={{
-              width: "250px",
-              display: "block",
-              marginTop: "30px",
-            }}
-          />
         </Grid>
       ) : (
         <>
           <Grid container spacing={2} sx={{ padding: 1 }}>
             <Grid item xs={2}>
-              <StyledHeaderTypography> </StyledHeaderTypography>
+              <StyledHeaderTypography>Image</StyledHeaderTypography>
             </Grid>
             <Grid item xs={3}>
               <StyledHeaderTypography>Name</StyledHeaderTypography>
@@ -112,17 +103,18 @@ const Cart = () => {
               <StyledHeaderTypography>Total</StyledHeaderTypography>
             </Grid>
             <Grid item xs={1}>
-              <StyledHeaderTypography> </StyledHeaderTypography>
+              <StyledHeaderTypography>Action</StyledHeaderTypography>
             </Grid>
           </Grid>
 
           {cartItems.map((item) => (
-            <Grid container spacing={2} key={item.id} alignItems="center">
+            <Grid container spacing={2} key={item.plate_id} alignItems="center">
               <Grid item xs={2}>
                 <img
-                  src={item.plateImage}
+                  src={item.plateImage || defaultPlaceholder}
                   alt={item.name}
                   style={{ width: "50px", height: "50px", objectFit: "cover" }}
+                  onError={(e) => { e.target.src = defaultPlaceholder; }} 
                 />
               </Grid>
               <Grid item xs={3}>
@@ -134,7 +126,7 @@ const Cart = () => {
                   variant="outlined"
                   size="small"
                   value={item.quantity}
-                  onChange={(e) => handleQuantityChange(item.id, Number(e.target.value))}
+                  onChange={(e) => handleQuantityChange(item.plate_id, Number(e.target.value))}
                 />
               </Grid>
               <Grid item xs={2}>
@@ -147,7 +139,7 @@ const Cart = () => {
                 <Button
                   variant="contained"
                   color="secondary"
-                  onClick={() => handleRemove(item.id)}
+                  onClick={() => handleRemove(item.plate_id)}
                   sx={{
                     backgroundColor: 'black',
                     '&:hover': {

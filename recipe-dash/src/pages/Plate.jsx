@@ -46,6 +46,7 @@ const Plate = () => {
         price: filteredPlate.price,
         quantity,
         total: filteredPlate.price * quantity,
+        plateImage: filteredPlate.imageUrl,
       }));
   
       navigate('/');
