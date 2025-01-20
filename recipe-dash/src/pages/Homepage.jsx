@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchMenu, selectMenuItems, selectMenuStatus } from "../store/menuSlice";
 import PlateList from "../components/plates/PlateList";
-import { Box, Divider, Typography, TextField } from '@mui/material';
+import { Box, Divider, Typography, TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { styled } from "@mui/system";
 import logoImage from '../assets/images/reciepe-dash-black-yellow.png';
 
@@ -40,7 +40,8 @@ const Homepage = () => {
     const dispatch = useDispatch();
     const plates = useSelector(selectMenuItems);
     const menuStatus = useSelector(selectMenuStatus);
-    const [searchQuery, setSearchQuery] = useState(""); // State to hold the search input
+    const [searchQuery, setSearchQuery] = useState("");
+     const [selectedCuisine, setSelectedCuisine] = useState("all");
 
     // Fetch the menu only if the state is empty
     useEffect(() => {
@@ -53,15 +54,24 @@ const Homepage = () => {
         console.log("Plates loaded:", plates); // Check plates data
     }, [plates]);
 
+       const cuisineTypes = ["all", ...new Set(plates.map((plate) => plate.cuisine))];
+
     // Handle search input change
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value.toLowerCase());
     };
 
+    const handleCuisineChange = (event) => {
+        setSelectedCuisine(event.target.value);
+    };
+
     // Filter plates based on the search query
-    const filteredPlates = plates.filter(plate =>
-        plate.name.toLowerCase().includes(searchQuery) // Assuming plates have a 'name' property
-    );
+    const filteredPlates = plates.filter((plate) => {
+        const matchesQuery = plate.name.toLowerCase().includes(searchQuery); // Assuming plates have a 'name' property
+        const matchesCuisine = selectedCuisine === "all" || plate.cuisine === selectedCuisine;
+
+        return matchesQuery && matchesCuisine;
+    });
 
     useEffect(() => {
       console.log("Filter loaded:", filteredPlates); // Check plates data
@@ -78,9 +88,19 @@ const Homepage = () => {
               paddingTop: '10px'
             }}
           >
-            <Typography variant="subtitle1" align="center" sx={{ mb: 2, color: "black" }}>
+            <Typography variant="subtitle1" align="center" sx={{color: "black",}}>
                 Skip the hassle of cooking and let us bring the warmth of homemade food to you—wholesome, tasty, and delivered with care!
             </Typography>
+
+            <Divider sx={{
+                marginTop: 2,
+                marginBottom: 3,
+                borderWidth: 3,
+                borderColor: 'black',
+                width: '100%',
+                borderStyle: 'solid',
+                opacity: 1,
+            }} />
 
             <Box
               sx={{
@@ -117,7 +137,7 @@ const Homepage = () => {
                     fontWeight: "bold",
                     fontSize: "20px",
                     color: "#DAA520",
-                    marginRight: 3,
+                    marginRight: 10,
                   }}
                 >
                   plate
@@ -126,12 +146,51 @@ const Homepage = () => {
               <StyledTextField
                 label="Search by plate name"
                 value={searchQuery}
-                onChange={handleSearchChange} // Bind the search input
+                onChange={handleSearchChange}
               />
+
+                {/* Search by cuisine */}
+               <FormControl sx={{ marginLeft: 10, width: "200px", backgroundColor: "#DAA520", }}>
+
+                 <InputLabel
+                   id="cuisine-select-label"
+                   sx={{
+                     color: "black",
+                     backgroundColor: "transparent",
+                     fontWeight: "bold",
+                     position: "absolute",
+                     top: "-10px",  // Adjust to position the label above
+                     left: "0",
+                   }}
+                   shrink={true}  // Ensure the label shrinks and stays above the input
+                 >
+                   Filter by cuisine
+                 </InputLabel>
+
+                 <Select
+                   labelId="cuisine-select-label"
+                   value={selectedCuisine}
+                   onChange={handleCuisineChange}
+                   sx={{
+                     backgroundColor: "#DAA520",
+                     color: "white",
+                     fontWeight: "bold",
+                     "& .MuiSelect-icon": { color: "black" },
+                   }}
+                 >
+                   {cuisineTypes.sort().map((cuisine) => (
+                    <MenuItem key={cuisine} value={cuisine} sx={{ color: "black" }}>
+                    {/* >>>>>>>>>>>>>> Need to fix cuisine data <<<<<<<<<<<<<<<<<<*/}
+                    {/* {cuisine.charAt(0).toUpperCase() + cuisine.slice(1).toLowerCase()} */}
+                    </MenuItem>
+                   ))}
+                 </Select>
+               </FormControl>
+
             </Box>
 
             <Divider sx={{
-                marginTop: 4,
+                marginTop: 2,
                 marginBottom: 5,
                 borderWidth: 3,
                 borderColor: 'black',
@@ -141,7 +200,7 @@ const Homepage = () => {
             }} />
 
             <PlateList plates={filteredPlates} /> {/* Display filtered plates */}
-            
+
             {menuStatus === "loading" && <p>Loading...</p>}
             {menuStatus === "failed" && <p>Error loading menu.</p>}
         </div>
