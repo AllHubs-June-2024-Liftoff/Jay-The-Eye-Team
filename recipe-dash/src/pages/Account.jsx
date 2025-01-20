@@ -1,7 +1,10 @@
-import React from 'react';
-import { Divider, Container, Box, Card, CardContent, Grid, Typography } from '@mui/material';
+import React, { useState, useEffect } from "react";
+import { Divider, Container, Box, Card, CardContent, Grid, Typography, Button } from '@mui/material';
 import { styled } from '@mui/system';
+import { useSelector, useDispatch } from "react-redux";
 import logoImage from '../assets/images/reciepe-dash-black-yellow.png';
+import axios from "axios";
+
 
 const StyledHeaderTypography = styled(Typography)(({ theme }) => ({
   fontWeight: 'bold',
@@ -50,6 +53,8 @@ const favorites = [
   'Wiener Schnitzel'
 ];
 
+
+
 const dashboardData = {
   totalStuff1: 23,
   totalStuff2: 94,
@@ -57,7 +62,72 @@ const dashboardData = {
   totalStuff4: '2100',
 };
 
+const handleAddToCart = () => {
+    if (filteredPlate && quantity > 0) {
+      dispatch(addToCart({
+        plate_id: filteredPlate.id, // Use plate_id instead of id
+        name: filteredPlate.name,
+        price: filteredPlate.price,
+        quantity,
+        total: filteredPlate.price * quantity,
+        plateImage: filteredPlate.imageUrl,
+      }));
+
+      navigate('/');
+    }
+  };
+
 const Account = () => {
+    const [previousOrders, setPreviousOrders] = useState([]);
+      const [loading, setLoading] = useState(true);
+      const [error, setError] = useState(null);
+       const userId = useSelector((state) => state.user.user_id);
+      const { loginStatus, email, nameFirst, nameLast, isChef, address, phone, customer_id } = useSelector((state) => state.user);
+      console.log('customer_id', customer_id);
+
+      const customerInfo = {
+        name: `${nameFirst} ${nameLast}`,
+        address: address,
+        phone: phone,
+        email: email,
+      };
+
+      useEffect(() => {
+          // Fetch previous orders using Axios
+          const fetchPreviousOrders = async () => {
+            try {
+              const response = await axios.get(`http://localhost:8080/deliveries/order-history/${userId}`);
+              console.log('API Response:', response.data);
+
+                const data = response.data.map(order => ({
+                        total: order.grandTotal,
+                        items: Object.entries(order.plateQuantities).map(([plateStr, quantity]) => {
+                          // Extract the plate name from the string and create the item structure
+                          const plateName = plateStr.match(/name='([^']+)'/)[1]; // Extract name from the string
+
+
+                          return { name: plateName, quantity };
+                        }),
+                      }));
+                  console.log('data:', data);
+                  console.log('response', response.data);
+
+                  setPreviousOrders(data); // Assume response.data contains an array of orders
+              setLoading(false);
+            } catch (err) {
+              console.error('Error fetching previous orders:', err);
+              setError('Failed to load previous orders');
+              setLoading(false);
+            }
+          };
+
+          fetchPreviousOrders();
+        }, []);
+
+    const reorderItems = async (order) => {
+
+        }
+
   return (
     <Container
       sx={{
@@ -141,6 +211,50 @@ const Account = () => {
           </Box>
         </Grid>
       </Grid>
+
+      {/* Previous Orders Section */}
+            <Divider sx={{ marginTop: 5, marginBottom: 3 }} />
+            <StyledHeaderTypography variant="h6">Previous Orders</StyledHeaderTypography>
+            {loading ? (
+              <Typography>Loading previous orders...</Typography>
+            ) : error ? (
+              <Typography color="error">{error}</Typography>
+            ) : previousOrders.length === 0 ? (
+              <Typography>No previous orders found.</Typography>
+            ) : (
+              <Grid container spacing={2}>
+                {previousOrders.map((order, index) => (
+                  <Grid item xs={12} md={6} key={index}>
+                    <Card>
+                      <CardContent>
+
+                        <Typography variant="body2">
+                          Items:
+                        </Typography>
+                        <ul>
+                                              {order.items.map((item, index) => (
+                                                <li key={index}>
+                                                  {item.name} (x{item.quantity})
+                                                </li>
+                                              ))}
+                                            </ul>
+
+                        <Typography variant="body2">Total: {order.total}</Typography>
+                        {/* Reorder Button */}
+                                            <Button
+                                              variant="contained"
+                                              color="primary"
+                                              onClick={() => reorderItems(order)}
+                                              sx={{ marginTop: 2 }}
+                                            >
+                                              Reorder
+                                            </Button>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+            )}
 
       {/* Dashboard Stats Section */}
       <Grid container spacing={3}>
