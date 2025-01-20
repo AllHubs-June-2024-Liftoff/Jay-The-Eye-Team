@@ -14,7 +14,6 @@ public class Plate extends AbstractEntity {
     // RELATIONAL MAPPINGS
     @ManyToOne
     @JoinColumn(name = "cuisine", nullable = false)
-    @JsonBackReference("plate-cuisine")  // Prevent infinite recursion when serializing
     private Cuisine cuisine;
 
     @OneToMany(mappedBy = "plate", cascade = CascadeType.ALL, orphanRemoval = true)

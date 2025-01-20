@@ -78,4 +78,16 @@ public class Delivery {
     public void setPlateQuantities(Map<Plate, Integer> plateQuantities) {
         this.plateQuantities = plateQuantities;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public LocalDateTime getDateCreated() {
+        return dateCreated;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
 }
