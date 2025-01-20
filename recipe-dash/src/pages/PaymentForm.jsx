@@ -35,9 +35,11 @@ const PaymentForm = () => {
       }
     };
 
-    fetchPaymentIntent();
+    if (totalPrice > 0) {
+      fetchPaymentIntent();
+    }
   }, [totalPrice, cartItems]);
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
@@ -45,6 +47,12 @@ const PaymentForm = () => {
   
     if (!stripe || !elements) {
       setErrorMessage("Stripe has not loaded.");
+      setIsProcessing(false);
+      return;
+    }
+  
+    if (!user?.customer_id) {
+      setErrorMessage("Customer ID is missing. Please log in again.");
       setIsProcessing(false);
       return;
     }
@@ -60,42 +68,45 @@ const PaymentForm = () => {
   
       if (error) {
         setErrorMessage(error.message);
-      } else if (paymentIntent.status === "succeeded") {
+        setIsProcessing(false);
+        return;
+      }
+  
+      if (paymentIntent.status === "succeeded") {
         setSuccessMessage("Payment successful! Thank you for your order.");
   
-        // Submit order to the backend
-        try {
-          const payload = {
-            customerId: user.customer_id,
-            items: cartItems.map((item) => ({
-              plateId: item.plate_id,
-              quantity: item.quantity,
-            })),
-            totalPrice,
-          };
+        const payload = {
+          customer_id: user.customer_id,  // Ensure correct key
+          items: cartItems.map((item) => ({
+            plateId: item.plate_id,
+            quantity: item.quantity,
+          })),
+          totalPrice: parseFloat(totalPrice.toFixed(2)),
+        };
   
-          console.log("Submitting order payload:", payload);
-          await axios.post("http://localhost:8080/deliveries/submit-order", payload);
+        console.log("Submitting order payload:", payload);
   
-          // Clear the cart state
-          dispatch(clearCart());
-  
-          // Redirect to OrderComplete page with the total price
-          navigate("/order-complete", { state: { totalPrice } });
-        } catch (submitError) {
-          console.error("Order Submission Error:", submitError);
-          setErrorMessage("Failed to submit order. Please try again.");
+        // Ensure customer ID exists in payload before submission
+        if (!payload.customer_id) {
+          throw new Error("Customer ID is missing in request payload.");
         }
+  
+        await axios.post("http://localhost:8080/deliveries/submit-order", payload);
+  
+        dispatch(clearCart());
+        navigate("/order-complete", { state: { totalPrice } });
       } else {
         setErrorMessage("Payment failed. Please try again.");
       }
     } catch (error) {
-      console.error("Payment Error:", error);
+      console.error("Order Submission Error:", error);
       setErrorMessage("An unexpected error occurred. Please try again.");
     }
   
     setIsProcessing(false);
-  };  
+  };
+  
+  
 
   return (
     <Container
@@ -170,4 +181,3 @@ const PaymentForm = () => {
 };
 
 export default PaymentForm;
-

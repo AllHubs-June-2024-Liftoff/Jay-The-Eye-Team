@@ -83,7 +83,7 @@ const NutritionBox = ({ plates }) => {
             height: '750px',
             border: 'none',
             transform: 'translateY(-200px)', // Adjust this to crop the top part
-            //pointerEvents: 'none',  // Disable interactions
+            pointerEvents: 'none',  // Disable interactions
             overflow: 'hidden',
           }}
           frameBorder="0"
