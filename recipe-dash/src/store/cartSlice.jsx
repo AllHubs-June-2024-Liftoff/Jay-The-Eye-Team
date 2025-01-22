@@ -9,6 +9,8 @@ const cartSlice = createSlice({
   },
   reducers: {
     addToCart: (state, action) => {
+        console.log("Payload received in addToCart:", action.payload);
+
       const { plate_id, name, price, quantity, plateImage } = action.payload;
       const existingItem = state.items.find((item) => item.plate_id === plate_id);
 

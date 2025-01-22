@@ -78,4 +78,8 @@ public class Delivery {
     public void setPlateQuantities(Map<Plate, Integer> plateQuantities) {
         this.plateQuantities = plateQuantities;
     }
+
+    public int getId() {
+        return id;
+    }
 }

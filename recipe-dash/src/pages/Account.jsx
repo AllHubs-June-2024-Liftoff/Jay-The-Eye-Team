@@ -4,6 +4,8 @@ import { styled } from '@mui/system';
 import { useSelector, useDispatch } from "react-redux";
 import logoImage from '../assets/images/reciepe-dash-black-yellow.png';
 import axios from "axios";
+import { addToCart } from '../store/cartSlice';
+import { useParams, useNavigate } from 'react-router-dom';
 
 
 const StyledHeaderTypography = styled(Typography)(({ theme }) => ({
@@ -62,22 +64,11 @@ const dashboardData = {
   totalStuff4: '2100',
 };
 
-const handleAddToCart = () => {
-    if (filteredPlate && quantity > 0) {
-      dispatch(addToCart({
-        plate_id: filteredPlate.id, // Use plate_id instead of id
-        name: filteredPlate.name,
-        price: filteredPlate.price,
-        quantity,
-        total: filteredPlate.price * quantity,
-        plateImage: filteredPlate.imageUrl,
-      }));
 
-      navigate('/');
-    }
-  };
 
 const Account = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [previousOrders, setPreviousOrders] = useState([]);
       const [loading, setLoading] = useState(true);
       const [error, setError] = useState(null);
@@ -97,22 +88,31 @@ const Account = () => {
           const fetchPreviousOrders = async () => {
             try {
               const response = await axios.get(`http://localhost:8080/deliveries/order-history/${userId}`);
+              const response = await axios.get('http://localhost:8080/plates/api');
               console.log('API Response:', response.data);
 
                 const data = response.data.map(order => ({
                         total: order.grandTotal,
+                        id: order.id,
                         items: Object.entries(order.plateQuantities).map(([plateStr, quantity]) => {
                           // Extract the plate name from the string and create the item structure
                           const plateName = plateStr.match(/name='([^']+)'/)[1]; // Extract name from the string
+                          const itemPriceMatch = plateStr.match(/price=([\d.]+)/);
+                          const itemPrice = itemPriceMatch ? parseFloat(itemPriceMatch[1]) : 0;
+
+                          // Extract the plate ID from the string
+                              const plateIdMatch = plateStr.match(/id=(\d+)/);
+                              const plateId = plateIdMatch ? parseInt(plateIdMatch[1], 10) : null;
 
 
-                          return { name: plateName, quantity };
+                          return { plateId, name: plateName, itemPrice, quantity };
                         }),
                       }));
                   console.log('data:', data);
                   console.log('response', response.data);
 
                   setPreviousOrders(data); // Assume response.data contains an array of orders
+
               setLoading(false);
             } catch (err) {
               console.error('Error fetching previous orders:', err);
@@ -124,8 +124,28 @@ const Account = () => {
           fetchPreviousOrders();
         }, []);
 
-    const reorderItems = async (order) => {
+    const handleReorderItems = async (order) => {
+        console.log("Order:", order);
+        order.items.forEach((item, index) => {
+          console.log(`Item ${index + 1}:`, item);
+        });
 
+        order.items.map((item, index) => (
+
+                                                        dispatch(addToCart({
+                                                                plate_id: item.plateId, // Use plate_id instead of id
+                                                                name: item.name,
+                                                                price: item.itemPrice,
+                                                                quantity: item.quantity,
+                                                                total: item.itemPrice * item.quantity,
+//                                                                 plateImage: item.imageUrl,
+                                                              }))
+                                                      ))
+
+
+
+
+        navigate('/');
         }
 
   return (
@@ -227,10 +247,10 @@ const Account = () => {
                   <Grid item xs={12} md={6} key={index}>
                     <Card>
                       <CardContent>
-
                         <Typography variant="body2">
-                          Items:
+                          Order id: {order.id}
                         </Typography>
+
                         <ul>
                                               {order.items.map((item, index) => (
                                                 <li key={index}>
@@ -244,7 +264,7 @@ const Account = () => {
                                             <Button
                                               variant="contained"
                                               color="primary"
-                                              onClick={() => reorderItems(order)}
+                                              onClick={() => handleReorderItems(order)}
                                               sx={{ marginTop: 2 }}
                                             >
                                               Reorder
