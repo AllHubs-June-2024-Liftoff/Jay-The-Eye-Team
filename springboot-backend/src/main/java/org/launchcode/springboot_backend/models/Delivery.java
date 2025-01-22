@@ -82,4 +82,14 @@ public class Delivery {
     public int getId() {
         return id;
     }
+
+
+    public LocalDateTime getDateCreated() {
+        return dateCreated;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
 }

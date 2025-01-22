@@ -37,7 +37,7 @@
 
         <tr th:each="review : ${reviews}">
             <td th:text="${review.id}" style="font-weight:bold;"></td>
-            <td th:text="${review.plate}"></td>
+            <td th:text="${review.plate.name}"></td>
             <td th:text="${#temporals.format(review.dateCreated, 'MMMM d, yyyy h:mm a')}" style="font-size:11px;"></td>
             <td th:text="${review.rating}"></td>
             <td th:text="${review.description}" style="font-size:11px;"></td>
