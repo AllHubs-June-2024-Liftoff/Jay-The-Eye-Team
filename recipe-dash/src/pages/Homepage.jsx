@@ -4,6 +4,7 @@ import { fetchMenu, selectMenuItems, selectMenuStatus } from "../store/menuSlice
 import PlateList from "../components/plates/PlateList";
 import { Box, Divider, Typography, TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { styled } from "@mui/system";
+import axios from "axios";
 import logoImage from '../assets/images/reciepe-dash-black-yellow.png';
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
@@ -42,6 +43,8 @@ const Homepage = () => {
     const menuStatus = useSelector(selectMenuStatus);
     const [searchQuery, setSearchQuery] = useState("");
      const [selectedCuisine, setSelectedCuisine] = useState("all");
+    const [cuisines, setCuisines] = useState([{ id: "all", name: "All" }]);
+
 
     // Fetch the menu only if the state is empty
     useEffect(() => {
@@ -54,7 +57,23 @@ const Homepage = () => {
         console.log("Plates loaded:", plates); // Check plates data
     }, [plates]);
 
-       const cuisineTypes = ["all", ...new Set(plates.map((plate) => plate.cuisine))];
+    useEffect(() => {
+            const fetchCuisines = async () => {
+                try {
+                    const response = await axios.get("http://localhost:8080/cuisines/api");
+                    const formattedCuisines = [{ id: "all", name: "All" }, ...response.data];
+                    console.log("Fetched cuisines:", formattedCuisines); // Debug log
+                    setCuisines(formattedCuisines);
+                } catch (error) {
+                    console.error("Error fetching cuisines:", error);
+                }
+            };
+
+
+
+            fetchCuisines();
+        }, []);
+
 
     // Handle search input change
     const handleSearchChange = (event) => {
@@ -68,7 +87,7 @@ const Homepage = () => {
     // Filter plates based on the search query
     const filteredPlates = plates.filter((plate) => {
         const matchesQuery = plate.name.toLowerCase().includes(searchQuery); // Assuming plates have a 'name' property
-        const matchesCuisine = selectedCuisine === "all" || plate.cuisine === selectedCuisine;
+        const matchesCuisine = selectedCuisine === "all" || plate.cuisine?.toLowerCase() === selectedCuisine.toLowerCase();
 
         return matchesQuery && matchesCuisine;
     });
@@ -171,17 +190,13 @@ const Homepage = () => {
                    labelId="cuisine-select-label"
                    value={selectedCuisine}
                    onChange={handleCuisineChange}
-                   sx={{
-                     backgroundColor: "#DAA520",
-                     color: "white",
-                     fontWeight: "bold",
-                     "& .MuiSelect-icon": { color: "black" },
-                   }}
+
                  >
-                   {cuisineTypes.sort().map((cuisine) => (
-                    <MenuItem key={cuisine} value={cuisine} sx={{ color: "black" }}>
+                   {cuisines.map((cuisine) => (
+                    <MenuItem key={cuisine.id} value={cuisine.name.toLowerCase()}>
                     {/* >>>>>>>>>>>>>> Need to fix cuisine data <<<<<<<<<<<<<<<<<<*/}
-                    {/* {cuisine.charAt(0).toUpperCase() + cuisine.slice(1).toLowerCase()} */}
+{/*                     {cuisine.charAt(0).toUpperCase() + cuisine.slice(1).toLowerCase()} */}
+                        {cuisine.name}
                     </MenuItem>
                    ))}
                  </Select>
