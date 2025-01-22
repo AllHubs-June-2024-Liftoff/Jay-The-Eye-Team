@@ -88,8 +88,16 @@ const Account = () => {
           const fetchPreviousOrders = async () => {
             try {
               const response = await axios.get(`http://localhost:8080/deliveries/order-history/${userId}`);
-              const response = await axios.get('http://localhost:8080/plates/api');
+              const platesResponse = await axios.get('http://localhost:8080/plates/api');
               console.log('API Response:', response.data);
+              console.log('Plates API Response:', platesResponse.data);
+
+              // Create a lookup map for plates
+                    const platesMap = platesResponse.data.reduce((acc, plate) => {
+                      acc[plate.id] = plate;// Assuming `plate.id` matches the `plateId` in `plateQuantities`
+                      console.log("acc", acc);
+                      return acc;
+                    }, {});
 
                 const data = response.data.map(order => ({
                         total: order.grandTotal,
@@ -104,8 +112,11 @@ const Account = () => {
                               const plateIdMatch = plateStr.match(/id=(\d+)/);
                               const plateId = plateIdMatch ? parseInt(plateIdMatch[1], 10) : null;
 
+                          // Get plate details from platesMap
+                                const plateData = platesMap[plateId] || {};
+                                const imageUrl = plateData.plateImage || '';
 
-                          return { plateId, name: plateName, itemPrice, quantity };
+                          return { plateId, name: plateName, itemPrice, quantity, imageUrl };
                         }),
                       }));
                   console.log('data:', data);
@@ -138,7 +149,7 @@ const Account = () => {
                                                                 price: item.itemPrice,
                                                                 quantity: item.quantity,
                                                                 total: item.itemPrice * item.quantity,
-//                                                                 plateImage: item.imageUrl,
+                                                                plateImage: item.imageUrl,
                                                               }))
                                                       ))
 
