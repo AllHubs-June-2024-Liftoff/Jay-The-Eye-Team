@@ -1,9 +1,15 @@
+
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { Divider, Container, Box, Card, CardContent, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/system';
+import { useSelector, useDispatch } from "react-redux";
 import logoImage from '../assets/images/reciepe-dash-black-yellow.png';
 import axios from "axios";
+import { addToCart } from '../store/cartSlice';
+import { useParams, useNavigate } from 'react-router-dom';
+
+
 
 const StyledHeaderTypography = styled(Typography)(({ theme }) => ({
   fontWeight: 'bold',
@@ -52,6 +58,8 @@ const favorites = [
   'Wiener Schnitzel'
 ];
 
+
+
 const dashboardData = {
   totalStuff1: 23,
   totalStuff2: 94,
@@ -59,7 +67,101 @@ const dashboardData = {
   totalStuff4: '2100',
 };
 
+
+
 const Account = () => {
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [previousOrders, setPreviousOrders] = useState([]);
+      const [loading, setLoading] = useState(true);
+      const [error, setError] = useState(null);
+       const userId = useSelector((state) => state.user.user_id);
+      const { loginStatus, email, nameFirst, nameLast, isChef, address, phone, customer_id } = useSelector((state) => state.user);
+      console.log('customer_id', customer_id);
+
+      const customerInfo = {
+        name: `${nameFirst} ${nameLast}`,
+        address: address,
+        phone: phone,
+        email: email,
+      };
+
+      useEffect(() => {
+          // Fetch previous orders using Axios
+          const fetchPreviousOrders = async () => {
+            try {
+              const response = await axios.get(`http://localhost:8080/deliveries/order-history/${userId}`);
+              const platesResponse = await axios.get('http://localhost:8080/plates/api');
+              console.log('API Response:', response.data);
+              console.log('Plates API Response:', platesResponse.data);
+
+              // Create a lookup map for plates
+                    const platesMap = platesResponse.data.reduce((acc, plate) => {
+                      acc[plate.id] = plate;// Assuming `plate.id` matches the `plateId` in `plateQuantities`
+                      console.log("acc", acc);
+                      return acc;
+                    }, {});
+
+                const data = response.data.map(order => ({
+                        total: order.grandTotal,
+                        id: order.id,
+                        items: Object.entries(order.plateQuantities).map(([plateStr, quantity]) => {
+                          // Extract the plate name from the string and create the item structure
+                          const plateName = plateStr.match(/name='([^']+)'/)[1]; // Extract name from the string
+                          const itemPriceMatch = plateStr.match(/price=([\d.]+)/);
+                          const itemPrice = itemPriceMatch ? parseFloat(itemPriceMatch[1]) : 0;
+
+                          // Extract the plate ID from the string
+                              const plateIdMatch = plateStr.match(/id=(\d+)/);
+                              const plateId = plateIdMatch ? parseInt(plateIdMatch[1], 10) : null;
+
+                          // Get plate details from platesMap
+                                const plateData = platesMap[plateId] || {};
+                                const imageUrl = plateData.plateImage || '';
+
+                          return { plateId, name: plateName, itemPrice, quantity, imageUrl };
+                        }),
+                      }));
+                  console.log('data:', data);
+                  console.log('response', response.data);
+
+                  setPreviousOrders(data); // Assume response.data contains an array of orders
+
+              setLoading(false);
+            } catch (err) {
+              console.error('Error fetching previous orders:', err);
+              setError('Failed to load previous orders');
+              setLoading(false);
+            }
+          };
+
+          fetchPreviousOrders();
+        }, []);
+
+    const handleReorderItems = async (order) => {
+        console.log("Order:", order);
+        order.items.forEach((item, index) => {
+          console.log(`Item ${index + 1}:`, item);
+        });
+
+        order.items.map((item, index) => (
+
+                                                        dispatch(addToCart({
+                                                                plate_id: item.plateId, // Use plate_id instead of id
+                                                                name: item.name,
+                                                                price: item.itemPrice,
+                                                                quantity: item.quantity,
+                                                                total: item.itemPrice * item.quantity,
+                                                                plateImage: item.imageUrl,
+                                                              }))
+                                                      ))
+
+
+
+
+        navigate('/');
+        }
     const [orderHistory, setOrderHistory] = useState([]);
     const [error, setError] = useState(null);
 
@@ -122,6 +224,87 @@ const Account = () => {
           }}
         />
 
+
+        {/* Favorites Section */}
+        <Grid item xs={12} md={6}>
+          <Box sx={{ padding: '0 20px' }}>
+            <CardContent>
+              <StyledHeaderTypography variant="h6">Favorites</StyledHeaderTypography>
+              <ul
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(2, 1fr)',
+                  gap: '5px',
+                  paddingLeft: '30px',
+                  textAlign: 'left',
+                }}
+              >
+                {favorites.map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
+              </ul>
+            </CardContent>
+          </Box>
+        </Grid>
+      </Grid>
+
+      {/* Previous Orders Section */}
+            <Divider sx={{ marginTop: 5, marginBottom: 3 }} />
+            <StyledHeaderTypography variant="h6">Previous Orders</StyledHeaderTypography>
+            {loading ? (
+              <Typography>Loading previous orders...</Typography>
+            ) : error ? (
+              <Typography color="error">{error}</Typography>
+            ) : previousOrders.length === 0 ? (
+              <Typography>No previous orders found.</Typography>
+            ) : (
+              <Grid container spacing={2}>
+                {previousOrders.map((order, index) => (
+                  <Grid item xs={12} md={6} key={index}>
+                    <Card>
+                      <CardContent>
+                        <Typography variant="body2">
+                          Order id: {order.id}
+                        </Typography>
+
+                        <ul>
+                                              {order.items.map((item, index) => (
+                                                <li key={index}>
+                                                  {item.name} (x{item.quantity})
+                                                </li>
+                                              ))}
+                                            </ul>
+
+                        <Typography variant="body2">Total: {order.total}</Typography>
+                        {/* Reorder Button */}
+                                            <Button
+                                              variant="contained"
+                                              color="primary"
+                                              onClick={() => handleReorderItems(order)}
+                                              sx={{ marginTop: 2 }}
+                                            >
+                                              Reorder
+                                            </Button>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+            )}
+
+      {/* Dashboard Stats Section */}
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={2}>
+          <StyledCard>
+            <CardContent sx={{ textAlign: 'center' }}>
+              <StyledValueTypography>{dashboardData.totalStuff1}</StyledValueTypography>
+              <StyledStuffTypography variant="h6">
+                Different <br /> meals
+              </StyledStuffTypography>
+            </CardContent>
+          </StyledCard>
+        </Grid>
+
         {/* Customer Info Section */}
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
@@ -145,6 +328,7 @@ const Account = () => {
               </CardContent>
             </Box>
           </Grid>
+
 
           {/* Favorites Section */}
           <Grid item xs={12} md={6}>

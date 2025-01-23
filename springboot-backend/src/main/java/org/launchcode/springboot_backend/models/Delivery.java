@@ -83,6 +83,7 @@ public class Delivery {
         return id;
     }
 
+
     public LocalDateTime getDateCreated() {
         return dateCreated;
     }
@@ -90,4 +91,5 @@ public class Delivery {
     public Status getStatus() {
         return status;
     }
+
 }

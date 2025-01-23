@@ -44,7 +44,7 @@ const StyledNavLink = styled(Nav.Link)`
 function NavBar() {
   const dispatch = useDispatch();
 
-  const { loginStatus, email, nameFirst, isChef } = useSelector((state) => state.user);
+  const { loginStatus, email, nameFirst, isChef } = useSelector((state) => state.user) ;
   const totalQuantity = useSelector(selectCartTotalQuantity); // Fetch total quantity from cart
   const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
   const handleLogout = () => {
