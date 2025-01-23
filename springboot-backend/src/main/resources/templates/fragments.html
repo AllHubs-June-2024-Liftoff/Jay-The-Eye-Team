@@ -561,5 +561,58 @@
     </div>
 </div>
 
+<div th:fragment="script-show-delivery">
+    <script type="text/javascript">
+
+    function showDeliverySummary(button) {
+        var row = button.closest('tr');
+        var orderId = row.getAttribute('data-id');
+
+    fetch('http://localhost:8080/deliveries/api')
+        .then(response => response.json())
+        .then(deliveries => {
+            var selectedOrder = deliveries.find(delivery => delivery.id == orderId);
+
+            if (selectedOrder) {
+                // Update the Delivery Summary section
+                document.getElementById('delivery-summary').innerHTML = `
+
+                    <p><strong style="font-size: 20px;">Order #${selectedOrder.id}</strong></p>
+
+                    <p><strong>Name:</strong> ${selectedOrder.customer.fullName}</p>
+                    <p><strong>Email:</strong> ${selectedOrder.customer.email}</p>
+                    <p><strong>Phone:</strong> ${selectedOrder.customer.phone}</p>
+                    <p><strong>Address:</strong> ${selectedOrder.customer.address}</p>
+
+                    <div></div>
+                    <p><strong>Total Price:</strong> $${selectedOrder.grandTotal}</p>
+
+                    <table class="table-container">
+                        <tr style="color: white;">
+                                <th>ID </th>
+                                <th>Plate</th>
+                                <th>Quantity</th>
+                        </tr>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+
+
+                `;
+            } else {
+                console.error('Order not found for ID:', orderId);
+                alert('Order not found. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching deliveries:', error);
+            alert('Error fetching order details. Please try again.');
+        });
+}
+
+    </script>
+</div>
+
 </body>
 </html>
