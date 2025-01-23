@@ -6,6 +6,10 @@ import { styled } from '@mui/system';
 import { useSelector, useDispatch } from "react-redux";
 import logoImage from '../assets/images/reciepe-dash-black-yellow.png';
 import axios from "axios";
+import { addToCart } from '../store/cartSlice';
+import { useParams, useNavigate } from 'react-router-dom';
+
+
 
 import { addToCart } from '../store/cartSlice';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -85,7 +89,7 @@ const Account = () => {
         address: address,
         phone: phone,
         email: email,
-              };
+      };
 
       useEffect(() => {
           // Fetch previous orders using Axios
@@ -95,9 +99,8 @@ const Account = () => {
               const platesResponse = await axios.get('http://localhost:8080/plates/api');
               console.log('API Response:', response.data);
               console.log('Plates API Response:', platesResponse.data);
+
               console.log('Redux State:', { address, phone, nameFirst, nameLast });
-
-
 
 
               // Create a lookup map for plates
@@ -275,7 +278,9 @@ const Account = () => {
                         <ul>
                                               {order.items.map((item, index) => (
                                                 <li key={index}>
+
                                                   {item.name} (x{item.quantity}) ${item.itemPrice}
+
                                                 </li>
                                               ))}
                                             </ul>
@@ -333,6 +338,7 @@ const Account = () => {
               </CardContent>
             </Box>
           </Grid>
+
 
           {/* Favorites Section */}
           <Grid item xs={12} md={6}>
