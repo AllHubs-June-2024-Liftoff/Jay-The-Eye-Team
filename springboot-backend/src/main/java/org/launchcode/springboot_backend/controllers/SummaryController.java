@@ -47,6 +47,10 @@ public class SummaryController {
         long totalDeliveries = deliveryRepository.count();
         model.addAttribute("totalDeliveries", totalDeliveries);
 
+        Double totalRevenue = deliveryRepository.getGrandTotalRevenue();
+        String formattedRevenue = String.format("%.0f", totalRevenue);
+        model.addAttribute("totalRevenue", formattedRevenue);
+
         return "summary";
     }
 }
