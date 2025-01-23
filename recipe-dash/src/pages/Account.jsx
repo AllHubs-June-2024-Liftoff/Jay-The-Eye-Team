@@ -38,13 +38,6 @@ const StyledCard = styled(Card)(({ theme }) => ({
   alignItems: 'flex-end',
 }));
 
-const customerInfo = {
-  name: 'John Doe',
-  address: '123 Main St, Cityville, USA',
-  phone: '(123) 456-7890',
-  email: 'johndoe@example.com',
-};
-
 const favorites = [
   'Beef Wellington',
   'Cajun Crab',
@@ -65,21 +58,22 @@ const Account = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const userId = useSelector((state) => state.user.user_id);
+
     const [previousOrders, setPreviousOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const userId = useSelector((state) => state.user.user_id);
-    const { loginStatus, email, nameFirst, nameLast, isChef, address, phone, customer_id } = useSelector((state) => state.user);
     const [orderHistory, setOrderHistory] = useState([]);
 
+    const { loginStatus, email, nameFirst, nameLast, isChef, address, phone, customer_id } = useSelector((state) => state.user);
     console.log('customer_id', customer_id);
 
-      const customerInfo = {
+    const customerInfo = {
         name: `${nameFirst} ${nameLast}`,
         address: address,
         phone: phone,
         email: email,
-      };
+    };
 
       useEffect(() => {
           // Fetch previous orders using Axios
@@ -91,32 +85,33 @@ const Account = () => {
               console.log('Plates API Response:', platesResponse.data);
 
               // Create a lookup map for plates
-                    const platesMap = platesResponse.data.reduce((acc, plate) => {
-                      acc[plate.id] = plate;// Assuming `plate.id` matches the `plateId` in `plateQuantities`
-                      console.log("acc", acc);
-                      return acc;
-                    }, {});
+                const platesMap = platesResponse.data.reduce((acc, plate) => {
+                  acc[plate.id] = plate; // Assuming `plate.id` matches the `plateId` in `plateQuantities`
+                  console.log("acc", acc);
+                  return acc;
+                }, {});
 
                 const data = response.data.map(order => ({
-                        total: order.grandTotal,
-                        id: order.id,
-                        items: Object.entries(order.plateQuantities).map(([plateStr, quantity]) => {
-                          // Extract the plate name from the string and create the item structure
-                          const plateName = plateStr.match(/name='([^']+)'/)[1]; // Extract name from the string
-                          const itemPriceMatch = plateStr.match(/price=([\d.]+)/);
-                          const itemPrice = itemPriceMatch ? parseFloat(itemPriceMatch[1]) : 0;
+                    total: order.grandTotal,
+                    id: order.id,
+                    items: Object.entries(order.plateQuantities).map(([plateStr, quantity]) => {
 
-                          // Extract the plate ID from the string
-                              const plateIdMatch = plateStr.match(/id=(\d+)/);
-                              const plateId = plateIdMatch ? parseInt(plateIdMatch[1], 10) : null;
+                      // Extract the plate name from the string and create the item structure
+                      const plateName = plateStr.match(/name='([^']+)'/)[1]; // Extract name from the string
+                      const itemPriceMatch = plateStr.match(/price=([\d.]+)/);
+                      const itemPrice = itemPriceMatch ? parseFloat(itemPriceMatch[1]) : 0;
 
-                          // Get plate details from platesMap
-                                const plateData = platesMap[plateId] || {};
-                                const imageUrl = plateData.plateImage || '';
+                      // Extract the plate ID from the string
+                      const plateIdMatch = plateStr.match(/id=(\d+)/);
+                      const plateId = plateIdMatch ? parseInt(plateIdMatch[1], 10) : null;
 
-                          return { plateId, name: plateName, itemPrice, quantity, imageUrl };
-                        }),
-                      }));
+                      // Get plate details from platesMap
+                      const plateData = platesMap[plateId] || {};
+                      const imageUrl = plateData.plateImage || '';
+
+                      return { plateId, name: plateName, itemPrice, quantity, imageUrl };
+                    }),
+                  }));
                   console.log('data:', data);
                   console.log('response', response.data);
 
@@ -142,23 +137,24 @@ const Account = () => {
         order.items.map((item, index) => (
 
         dispatch(addToCart({
-                plate_id: item.plateId, // Use plate_id instead of id
-                name: item.name,
-                price: item.itemPrice,
-                quantity: item.quantity,
-                total: item.itemPrice * item.quantity,
-                plateImage: item.imageUrl,
-              }))
-      ))
+            plate_id: item.plateId, // Use plate_id instead of id
+            name: item.name,
+            price: item.itemPrice,
+            quantity: item.quantity,
+            total: item.itemPrice * item.quantity,
+            plateImage: item.imageUrl,
+          }))
+        ))
 
         navigate('/');
-        }
+    }
 
       useEffect(() => {
           const fetchOrders = async () => {
             try {
                 const userId = 1;
-              const response = await axios.get(`http://localhost:8080/deliveries/order-history/${userId}`);
+                const response = await axios.get(`http://localhost:8080/deliveries/order-history/${userId}`);
+
               setOrderHistory(response.data);
               console.log("Order history fetched:", response.data);
               } catch (err) {
@@ -170,147 +166,46 @@ const Account = () => {
           fetchOrders();
         }, []);
 
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
+        if (error) {
+            return <div>Error: {error}</div>;
+        }
 
-return (
-  <Container
-    sx={{
-      marginTop: 1,
-      display: 'flex',
-      flexDirection: 'column',
-      minHeight: '100vh',
-      justifyContent: 'flex-start',
-      width: '100%',
-    }}
-  >
-    <Typography
-      variant="h3"
-      component="h1"
-      align="center"
-      gutterBottom
-      sx={{
-        fontWeight: 'bold',
-        color: '#DAA520',
-        marginRight: 3,
-      }}
-    >
-      Account Details
-    </Typography>
+    return (
+      <Container
+        sx={{
+          marginTop: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: '100vh',
+          justifyContent: 'flex-start',
+          width: '100%',
+        }}
+      >
+        <Typography
+          variant="h3"
+          component="h1"
+          align="center"
+          gutterBottom
+          sx={{
+            fontWeight: 'bold',
+            color: '#DAA520',
+            marginRight: 3,
+          }}
+        >
+          Account Details
+        </Typography>
 
-    <Divider
-      sx={{
-        marginTop: 4,
-        marginBottom: 5,
-        borderWidth: 3,
-        borderColor: 'black',
-        width: '100%',
-        borderStyle: 'solid',
-        opacity: 1,
-      }}
-    />
-
-    {/* Favorites Section */}
-    <Grid item xs={12} md={6}>
-      <Box sx={{ padding: '0 20px' }}>
-        <CardContent>
-          <StyledHeaderTypography variant="h6">Favorites</StyledHeaderTypography>
-          <ul
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              gap: '5px',
-              paddingLeft: '30px',
-              textAlign: 'left',
-            }}
-          >
-            {favorites.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </CardContent>
-      </Box>
-    </Grid>
-
-    {/* Previous Orders Section */}
-    <Divider sx={{ marginTop: 5, marginBottom: 3 }} />
-    <StyledHeaderTypography variant="h6">Previous Orders</StyledHeaderTypography>
-    {loading ? (
-      <Typography>Loading previous orders...</Typography>
-    ) : error ? (
-      <Typography color="error">{error}</Typography>
-    ) : previousOrders.length === 0 ? (
-      <Typography>No previous orders found.</Typography>
-    ) : (
-      <Grid container spacing={2}>
-        {previousOrders.map((order, index) => (
-          <Grid item xs={12} md={6} key={index}>
-            <Card>
-              <CardContent>
-                <Typography variant="body2">Order id: {order.id}</Typography>
-
-                <ul>
-                  {order.items.map((item, index) => (
-                    <li key={index}>
-                      {item.name} (x{item.quantity})
-                    </li>
-                  ))}
-                </ul>
-
-                <Typography variant="body2">Total: {order.total}</Typography>
-                {/* Reorder Button */}
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleReorderItems(order)}
-                  sx={{ marginTop: 2 }}
-                >
-                  Reorder
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    )}
-
-    {/* Dashboard Stats Section */}
-    <Grid container spacing={3}>
-      <Grid item xs={12} md={2}>
-        <StyledCard>
-          <CardContent sx={{ textAlign: 'center' }}>
-            <StyledValueTypography>{dashboardData.totalStuff1}</StyledValueTypography>
-            <StyledStuffTypography variant="h6">
-              Different <br /> meals
-            </StyledStuffTypography>
-          </CardContent>
-        </StyledCard>
-      </Grid>
-
-      {/* Customer Info Section */}
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
-          <Box sx={{ padding: '0 20px' }}>
-            <CardContent>
-              <StyledHeaderTypography variant="h6" sx={{ fontWeight: 'bold' }}>
-                Customer Information
-              </StyledHeaderTypography>
-              <Typography sx={{ textAlign: 'left' }}>
-                <span style={{ fontWeight: 'bold' }}>Name:</span> {customerInfo.name}
-              </Typography>
-              <Typography sx={{ textAlign: 'left' }}>
-                <span style={{ fontWeight: 'bold' }}>Address:</span> {customerInfo.address}
-              </Typography>
-              <Typography sx={{ textAlign: 'left' }}>
-                <span style={{ fontWeight: 'bold' }}>Phone:</span> {customerInfo.phone}
-              </Typography>
-              <Typography sx={{ textAlign: 'left' }}>
-                <span style={{ fontWeight: 'bold' }}>Email:</span> {customerInfo.email}
-              </Typography>
-            </CardContent>
-          </Box>
-        </Grid>
+        <Divider
+          sx={{
+            marginTop: 4,
+            marginBottom: 5,
+            borderWidth: 3,
+            borderColor: 'black',
+            width: '100%',
+            borderStyle: 'solid',
+            opacity: 1,
+          }}
+        />
 
         {/* Favorites Section */}
         <Grid item xs={12} md={6}>
@@ -333,97 +228,198 @@ return (
             </CardContent>
           </Box>
         </Grid>
-      </Grid>
 
-      {/* Dashboard Stats Section */}
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={2}>
-          <StyledCard>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <StyledValueTypography>{dashboardData.totalStuff1}</StyledValueTypography>
-              <StyledStuffTypography variant="h6">
-                Different <br /> meals
-              </StyledStuffTypography>
-            </CardContent>
-          </StyledCard>
-        </Grid>
-
-        <Grid item xs={12} md={2}>
-          <StyledCard sx={{ alignItems: 'flex-end' }}>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <StyledValueTypography>{dashboardData.totalStuff2}</StyledValueTypography>
-              <StyledStuffTypography variant="h6">
-                Total plates ordered
-              </StyledStuffTypography>
-            </CardContent>
-          </StyledCard>
-        </Grid>
-
-        <Grid item xs={12} md={4}>
-          <StyledCard sx={{ alignItems: 'flex-end' }}>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <StyledValueTypography>{dashboardData.totalStuff3}</StyledValueTypography>
-              <StyledStuffTypography variant="h6">
-                Date of your last order
-              </StyledStuffTypography>
-            </CardContent>
-          </StyledCard>
-        </Grid>
-
-        <Grid item xs={12} md={4}>
-          <StyledCard>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <StyledValueTypography>{dashboardData.totalStuff4}</StyledValueTypography>
-              <StyledStuffTypography variant="h6">Points to spend</StyledStuffTypography>
-            </CardContent>
-          </StyledCard>
-        </Grid>
-      </Grid>
-
-      {/* Order History Section */}
-      <Box sx={{ marginTop: 5, width: '100%' }}>
-        <Typography
-          variant="h4"
-          component="h2"
-          align="left"
-          gutterBottom
-          sx={{
-            fontWeight: 'bold',
-            color: '#DAA520',
-            marginBottom: 3,
-          }}
-        >
-          Order History
-        </Typography>
-        {orderHistory.length === 0 ? (
-          <Typography sx={{ textAlign: 'center' }}>
-            No orders found.
-          </Typography>
+        {/* Previous Orders Section */}
+        <Divider sx={{ marginTop: 5, marginBottom: 3 }} />
+        <StyledHeaderTypography variant="h6">Previous Orders</StyledHeaderTypography>
+        {loading ? (
+          <Typography>Loading previous orders...</Typography>
+        ) : error ? (
+          <Typography color="error">{error}</Typography>
+        ) : previousOrders.length === 0 ? (
+          <Typography>No previous orders found.</Typography>
         ) : (
-          <Grid container spacing={3}>
-            {orderHistory.map((order) => (
-              <div key={order.id}>
-                <h3>Order ID: {order.id}</h3>
-                <p>Status: {order.status}</p>
-                <p>Total: ${order.grandTotal}</p>
-                <p>Date: {new Date(order.dateCreated).toLocaleString()}</p>
-                <h4>Items:</h4>
-                <ul>
-                  {order.items.map((item) => (
-                    <li key={item.plateId}>
-                      {item.plateName} - Quantity: {item.quantity} - Price: ${item.price}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+          <Grid container spacing={2}>
+            {previousOrders.map((order, index) => (
+              <Grid item xs={12} md={6} key={index}>
+                <Card>
+                  <CardContent>
+                    <Typography variant="body2">Order id: {order.id}</Typography>
+
+                    <ul>
+                      {order.items.map((item, index) => (
+                        <li key={index}>
+                          {item.name} (x{item.quantity})
+                        </li>
+                      ))}
+                    </ul>
+
+                    <Typography variant="body2">Total: {order.total}</Typography>
+                    {/* Reorder Button */}
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleReorderItems(order)}
+                      sx={{ marginTop: 2 }}
+                    >
+                      Reorder
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Grid>
             ))}
           </Grid>
         )}
-      </Box>
 
-    </Grid> {/* Closing the outer Grid container */}
-  </Container>
-);
+        {/* Dashboard Stats Section */}
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={2}>
+            <StyledCard>
+              <CardContent sx={{ textAlign: 'center' }}>
+                <StyledValueTypography>{dashboardData.totalStuff1}</StyledValueTypography>
+                <StyledStuffTypography variant="h6">
+                  Different <br /> meals
+                </StyledStuffTypography>
+              </CardContent>
+            </StyledCard>
+          </Grid>
+
+          {/* Customer Info Section */}
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <Box sx={{ padding: '0 20px' }}>
+                <CardContent>
+                  <StyledHeaderTypography variant="h6" sx={{ fontWeight: 'bold' }}>
+                    Customer Information
+                  </StyledHeaderTypography>
+                  <Typography sx={{ textAlign: 'left' }}>
+                    <span style={{ fontWeight: 'bold' }}>Name:</span> {customerInfo.name}
+                  </Typography>
+                  <Typography sx={{ textAlign: 'left' }}>
+                    <span style={{ fontWeight: 'bold' }}>Address:</span> {customerInfo.address}
+                  </Typography>
+                  <Typography sx={{ textAlign: 'left' }}>
+                    <span style={{ fontWeight: 'bold' }}>Phone:</span> {customerInfo.phone}
+                  </Typography>
+                  <Typography sx={{ textAlign: 'left' }}>
+                    <span style={{ fontWeight: 'bold' }}>Email:</span> {customerInfo.email}
+                  </Typography>
+                </CardContent>
+              </Box>
+            </Grid>
+
+            {/* Favorites Section */}
+            <Grid item xs={12} md={6}>
+              <Box sx={{ padding: '0 20px' }}>
+                <CardContent>
+                  <StyledHeaderTypography variant="h6">Favorites</StyledHeaderTypography>
+                  <ul
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(2, 1fr)',
+                      gap: '5px',
+                      paddingLeft: '30px',
+                      textAlign: 'left',
+                    }}
+                  >
+                    {favorites.map((item, index) => (
+                      <li key={index}>{item}</li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Box>
+            </Grid>
+          </Grid>
+
+          {/* Dashboard Stats Section */}
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={2}>
+              <StyledCard>
+                <CardContent sx={{ textAlign: 'center' }}>
+                  <StyledValueTypography>{dashboardData.totalStuff1}</StyledValueTypography>
+                  <StyledStuffTypography variant="h6">
+                    Different <br /> meals
+                  </StyledStuffTypography>
+                </CardContent>
+              </StyledCard>
+            </Grid>
+
+            <Grid item xs={12} md={2}>
+              <StyledCard sx={{ alignItems: 'flex-end' }}>
+                <CardContent sx={{ textAlign: 'center' }}>
+                  <StyledValueTypography>{dashboardData.totalStuff2}</StyledValueTypography>
+                  <StyledStuffTypography variant="h6">
+                    Total plates ordered
+                  </StyledStuffTypography>
+                </CardContent>
+              </StyledCard>
+            </Grid>
+
+            <Grid item xs={12} md={4}>
+              <StyledCard sx={{ alignItems: 'flex-end' }}>
+                <CardContent sx={{ textAlign: 'center' }}>
+                  <StyledValueTypography>{dashboardData.totalStuff3}</StyledValueTypography>
+                  <StyledStuffTypography variant="h6">
+                    Date of your last order
+                  </StyledStuffTypography>
+                </CardContent>
+              </StyledCard>
+            </Grid>
+
+            <Grid item xs={12} md={4}>
+              <StyledCard>
+                <CardContent sx={{ textAlign: 'center' }}>
+                  <StyledValueTypography>{dashboardData.totalStuff4}</StyledValueTypography>
+                  <StyledStuffTypography variant="h6">Points to spend</StyledStuffTypography>
+                </CardContent>
+              </StyledCard>
+            </Grid>
+          </Grid>
+
+          {/* Order History Section */}
+          <Box sx={{ marginTop: 5, width: '100%' }}>
+            <Typography
+              variant="h4"
+              component="h2"
+              align="left"
+              gutterBottom
+              sx={{
+                fontWeight: 'bold',
+                color: '#DAA520',
+                marginBottom: 3,
+              }}
+            >
+              Order History
+            </Typography>
+            {orderHistory.length === 0 ? (
+              <Typography sx={{ textAlign: 'center' }}>
+                No orders found.
+              </Typography>
+            ) : (
+              <Grid container spacing={3}>
+                {orderHistory.map((order) => (
+                  <div key={order.id}>
+                    <h3>Order ID: {order.id}</h3>
+                    <p>Status: {order.status}</p>
+                    <p>Total: ${order.grandTotal}</p>
+                    <p>Date: {new Date(order.dateCreated).toLocaleString()}</p>
+                    <h4>Items:</h4>
+                    <ul>
+                      {order.items.map((item) => (
+                        <li key={item.plateId}>
+                          {item.plateName} - Quantity: {item.quantity} - Price: ${item.price}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </Grid>
+            )}
+          </Box>
+
+        </Grid> {/* Closing the outer Grid container */}
+      </Container>
+    );
 
 };
 

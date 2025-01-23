@@ -563,54 +563,66 @@
 
 <div th:fragment="script-show-delivery">
     <script type="text/javascript">
+        // Define the showDeliverySummary function in the global scope
+        function showDeliverySummary(button) {
+            var row = button.closest('tr');
+            var orderId = row.getAttribute('data-id');
 
-    function showDeliverySummary(button) {
-        var row = button.closest('tr');
-        var orderId = row.getAttribute('data-id');
+            fetch('http://localhost:8080/deliveries/api')
+                .then(response => response.json())
+                .then(deliveries => {
+                    var selectedOrder = deliveries.find(delivery => delivery.id == orderId);
 
-    fetch('http://localhost:8080/deliveries/api')
-        .then(response => response.json())
-        .then(deliveries => {
-            var selectedOrder = deliveries.find(delivery => delivery.id == orderId);
+                    if (selectedOrder) {
 
-            if (selectedOrder) {
-                // Update the Delivery Summary section
-                document.getElementById('delivery-summary').innerHTML = `
+                        // Convert plateQuantities object to an array of plates and quantities
+                        const orderedPlates = Object.entries(selectedOrder.plateQuantities).map(([PLATE, quantity]) => {
+                            // Use a regular expression to extract the id and name of the plate
+                            const regex = /id=(\d+), name='([^']+)'/;
+                            const match = PLATE.match(regex);
 
-                    <p><strong style="font-size: 20px;">Order #${selectedOrder.id}</strong></p>
+                            if (match) {
+                                const [_, id, name] = match;  // Extract the id and name of the plate
+                                return { id, name, quantity }; // Return the id, name, and quantity
+                            }
+                            return {};  // If parsing fails, return an empty object
+                        });
 
-                    <p><strong>Name:</strong> ${selectedOrder.customer.fullName}</p>
-                    <p><strong>Email:</strong> ${selectedOrder.customer.email}</p>
-                    <p><strong>Phone:</strong> ${selectedOrder.customer.phone}</p>
-                    <p><strong>Address:</strong> ${selectedOrder.customer.address}</p>
+                        // Update the Delivery Summary section
+                        document.getElementById('delivery-summary').innerHTML = `
+                            <p><strong style="font-size: 20px;">Order #${selectedOrder.id}</strong></p>
+                            <p><strong>Name:</strong> ${selectedOrder.customer.fullName}</p>
+                            <p><strong>Email:</strong> ${selectedOrder.customer.email}</p>
+                            <p><strong>Phone:</strong> ${selectedOrder.customer.phone}</p>
+                            <p><strong>Address:</strong> ${selectedOrder.customer.address}</p>
+                            <p><strong>Total Price:</strong> $${selectedOrder.grandTotal}</p>
 
-                    <div></div>
-                    <p><strong>Total Price:</strong> $${selectedOrder.grandTotal}</p>
+                            <table class="table-container">
+                                <tr>
+                                    <th style="color: white;">ID</th>
+                                    <th style="color: white;">Plate</th>
+                                    <th style="color: white;">Quantity</th>
+                                </tr>
+                                ${orderedPlates.map(({ id, name, quantity }) => `
+                                    <tr>
+                                        <td>${id}</td>
+                                        <td>${name}</td>
+                                        <td>${quantity}</td>
+                                    </tr>
+                                `).join('')}
+                            </table>
+                        `;
+                    } else {
+                        console.error('Order not found for ID:', orderId);
+                        alert('Order not found. Please try again.');
+                    }
+                });
+        }
 
-                    <table class="table-container">
-                        <tr style="color: white;">
-                                <th>ID </th>
-                                <th>Plate</th>
-                                <th>Quantity</th>
-                        </tr>
-                        <tbody>
-
-                        </tbody>
-                    </table>
-
-
-                `;
-            } else {
-                console.error('Order not found for ID:', orderId);
-                alert('Order not found. Please try again.');
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching deliveries:', error);
-            alert('Error fetching order details. Please try again.');
+        // Wait for the DOM content to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Any other DOM manipulation or event listener setup you need
         });
-}
-
     </script>
 </div>
 
