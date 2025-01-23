@@ -20,17 +20,6 @@
     <!--API-->
     <div style="margin: 0 150px;">
 
-        <p class="summary-v2-title" style="margin-top: 0;"> Data API Links </p>
-        <hr>
-        <div class="button-api-container" style="font-size: 12px;">
-            <button class="button-api"> <a style="color: white;" target="_blank" href="http://localhost:8080/plates/api">Plates</a></button>
-            <button class="button-api"> <a style="color: white;" target="_blank" href="http://localhost:8080/cuisines/api">Cuisines</a></button>
-            <button class="button-api"> <a style="color: white;" target="_blank" href="http://localhost:8080/customers/api">Customers</a></button>
-            <button class="button-api"> <a style="color: white;" target="_blank" href="http://localhost:8080/reviews/api">Reviews</a></button>
-            <button class="button-api"> <a style="color: white;" target="_blank" href="http://localhost:8080/deliveries/api">Deliveries</a></button>
-            <button class="button-api"> <a style="color: white;" target="_blank" href="http://localhost:8080/contactus/api">Messages</a></button>
-        </div>
-        <div style="height: 75px;"> </div>
         <div class="text-summary">
 
             <div class="button-summary">
@@ -75,21 +64,33 @@
 
             <div class="button-summary">
                 <p class="text-summary-top">
-                    <span th:text="'$' + ${totalPlates} + 'X'"></span>
+                    <span th:text="'$' + ${totalRevenue}"></span>
                 </p>
                 <p class="text-summary-bottom"> total revenue </p>
                 <div class="list-image-container">
-                    <img src="/images/cashmoney.png" alt="Chef"/>
+                    <img src="/images/cashmoney.png" alt="monies"/>
                 </div>
             </div>
 
         </div>
 
+        <p class="summary-v2-title" style="margin-top: 75px;"> Data API Links </p>
+        <hr>
+        <div class="button-api-container" style="font-size: 12px;">
+            <button class="button-api"> <a style="color: white;" target="_blank" href="http://localhost:8080/plates/api">Plates</a></button>
+            <button class="button-api"> <a style="color: white;" target="_blank" href="http://localhost:8080/cuisines/api">Cuisines</a></button>
+            <button class="button-api"> <a style="color: white;" target="_blank" href="http://localhost:8080/customers/api">Customers</a></button>
+            <button class="button-api"> <a style="color: white;" target="_blank" href="http://localhost:8080/reviews/api">Reviews</a></button>
+            <button class="button-api"> <a style="color: white;" target="_blank" href="http://localhost:8080/deliveries/api">Deliveries</a></button>
+            <button class="button-api"> <a style="color: white;" target="_blank" href="http://localhost:8080/contactus/api">Messages</a></button>
+        </div>
+
+
     </div>
 
-    <div style="height: 75px;"> </div>
     <!--HALL OF FAME-->
-    <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center;">
+    <div
+            style="display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center; margin-top: 50px;">
 
         <div style="width: 95%;display: flex; justify-content: center; align-items: center; flex-direction: row;">
             <div>

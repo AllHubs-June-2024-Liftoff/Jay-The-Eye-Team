@@ -33,7 +33,7 @@ public class DeliveryApi {
 
     @GetMapping("/api")
     public Iterable<Delivery> getDeliveryData() {
-        Sort sort = Sort.by(Sort.Order.asc("dateCreated"));
+        Sort sort = Sort.by(Sort.Order.desc("id"));
         return deliveryRepository.findAll(sort);
     }
 
@@ -52,7 +52,6 @@ public class DeliveryApi {
             } catch (NumberFormatException e) {
                 return ResponseEntity.badRequest().body("Invalid customer ID format");
             }
-
 
             Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
             if (optionalCustomer.isEmpty()) {
@@ -153,6 +152,3 @@ public class DeliveryApi {
         return ResponseEntity.ok(deliveries);
     }
 }
-
-
-

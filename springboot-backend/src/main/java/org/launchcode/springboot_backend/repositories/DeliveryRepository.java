@@ -11,4 +11,8 @@ public interface DeliveryRepository extends CrudRepository<Delivery, Integer>, P
 
     @Query(value = "SELECT * FROM delivery WHERE customer_id = :customer_id", nativeQuery = true)
     List<Delivery> findByCustomerId(@Param("customer_id") int customer_id);
+
+    // Custom query to sum all the grandTotals
+    @Query("SELECT SUM(d.grandTotal) FROM Delivery d")
+    Double getGrandTotalRevenue();
 }
