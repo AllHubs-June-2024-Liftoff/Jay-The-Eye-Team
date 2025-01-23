@@ -56,11 +56,13 @@
         
           try {
             const response = await axios.post("http://localhost:8080/api/login", formData);
-        
+            console.log('Login API Response:', response.data);
+
             // Extract user and customer details
-            const { user_id, customer_id, email, firstName, lastName, isChef } = response.data;
+            const { user_id, customer_id, email, firstName, lastName, isChef, address, phone } = response.data;
         
             // Update Redux store
+            try {
             dispatch(
               login({
                 user_id,
@@ -70,8 +72,12 @@
                 nameLast: lastName,
                 isChef,
                 loginStatus: true,
-              })
-            );
+                address: address,
+                phone: phone,
+              }));
+          } catch (err) {
+              console.error("Dispatch error:", err);
+              }
         
             // Redirect to homepage
             navigate("/");

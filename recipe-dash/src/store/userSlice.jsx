@@ -10,10 +10,12 @@ const userSlice = createSlice({
     isChef: false,
     user_id: null,
     customer_id: null,
+    address: "",
+    phone: "",
   },
   reducers: {
     login: (state, action) => {
-      const { user_id, customer_id, email, nameFirst, nameLast, isChef } = action.payload;
+      const { user_id, customer_id, email, nameFirst, nameLast, isChef, address, phone } = action.payload;
       state.loginStatus = true;
       state.user_id = user_id;
       state.customer_id = customer_id;
@@ -21,6 +23,8 @@ const userSlice = createSlice({
       state.nameFirst = nameFirst;
       state.nameLast = nameLast;
       state.isChef = isChef;
+      state.address = address; // Update address
+      state.phone = phone;     // Update phone
     },
     logout: (state) => {
       state.loginStatus = false;
@@ -30,6 +34,8 @@ const userSlice = createSlice({
       state.nameFirst = "";
       state.nameLast = "";
       state.isChef = false;
+      state.address = ""; // Reset address
+      state.phone = "";   // Reset phone
     },
   },
 });

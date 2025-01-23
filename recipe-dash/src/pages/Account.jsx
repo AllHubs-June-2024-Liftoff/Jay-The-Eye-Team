@@ -81,7 +81,7 @@ const Account = () => {
         address: address,
         phone: phone,
         email: email,
-      };
+              };
 
       useEffect(() => {
           // Fetch previous orders using Axios
@@ -91,6 +91,10 @@ const Account = () => {
               const platesResponse = await axios.get('http://localhost:8080/plates/api');
               console.log('API Response:', response.data);
               console.log('Plates API Response:', platesResponse.data);
+              console.log('Redux State:', { address, phone, nameFirst, nameLast });
+
+
+
 
               // Create a lookup map for plates
                     const platesMap = platesResponse.data.reduce((acc, plate) => {
@@ -265,7 +269,7 @@ const Account = () => {
                         <ul>
                                               {order.items.map((item, index) => (
                                                 <li key={index}>
-                                                  {item.name} (x{item.quantity})
+                                                  {item.name} (x{item.quantity}) ${item.itemPrice}
                                                 </li>
                                               ))}
                                             </ul>

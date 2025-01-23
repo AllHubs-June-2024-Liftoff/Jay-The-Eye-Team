@@ -42,6 +42,8 @@ public class LoginController {
                     response.put("customer_id", customer.getId());
                     response.put("firstName", customer.getNameFirst());
                     response.put("lastName", customer.getNameLast());
+                    response.put("address", customer.getAddress());
+                    response.put("phone", customer.getPhone());
 
                     return ResponseEntity.ok(response);
                 } else {
