@@ -84,6 +84,9 @@ const Account = () => {
               //console.log('API Response:', response.data);
               //console.log('Plates API Response:', platesResponse.data);
 
+              console.log('Redux State:', { address, phone, nameFirst, nameLast });
+
+
               // Create a lookup map for plates
                 const platesMap = platesResponse.data.reduce((acc, plate) => {
                   acc[plate.id] = plate; // Assuming `plate.id` matches the `plateId` in `plateQuantities`
@@ -147,7 +150,7 @@ const Account = () => {
         ))
 
         navigate('/');
-    }
+
 
       useEffect(() => {
           const fetchOrders = async () => {
@@ -254,7 +257,8 @@ const Account = () => {
         </Grid>
       </Grid>
 
-        {/* Previous Orders Section */}
+
+      {/* Previous Orders Section */}
         <Grid container spacing={3}>
           <StyledHeaderTypography variant="h6">
             Previous Orders
