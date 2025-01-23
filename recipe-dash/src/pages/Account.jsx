@@ -11,6 +11,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 
 
+import { addToCart } from '../store/cartSlice';
+import { useParams, useNavigate } from 'react-router-dom';
+
+
 const StyledHeaderTypography = styled(Typography)(({ theme }) => ({
   fontWeight: 'bold',
   color: '#DAA520',
@@ -96,6 +100,9 @@ const Account = () => {
               console.log('API Response:', response.data);
               console.log('Plates API Response:', platesResponse.data);
 
+              console.log('Redux State:', { address, phone, nameFirst, nameLast });
+
+
               // Create a lookup map for plates
                     const platesMap = platesResponse.data.reduce((acc, plate) => {
                       acc[plate.id] = plate;// Assuming `plate.id` matches the `plateId` in `plateQuantities`
@@ -162,6 +169,7 @@ const Account = () => {
 
         navigate('/');
         }
+
     const [orderHistory, setOrderHistory] = useState([]);
     const [error, setError] = useState(null);
 
@@ -270,7 +278,9 @@ const Account = () => {
                         <ul>
                                               {order.items.map((item, index) => (
                                                 <li key={index}>
-                                                  {item.name} (x{item.quantity})
+
+                                                  {item.name} (x{item.quantity}) ${item.itemPrice}
+
                                                 </li>
                                               ))}
                                             </ul>
