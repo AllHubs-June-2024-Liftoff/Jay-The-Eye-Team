@@ -30,6 +30,7 @@ public class PlateController {
     @RequestMapping("/list-plates")
     public String listAllPlates(Model model,
                                 @RequestParam(value = "sort", defaultValue = "name") String sortBy) {
+
         List<Plate> plates = new ArrayList<>();
         plateRepository.findAll().forEach(plates::add);
 

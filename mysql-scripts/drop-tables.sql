@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS `delivery_plates`;
+DROP TABLE IF EXISTS `delivery_plate_quantities`;
 DROP TABLE IF EXISTS `customer_delivery`;
 
 DROP TABLE IF EXISTS `delivery`;
