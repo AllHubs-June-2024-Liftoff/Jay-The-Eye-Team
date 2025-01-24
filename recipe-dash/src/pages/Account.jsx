@@ -154,9 +154,7 @@ const Account = () => {
         fetchOrders();
     }, [userId]);
 
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
+
 
     return (
          <Container
