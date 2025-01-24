@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { Button, Divider, Container, Box, Card, CardContent, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/system';
-import logoImage from '../assets/images/reciepe-dash-black-yellow.png';
 import axios from "axios";
 import { addToCart } from '../store/cartSlice';
 import { useParams, useNavigate } from 'react-router-dom';
+
+import logoImage from '../assets/images/reciepe-dash-black-yellow.png';
+import plateImage from '../assets/images/plate-243.png';
+import deliveryImage from '../assets/images/delivery-243.png';
 
 const StyledHeaderTypography = styled(Typography)(({ theme }) => ({
   fontWeight: 'bold',
@@ -155,16 +158,17 @@ const Account = () => {
     }
 
     return (
-        <Container
-            sx={{
-                marginTop: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                minHeight: '100vh',
-                justifyContent: 'flex-start',
-                width: '100%',
-            }}
-        >
+         <Container
+           sx={{
+             display: 'flex',
+             flexDirection: 'column',
+             justifyContent: 'flex-start',
+             alignItems: 'center',
+             paddingTop: 0,
+             width: '90vw',
+             maxWidth: '100%',
+           }}
+         >
             <Typography
                 variant="h3"
                 component="h1"
@@ -181,8 +185,8 @@ const Account = () => {
 
             <Divider
                 sx={{
-                    marginTop: 4,
-                    marginBottom: 5,
+                    marginTop: 0,
+                    marginBottom: 0,
                     borderWidth: 3,
                     borderColor: 'black',
                     width: '100%',
@@ -191,55 +195,114 @@ const Account = () => {
                 }}
             />
 
+        <Grid container spacing={2}>
             {/* Customer Info Section */}
-            <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
-                    <Box sx={{ padding: '0 20px' }}>
-                        <CardContent>
-                            <StyledHeaderTypography variant="h6" sx={{ fontWeight: 'bold' }}>
-                                Customer Information
-                            </StyledHeaderTypography>
-                            <Typography sx={{ textAlign: 'left' }}>
-                                <span style={{ fontWeight: 'bold' }}>Name:</span> {customerInfo.name}
-                            </Typography>
-                            <Typography sx={{ textAlign: 'left' }}>
-                                <span style={{ fontWeight: 'bold' }}>Address:</span> {customerInfo.address}
-                            </Typography>
-                            <Typography sx={{ textAlign: 'left' }}>
-                                <span style={{ fontWeight: 'bold' }}>Phone:</span> {customerInfo.phone}
-                            </Typography>
-                            <Typography sx={{ textAlign: 'left' }}>
-                                <span style={{ fontWeight: 'bold' }}>Email:</span> {customerInfo.email}
-                            </Typography>
-                        </CardContent>
-                    </Box>
+            <Grid item xs={12} md={7}>
+                <Box>
+                    <CardContent>
+                        <StyledHeaderTypography variant="h6" sx={{ fontWeight: 'bold' }}>
+                            Customer Information
+                        </StyledHeaderTypography>
+                        <Typography sx={{ textAlign: 'left' }}>
+                            <span style={{ fontWeight: 'bold' }}>Name:</span> {customerInfo.name}
+                        </Typography>
+                        <Typography sx={{ textAlign: 'left' }}>
+                            <span style={{ fontWeight: 'bold' }}>Address:</span> {customerInfo.address}
+                        </Typography>
+                        <Typography sx={{ textAlign: 'left' }}>
+                            <span style={{ fontWeight: 'bold' }}>Phone:</span> {customerInfo.phone}
+                        </Typography>
+                        <Typography sx={{ textAlign: 'left' }}>
+                            <span style={{ fontWeight: 'bold' }}>Email:</span> {customerInfo.email}
+                        </Typography>
+                    </CardContent>
+                </Box>
+            </Grid>
+
+            {/* Favorites Section */}
+            <Grid item xs={12} md={5}>
+                <Box>
+                    <CardContent>
+                        <StyledHeaderTypography variant="h6">Favorites</StyledHeaderTypography>
+                        <ul
+                            style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(2, 1fr)',
+                                gap: '5px',
+                                paddingLeft: '30px',
+                                textAlign: 'left',
+                            }}
+                        >
+                            {favorites.map((item, index) => (
+                                <li key={index} style={{ marginBottom: '0' }}>
+                                    {item}
+                                </li>
+                            ))}
+                        </ul>
+                    </CardContent>
+                </Box>
+            </Grid>
+        </Grid>
+
+            {/* Dashboard Stats Section */}
+            <Grid container spacing={3} sx={{ marginBottom: 7, }}>
+
+                <Grid item xs={12} md={4}>
+                  <StyledCard style={{ backgroundColor: '#f7f7f7',}}>
+                    <CardContent sx={{ textAlign: 'center' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <img
+                              src={plateImage}
+                              alt="meal icon"
+                              style={{ width: 40, height: 40,}}
+                            />
+
+                            <StyledValueTypography sx={{ marginLeft: 1 }}>
+                              {dashboardData.totalStuff1}
+                            </StyledValueTypography>
+                      </Box>
+
+                      <StyledStuffTypography variant="h6">
+                        Different meals
+                      </StyledStuffTypography>
+                    </CardContent>
+                  </StyledCard>
                 </Grid>
 
-                {/* Favorites Section */}
-                <Grid item xs={12} md={10}>
-                    <Box sx={{ padding: '0 20px' }}>
-                        <CardContent>
-                            <StyledHeaderTypography variant="h6">Favorites</StyledHeaderTypography>
-                            <ul
-                                style={{
-                                    display: 'grid',
-                                    gridTemplateColumns: 'repeat(2, 1fr)',
-                                    gap: '5px',
-                                    paddingLeft: '30px',
-                                    textAlign: 'left',
-                                }}
-                            >
-                                {favorites.map((item, index) => (
-                                    <li key={index}>{item}</li>
-                                ))}
-                            </ul>
+                <Grid item xs={12} md={4}>
+                  <StyledCard style={{ backgroundColor: '#f7f7f7',}}>
+                    <CardContent sx={{ textAlign: 'center' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <img
+                              src={deliveryImage}
+                              alt="meal icon"
+                              style={{ width: 40, height: 40,}}
+                            />
+
+                            <StyledValueTypography sx={{ marginLeft: 1 }}>
+                              {dashboardData.totalStuff2}
+                            </StyledValueTypography>
+                      </Box>
+
+                      <StyledStuffTypography variant="h6">
+                        Total plates ordered
+                      </StyledStuffTypography>
+                    </CardContent>
+                  </StyledCard>
+                </Grid>
+
+                <Grid item xs={12} md={4}>
+                    <StyledCard style={{ backgroundColor: '#f7f7f7',}}>
+                        <CardContent sx={{ textAlign: 'center' }}>
+                            <StyledValueTypography>{dashboardData.totalStuff4}</StyledValueTypography>
+                            <StyledStuffTypography variant="h6">Points to spend</StyledStuffTypography>
                         </CardContent>
-                    </Box>
+                    </StyledCard>
                 </Grid>
             </Grid>
 
             {/* Previous Orders Section */}
-            <Grid container spacing={3}>
+            <Grid container>
                 <StyledHeaderTypography variant="h6">
                     Previous Orders
                 </StyledHeaderTypography>
@@ -251,38 +314,50 @@ const Account = () => {
                 ) : previousOrders.length === 0 ? (
                     <Typography>No previous orders found.</Typography>
                 ) : (
-                    <Grid container spacing={2}>
+                    <Grid container spacing={1}>
                         {previousOrders.map((order, index) => (
                             <Grid item xs={12} md={6} key={index}>
-                                <Card>
+                                <Card sx={{ maxWidth: 250, maxHeight: 140,  overflow: 'auto' , margin: 0 }}>
                                     <CardContent>
-                                        <Typography>Order #{order.id}</Typography>
-                                        <Typography>Date:{new Date(order.dateCreated).toLocaleString()}</Typography>
 
-                                        {/* Plates ordered */}
-                                        <ul>
-                                            {order.items && order.items.length > 0 ? (
-                                                order.items.map((item, index) => (
-                                                    <li key={index}>
-                                                        {item.name} (x{item.quantity})
-                                                    </li>
-                                                ))
-                                            ) : (
-                                                <li>No items available</li>
-                                            )}
-                                        </ul>
+                                        <Typography variant="body1" style={{fontWeight: 'bold' }}>
+                                            Order #{order.id}
+                                        </Typography>
 
-                                        <Typography variant="body2">Total: ${order.total}</Typography>
+                                        <Typography style={{ fontSize: '0.85rem',}}>
+                                            Placed on {order.dateCreated}
+                                        </Typography>
 
                                         {/* Reorder Button */}
                                         <Button
                                             variant="contained"
                                             color="primary"
                                             onClick={() => handleReorderItems(order)}
-                                            sx={{ marginTop: 2 }}
+                                            sx={{ marginTop: 1, marginBottom: 1, backgroundColor: 'black', }}
                                         >
                                             Reorder
                                         </Button>
+
+                                        <Typography style={{ fontSize: '15px', fontWeight: 'bold', marginBottom:
+                                            '5px', color: 'grey'}}>
+                                            Cart Total: ${order.total}
+                                        </Typography>
+
+                                        {/* Plates ordered */}
+                                       <ul style={{ textAlign: 'left',}}>
+                                         {order.items && order.items.length > 0 ? (
+                                           order.items.map((item, index) => (
+                                             <li key={index}>
+                                               {item.name} ({item.quantity})
+                                             </li>
+                                           ))
+                                         ) : (
+                                           <li>No items available</li>
+                                         )}
+                                       </ul>
+
+
+
                                     </CardContent>
                                 </Card>
                             </Grid>
@@ -291,50 +366,6 @@ const Account = () => {
                 )}
             </Grid>
 
-            {/* Dashboard Stats Section */}
-            <Grid container spacing={3} sx={{ marginTop: 3 }}>
-                <Grid item xs={12} md={2}>
-                    <StyledCard>
-                        <CardContent sx={{ textAlign: 'center' }}>
-                            <StyledValueTypography>{dashboardData.totalStuff1}</StyledValueTypography>
-                            <StyledStuffTypography variant="h6">
-                                Different <br /> meals
-                            </StyledStuffTypography>
-                        </CardContent>
-                    </StyledCard>
-                </Grid>
-
-                <Grid item xs={12} md={2}>
-                    <StyledCard sx={{ alignItems: 'flex-end' }}>
-                        <CardContent sx={{ textAlign: 'center' }}>
-                            <StyledValueTypography>{dashboardData.totalStuff2}</StyledValueTypography>
-                            <StyledStuffTypography variant="h6">
-                                Total plates ordered
-                            </StyledStuffTypography>
-                        </CardContent>
-                    </StyledCard>
-                </Grid>
-
-                <Grid item xs={12} md={4}>
-                    <StyledCard sx={{ alignItems: 'flex-end' }}>
-                        <CardContent sx={{ textAlign: 'center' }}>
-                            <StyledValueTypography>{dashboardData.totalStuff3}</StyledValueTypography>
-                            <StyledStuffTypography variant="h6">
-                                Date of your last order
-                            </StyledStuffTypography>
-                        </CardContent>
-                    </StyledCard>
-                </Grid>
-
-                <Grid item xs={12} md={4}>
-                    <StyledCard>
-                        <CardContent sx={{ textAlign: 'center' }}>
-                            <StyledValueTypography>{dashboardData.totalStuff4}</StyledValueTypography>
-                            <StyledStuffTypography variant="h6">Points to spend</StyledStuffTypography>
-                        </CardContent>
-                    </StyledCard>
-                </Grid>
-            </Grid>
         </Container>
     );
 };
