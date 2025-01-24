@@ -1,6 +1,7 @@
 import React from "react";
 import Container from "react-bootstrap/Container";
-import { BrowserRouter as Router, Link, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Link, Routes, Route, useNavigate } from "react-router-dom";
+
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../store/userSlice";
@@ -43,6 +44,7 @@ const StyledNavLink = styled(Nav.Link)`
 
 function NavBar() {
   const dispatch = useDispatch();
+ const navigate = useNavigate();
 
   const { loginStatus, email, nameFirst, isChef } = useSelector((state) => state.user) ;
   const totalQuantity = useSelector(selectCartTotalQuantity); // Fetch total quantity from cart
@@ -52,8 +54,18 @@ function NavBar() {
     window.location.href = '/';
   };
 
+  const handleCheckout = () => {
+      if (!loginStatus) {
+        // Redirect to login page if user is not logged in
+        navigate("/login", { state: { from: "/payment" } });
+      } else {
+        // Proceed to payment page if logged in
+        navigate("/cart");
+      }
+    };
+
   return (
-    <Router>
+    <>
       <Navbar
         expand="lg"
         className="navbar-dark bg-dark fixed-top"
@@ -128,7 +140,8 @@ function NavBar() {
               )}
               {/* Add Cart Icon with Quantity */}
               {!isChef && (
-                <Nav.Link as={Link} to="/cart" className="cart-icon">
+
+                <Nav.Link onClick={handleCheckout}  className="cart-icon">
                   <div style={{ position: "relative", display: "inline-block" }}>
                     <i className="fas fa-shopping-cart" style={{ fontSize: "1.5rem", color: "#fff" }}></i>
                     {totalQuantity > 0 && (
@@ -150,6 +163,7 @@ function NavBar() {
                     )}
                   </div>
                 </Nav.Link>
+
               )}
             </Nav>
           </Navbar.Collapse>
@@ -178,7 +192,7 @@ function NavBar() {
 
         </Routes>
       </div>
-    </Router>
+    </>
   );
 }
 
