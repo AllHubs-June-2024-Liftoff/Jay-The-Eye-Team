@@ -99,9 +99,7 @@ function NavBar() {
                       <NavDropdown.Item as={Link} to="/cart">
                         Cart
                       </NavDropdown.Item>
-                      <NavDropdown.Item as={Link} to="/checkout">
-                        Checkout
-                      </NavDropdown.Item>
+
                     </>
                   )}
                   {isChef && (
