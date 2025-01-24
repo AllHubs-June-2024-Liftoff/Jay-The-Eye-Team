@@ -58,6 +58,11 @@ const Homepage = () => {
     }, [plates]);
 
     useEffect(() => {
+      console.log("Fetched cuisines:", cuisines); // Debug cuisines
+      console.log("Selected cuisine:", selectedCuisine); // Debug selected cuisine
+  }, [cuisines, selectedCuisine]);
+
+    useEffect(() => {
             const fetchCuisines = async () => {
                 try {
                     const response = await axios.get("http://localhost:8080/cuisines/api");
@@ -87,7 +92,7 @@ const Homepage = () => {
     // Filter plates based on the search query
     const filteredPlates = plates.filter((plate) => {
         const matchesQuery = plate.name.toLowerCase().includes(searchQuery); // Assuming plates have a 'name' property
-        const matchesCuisine = selectedCuisine === "all" || plate.cuisine?.toLowerCase() === selectedCuisine.toLowerCase();
+        const matchesCuisine = selectedCuisine === "all" || plate.cuisine?.toLowerCase() === selectedCuisine;
 
         return matchesQuery && matchesCuisine;
     });

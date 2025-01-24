@@ -47,6 +47,11 @@ public class PlateApi {
             updatedPlate.setPrice(Float.parseFloat(((String) requestBody.get("price")).replaceAll("[^\\d.]", "")));
             updatedPlate.setDiscount(Math.round(Float.parseFloat(((String) requestBody.get("discount")).replaceAll("[^\\d.]", ""))));
 
+            if (requestBody.containsKey("cuisine")) {
+                Optional<Cuisine> selectedCuisine = cuisineRepository.findById((Integer) requestBody.get("cuisine"));
+                selectedCuisine.ifPresent(updatedPlate::setCuisine);
+            }
+
             plateRepository.save(updatedPlate);
             return ResponseEntity.ok(updatedPlate);
 
