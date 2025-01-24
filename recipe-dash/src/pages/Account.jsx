@@ -90,6 +90,7 @@ const Account = () => {
                 const data = response.data.map(order => ({
                     total: order.grandTotal,
                     id: order.id,
+                    dateCreated: order.dateCreated,
                     items: Object.entries(order.plateQuantities).map(([plateStr, quantity]) => {
                         const plateName = plateStr.match(/name='([^']+)'/)[1];
                         const itemPriceMatch = plateStr.match(/price=([\d.]+)/);
