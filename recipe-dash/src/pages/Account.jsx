@@ -318,15 +318,22 @@ const Account = () => {
                     <Grid container spacing={1}>
                         {previousOrders.map((order, index) => (
                             <Grid item xs={12} md={6} key={index}>
-                                <Card sx={{ maxWidth: 250, maxHeight: 140,  overflow: 'auto' , margin: 0 }}>
+                                <Card sx={{ maxWidth: 275, maxHeight: 140,  overflow: 'auto' , margin: 0 }}>
                                     <CardContent>
 
                                         <Typography variant="body1" style={{fontWeight: 'bold' }}>
                                             Order #{order.id}
                                         </Typography>
 
-                                        <Typography style={{ fontSize: '0.85rem',}}>
-                                            Placed on {order.dateCreated}
+                                        <Typography style={{ fontSize: '0.85rem' }}>
+                                            Placed on {new Date(order.dateCreated).toLocaleString('en-US', {
+                                                year: '2-digit',
+                                                month: '2-digit',
+                                                day: '2-digit',
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                                hour12: true,
+                                            }).replace(',', '').replace(/^0/, '').replace(' ', ' at ')}
                                         </Typography>
 
                                         {/* Reorder Button */}
