@@ -106,9 +106,15 @@ const Account = () => {
         const fetchPreviousOrders = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/deliveries/order-history/${customer_id}`);
+                // Check if the response indicates no orders
+                            if (!response.data || response.data.length === 0) {
+                                setPreviousOrders([]) // No orders found
+
+                                } else {
                 const platesResponse = await axios.get('http://localhost:8080/plates/api');
 
                 console.log('Redux State:', { address, phone, nameFirst, nameLast });
+
 
                 const platesMap = platesResponse.data.reduce((acc, plate) => {
                     acc[plate.id] = plate;
@@ -137,10 +143,14 @@ const Account = () => {
                 }));
 
                 setPreviousOrders(data);
-                setLoading(false);
+
+                }
+                setError(null);
             } catch (err) {
                 console.error('Error fetching previous orders:', err);
-                setError('Failed to load previous orders');
+                setPreviousOrders([]);
+                setError(null);
+                } finally {
                 setLoading(false);
             }
         };
@@ -337,10 +347,16 @@ const Account = () => {
 
                 {loading ? (
                     <Typography>Loading previous orders...</Typography>
-                ) : error ? (
-                    <Typography color="error">{error}</Typography>
-                ) : previousOrders.length === 0 ? (
-                    <Typography>No previous orders found.</Typography>
+                ) : previousOrders.length === 0 || error ? (
+                          <Grid item xs={12}>
+                              <Card sx={{ padding: 2, backgroundColor: '#f9f9f9', textAlign: 'center', boxShadow: 2 }}>
+                                  <CardContent>
+                                      <Typography variant="body1" color={error ? "error" : "textPrimary"}>
+                                          {error || "No previous orders found."}
+                                      </Typography>
+                                  </CardContent>
+                              </Card>
+                          </Grid>
                 ) : (
                     <Grid container spacing={1}>
                         {previousOrders.map((order, index) => (
