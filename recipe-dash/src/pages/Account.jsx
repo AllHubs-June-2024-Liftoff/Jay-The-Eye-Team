@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { Button, Divider, Container, Box, Card, CardContent, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/system';
@@ -70,6 +70,31 @@ const Account = () => {
     const { loginStatus, email, nameFirst, nameLast, isChef, address, phone, customer_id } = useSelector((state) => state.user);
     console.log('customer_id', customer_id);
 
+    // Memoize the unique meal count to avoid recalculating on every render
+      const uniqueMealsCount = useMemo(() => {
+        const uniqueMeals = new Set();
+        previousOrders.forEach((order) => {
+          order.items.forEach((item) => {
+            uniqueMeals.add(item.name); // Add meal name to the set
+          });
+        });
+        return uniqueMeals.size; // Total unique meals
+      }, [previousOrders]);
+
+  // Memoize the total plates calculation
+    const totalPlatesOrdered = useMemo(() => {
+      return previousOrders.reduce((total, order) => {
+        const orderTotal = order.items.reduce((sum, item) => sum + item.quantity, 0);
+        return total + orderTotal;
+      }, 0);
+    }, [previousOrders]);
+
+// Memoize the total points calculation
+  const totalPoints = useMemo(() => {
+    const totalCost = previousOrders.reduce((total, order) => total + order.total, 0);
+    return totalCost * 100; // 100 points for every dollar
+  }, [previousOrders]);
+
     const customerInfo = {
         name: `${nameFirst} ${nameLast}`,
         address: address,
@@ -102,6 +127,10 @@ const Account = () => {
                         const plateId = plateIdMatch ? parseInt(plateIdMatch[1], 10) : null;
                         const plateData = platesMap[plateId] || {};
                         const imageUrl = plateData.plateImage || '';
+
+                        console.log('Parsed plateStr:', plateStr);
+                        console.log('Generated item:', { plateId, name: plateName, itemPrice, quantity, imageUrl });
+
 
                         return { plateId, name: plateName, itemPrice, quantity, imageUrl };
                     }),
@@ -257,7 +286,7 @@ const Account = () => {
                             />
 
                             <StyledValueTypography sx={{ marginLeft: 1 }}>
-                              {dashboardData.totalStuff1}
+                              {uniqueMealsCount}
                             </StyledValueTypography>
                       </Box>
 
@@ -279,7 +308,7 @@ const Account = () => {
                             />
 
                             <StyledValueTypography sx={{ marginLeft: 1 }}>
-                              {dashboardData.totalStuff2}
+                              {totalPlatesOrdered}
                             </StyledValueTypography>
                       </Box>
 
@@ -293,7 +322,7 @@ const Account = () => {
                 <Grid item xs={12} md={4}>
                     <StyledCard style={{ backgroundColor: '#f7f7f7',}}>
                         <CardContent sx={{ textAlign: 'center' }}>
-                            <StyledValueTypography>{dashboardData.totalStuff4}</StyledValueTypography>
+                            <StyledValueTypography>{totalPoints}</StyledValueTypography>
                             <StyledStuffTypography variant="h6">Points to spend</StyledStuffTypography>
                         </CardContent>
                     </StyledCard>
@@ -316,7 +345,7 @@ const Account = () => {
                     <Grid container spacing={1}>
                         {previousOrders.map((order, index) => (
                             <Grid item xs={12} md={6} key={index}>
-                                <Card sx={{ maxWidth: 275, maxHeight: 140,  overflow: 'auto' , margin: 0 }}>
+                                <Card sx={{ maxWidth: 'auto', maxHeight: 'auto', overflow: 'visible', margin: 0 }}>
                                     <CardContent>
 
                                         <Typography variant="body1" style={{fontWeight: 'bold' }}>
@@ -350,11 +379,11 @@ const Account = () => {
                                         </Typography>
 
                                         {/* Plates ordered */}
-                                       <ul style={{ textAlign: 'left',}}>
+                                      <ul style={{ textAlign: 'center',}}>
                                          {order.items && order.items.length > 0 ? (
                                            order.items.map((item, index) => (
                                              <li key={index}>
-                                               {item.name} ({item.quantity})
+                                               {item.name} ({item.quantity}) ${item.itemPrice}
                                              </li>
                                            ))
                                          ) : (
