@@ -539,7 +539,7 @@
 <div th:fragment="search-box-for-table-edit">
     <div class="list-table-search-intro">
         <div style="width: 100%; display: flex; justify-content: center; ">
-            <input type="text" class="searchInput" placeholder="Search though table">
+            <input type="text" class="searchInput" placeholder="Search through table">
         </div>
         <div class="table-list-header">
             <h6>
@@ -551,7 +551,7 @@
 <div th:fragment="search-box-for-table-no-edit">
     <div class="list-table-search-intro">
         <div style="width: 100%; display: flex; justify-content: center; ">
-            <input type="text" class="searchInput" placeholder="Search though table">
+            <input type="text" class="searchInput" placeholder="Search through table">
         </div>
         <div class="table-list-header">
             <h6>
@@ -563,22 +563,27 @@
 
 <div th:fragment="script-show-delivery">
     <script type="text/javascript">
-        // Define the showDeliverySummary function in the global scope
         function showDeliverySummary(button) {
             var row = button.closest('tr');
             var orderId = row.getAttribute('data-id');
 
             fetch('http://localhost:8080/deliveries/api')
-                .then(response => response.json())
+                .then(response => {
+                    //console.log(response.status);
+                    return response.json();
+                })
                 .then(deliveries => {
-                    var selectedOrder = deliveries.find(delivery => delivery.id == orderId);
+                    //console.log('Response JSON:', deliveries);
+                    var selectedOrder = deliveries.find(delivery => String(delivery.id) === String(orderId));
 
                     if (selectedOrder) {
+                        console.log('Fragment success: Delivery found for ID =', orderId);
 
                         // Convert plateQuantities object to an array of plates and quantities
                         const orderedPlates = Object.entries(selectedOrder.plateQuantities).map(([PLATE, quantity]) => {
+
                             // Use a regular expression to extract the id and name of the plate
-                            const regex = /id=(\d+), name='([^']+)'/;
+                            const regex = /id\s*=\s*(\d+)\s*,\s*name\s*=\s*'([^']+)'/;
                             const match = PLATE.match(regex);
 
                             if (match) {
@@ -590,14 +595,16 @@
 
                         // Update the Delivery Summary section
                         document.getElementById('delivery-summary').innerHTML = `
-                            <p><strong style="font-size: 20px;">Order #${selectedOrder.id}</strong></p>
+                            <p><strong style="font-size: 22px; margin-top: 20px;">Order #${selectedOrder
+                            .id}</strong></p>
+
                             <p><strong>Name:</strong> ${selectedOrder.customer.fullName}</p>
                             <p><strong>Email:</strong> ${selectedOrder.customer.email}</p>
                             <p><strong>Phone:</strong> ${selectedOrder.customer.phone}</p>
                             <p><strong>Address:</strong> ${selectedOrder.customer.address}</p>
                             <p><strong>Total Price:</strong> $${selectedOrder.grandTotal}</p>
 
-                            <table class="table-container">
+                            <table class="table-container" style="margin: 0 auto; font-size: 0.85em; max-width: 90%;">
                                 <tr>
                                     <th style="color: white;">ID</th>
                                     <th style="color: white;">Plate</th>
@@ -606,23 +613,19 @@
                                 ${orderedPlates.map(({ id, name, quantity }) => `
                                     <tr>
                                         <td>${id}</td>
-                                        <td>${name}</td>
+                                        <td><strong>${name}</strong></td>
                                         <td>${quantity}</td>
                                     </tr>
                                 `).join('')}
                             </table>
                         `;
                     } else {
-                        console.error('Order not found for ID:', orderId);
-                        alert('Order not found. Please try again.');
+                        // Update the Delivery Summary section
+                        document.getElementById('delivery-summary').innerHTML = ``
+                        console.error('Fragment error: Delivery not found for ID =', orderId);
                     }
                 });
         }
-
-        // Wait for the DOM content to be fully loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            // Any other DOM manipulation or event listener setup you need
-        });
     </script>
 </div>
 

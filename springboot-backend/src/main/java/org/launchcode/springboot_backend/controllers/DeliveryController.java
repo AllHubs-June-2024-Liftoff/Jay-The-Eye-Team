@@ -17,7 +17,7 @@ public class DeliveryController {
 
     @GetMapping("list-deliveries")
     public String listAllDeliveries(Model model) {
-        Sort sort = Sort.by(Sort.Order.asc("dateCreated"));
+        Sort sort = Sort.by(Sort.Order.desc("dateCreated"));
         model.addAttribute("deliveries", deliveryRepository.findAll(sort));
         model.addAttribute("statusOptions", Delivery.Status.values());
         return "deliveries/list-deliveries";
