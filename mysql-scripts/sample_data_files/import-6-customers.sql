@@ -49,6 +49,6 @@ INSERT INTO customer (id, name, address, email, name_first, name_last, phone, is
 (48, 'Hiroshi Fujimoto', '43 Clark Ave, St. Louis, MO 63102', 'hirofujimoto@example.com', 'Hiroshi', 'Fujimoto', '3145550122', FALSE, 48),
 (49, 'Nia Ndebele', '44 Oakland Ave, St. Louis, MO 63110', 'niandebele@example.com', 'Nia', 'Ndebele', '3145550123', FALSE, 49),
 (50, 'Javier Morales', '2 N Grand Blvd, St. Louis, MO 63103', 'javiermorales@example.com', 'Javier', 'Morales', '3145550124', FALSE, 50),
-(51, 'Haruto Sato', '11 N 4th St, St. Louis, MO 63162', 'harutosato@example.com', 'Haruto', 'Sato', '3145550125', FALSE, 51);
-
+(51, 'Haruto Sato', '11 N 4th St, St. Louis, MO 63162', 'harutosato@example.com', 'Haruto', 'Sato', '3145550125', FALSE, 51),
+(52,'Mae Jemison','123 Space St, St. Louis, MO 63101','mj@email.com','0','Mae','Jemison','3145551234',52);
 

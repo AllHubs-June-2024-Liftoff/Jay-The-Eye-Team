@@ -49,6 +49,8 @@ INSERT INTO user (id, email, pw_hash) VALUES
 (48, 'hirofujimoto@example.com', '$2a$10$ll6ybZG5q3FjlUwP2H5mkuCBfXYTLpaPX42zRE6DlBeYjLHpD5TTW'),
 (49, 'niandebele@example.com', '$2a$10$yHVfJUtqCj1VHFvHL3T4gB0dc9wnmfntQ0j3V0beAdAEr5npQw2mfm'),
 (50, 'javiermorales@example.com', '$2a$10$kBhdQBdWe8sw1P1od.SrGf.pif8XDbWaZaijRm33ivQAoZtu.eQu2'),
-(51, 'harutosato@example.com', '$2a$10$O1yHZYfExGIC4FZT10f7iKNHgF8XSt0Bjw3H7feDWpttb4OCQOdX9c');
+(51, 'harutosato@example.com', '$2a$10$O1yHZYfExGIC4FZT10f7iKNHgF8XSt0Bjw3H7feDWpttb4OCQOdX9c'),
+('52', 'mj@email.com', '$2a$10$CUxvPJuIcDq3SZ5IAORty.Knq7ppXLYNEs79sI8S3IHZhZngz0NVe');
+
 
 

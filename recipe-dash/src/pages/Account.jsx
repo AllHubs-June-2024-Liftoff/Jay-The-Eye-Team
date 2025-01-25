@@ -351,8 +351,8 @@ const Account = () => {
                           <Grid item xs={12}>
                               <Card sx={{ padding: 2, backgroundColor: '#f9f9f9', textAlign: 'center', boxShadow: 2 }}>
                                   <CardContent>
-                                      <Typography variant="body1" color={error ? "error" : "textPrimary"}>
-                                          {error || "No previous orders found."}
+                                      <Typography variant="body1">
+                                          {"No previous orders found."}
                                       </Typography>
                                   </CardContent>
                               </Card>
