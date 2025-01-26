@@ -1,11 +1,13 @@
     import React, { useState } from "react";
-    import { useDispatch } from "react-redux";
-    import { useNavigate } from "react-router-dom";
+    import axios from "axios";
+
+    import { useSelector, useDispatch } from "react-redux";
+    import { useNavigate, Link } from "react-router-dom";
     import { Divider, Box, Button, Checkbox, Container, FormControlLabel, Grid, Paper, TextField, Typography, useTheme, useMediaQuery } from "@mui/material";
     import { styled } from "@mui/system";
-    import { Link } from 'react-router-dom';
-    import axios from "axios";
+
     import { login } from "../store/userSlice"; // Import the login action from your Redux slice
+    import {selectCartTotalPrice} from "../store/cartSlice";
     import logoImage from '../assets/images/reciepe-dash-black-yellow.png';
 
     const StyledTextField = styled(TextField)(({ theme }) => ({
@@ -36,6 +38,8 @@
         const dispatch = useDispatch();
         const navigate = useNavigate();
 
+        const loginStatus = useSelector((state) => state.user.loginStatus);
+        const totalPrice = useSelector(selectCartTotalPrice);
 
         const handleChefLogin = () => {
             dispatch(login({ nameFirst: "Chef", isChef: true }));
@@ -53,14 +57,14 @@
         const handleSubmit = async (e) => {
           e.preventDefault();
           setErrorMessage("");
-        
+
           try {
             const response = await axios.post("http://localhost:8080/api/login", formData);
             console.log('Login API Response:', response.data);
 
             // Extract user and customer details
             const { user_id, customer_id, email, firstName, lastName, isChef, address, phone } = response.data;
-        
+
             // Update Redux store
             try {
             dispatch(
@@ -78,29 +82,30 @@
           } catch (err) {
               console.error("Dispatch error:", err);
               }
-        
+
             // Redirect to homepage
             navigate("/");
           } catch (error) {
             setErrorMessage(error.response?.data || "Login failed. Please try again.");
           }
         };
-        
-        
+
+
         return (
-            <div className="container mt-5">
-                <Typography
-                      variant="h4"
-                      component="h1"
-                      align="center"
-                      gutterBottom
-                      sx={{
-                        fontWeight: "bold",
-                        color: "#DAA520",
-                        marginBottom: 3,
-                      }}
-                    > Login
-                </Typography>
+            <div className="container">
+
+            <Typography
+              variant="h4"
+              align="center"
+              gutterBottom
+              sx={{
+                fontWeight: "bold",
+                color: "#DAA520",
+                marginBottom: 3,
+              }}
+            >
+              {totalPrice > 0 ? "Login to View Cart" : "Login" }
+            </Typography>
 
                 <form onSubmit={handleSubmit}>
 
@@ -160,7 +165,7 @@
                                style={{
                                    width: "150px",
                                    display: "block",
-                                   marginTop: "30px",
+                                   marginTop: "60px",
                                }}
                            />
                        </Grid>
@@ -177,7 +182,7 @@
                       <Grid item xs={12}>
                         <Divider
                           sx={{
-                            marginTop: 3,
+                            marginTop: 8,
                             marginBottom: 1,
                             borderWidth: 3,
                             borderColor: '#FF00FF',

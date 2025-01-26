@@ -119,9 +119,22 @@ const Plate = () => {
                       alt={`${filteredPlate.name}`}
                       style={{ width: '250px', height: '250px', objectFit: 'cover', borderRadius: '10px', display: 'block' }}
                     />
-                    <IconButton onClick={toggleFavorite} aria-label="Add to Favorites">
-                      {isFavorite ? <Favorite sx={{ color: 'red' }} /> : <FavoriteBorder />}
-                    </IconButton>
+                        <IconButton
+                          onClick={toggleFavorite}
+                          aria-label="Add to Favorites"
+                          sx={{
+                            '&:hover': {
+                              backgroundColor: 'black',
+                              color: '#DAA520',
+                            },
+                          }}
+                        >
+                          {isFavorite ? (
+                            <Favorite sx={{ color: 'red', fontSize: '50px' }} />
+                          ) : (
+                            <FavoriteBorder sx={{ color: '#DAA520', fontSize: '50px' }} />
+                          )}
+                        </IconButton>
                   </Grid>
 
                   <Grid item xs={12}>

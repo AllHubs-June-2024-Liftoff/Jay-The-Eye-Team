@@ -361,7 +361,7 @@ const Account = () => {
                     <Grid container spacing={1}>
                         {previousOrders.map((order, index) => (
                             <Grid item xs={12} md={6} key={index}>
-                                <Card sx={{ maxWidth: 'auto', maxHeight: 'auto', overflow: 'visible', margin: 0 }}>
+                                <Card sx={{ maxWidth: '350px', maxHeight: 'auto', overflow: 'visible', margin: 0 }}>
                                     <CardContent>
 
                                         <Typography variant="body1" style={{fontWeight: 'bold' }}>
@@ -384,22 +384,36 @@ const Account = () => {
                                             variant="contained"
                                             color="primary"
                                             onClick={() => handleReorderItems(order)}
-                                            sx={{ marginTop: 1, marginBottom: 1, backgroundColor: 'black', }}
+                                            sx={{ marginTop: 1, marginBottom: 2, backgroundColor: 'black', }}
                                         >
                                             Reorder
                                         </Button>
 
-                                        <Typography style={{ fontSize: '15px', fontWeight: 'bold', marginBottom:
-                                            '5px', color: 'grey'}}>
+                                        <Typography style={{ fontSize: '15px', fontWeight: 'bold', color: 'grey', textAlign: 'right',}}>
                                             Cart Total: ${order.total}
                                         </Typography>
 
+                                        <Divider
+                                            sx={{
+                                                marginTop: 1,
+                                                marginBottom: 1,
+                                                borderWidth: 1,
+                                                borderColor: '#DAA520',
+                                                width: '100%',
+                                                borderStyle: 'solid',
+                                                opacity: 1,
+                                            }}
+                                        />
+
                                         {/* Plates ordered */}
-                                      <ul style={{ textAlign: 'center',}}>
+
+                                      <ul style={{ textAlign: 'right', fontSize: '0.8em',listStyleType: 'none', color: 'grey',  }}>
                                          {order.items && order.items.length > 0 ? (
                                            order.items.map((item, index) => (
                                              <li key={index}>
-                                               {item.name} ({item.quantity}) ${item.itemPrice}
+                                               {item.name}
+                                               <span style={{ paddingLeft: '2em' }}> ${item.itemPrice}</span>
+                                               <span style={{ paddingLeft: '2em' }}> x{item.quantity}</span>
                                              </li>
                                            ))
                                          ) : (

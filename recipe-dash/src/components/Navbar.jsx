@@ -9,6 +9,7 @@ import { selectCartTotalQuantity } from "../store/cartSlice";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { styled } from '@mui/system';
+import { Tooltip } from "@mui/material";
 
 // Components
 import logo from '../assets/images/reciepe-dash-white-yellow.png';
@@ -17,18 +18,20 @@ import logo from '../assets/images/reciepe-dash-white-yellow.png';
 import Homepage from "../pages/Homepage";
 import About from "../pages/About";
 import Account from "../pages/Account";
-import AddPlate from "../pages/AddPlate";
-import Admin from "../pages/Admin";
 import ContactUs from "../pages/ContactUs";
 import Login from "../pages/Login";
-import MenuItem from "../pages/MenuItem";
+
 import Register from "../pages/Register";
 import OrderComplete from "../pages/OrderComplete";
-import Reviews from "../pages/Reviews";
 import Plate from "../pages/Plate";
 import Cart from "../pages/Cart";
 import PaymentForm from "../pages/PaymentForm"
 import NotFound404 from "../pages/NotFound404";
+
+// import AddPlate from "../pages/AddPlate";
+// import Admin from "../pages/Admin";
+// import Reviews from "../pages/Reviews";
+// import MenuItem from "../pages/MenuItem";
 
 import ChiliDraft from "../pages/ChiliDraft";
 
@@ -44,7 +47,7 @@ const StyledNavLink = styled(Nav.Link)`
 
 function NavBar() {
   const dispatch = useDispatch();
- const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const { loginStatus, email, nameFirst, isChef } = useSelector((state) => state.user) ;
   const totalQuantity = useSelector(selectCartTotalQuantity); // Fetch total quantity from cart
@@ -102,69 +105,72 @@ function NavBar() {
                   title={`Hi, ${nameFirst}`}
                   id="user-dropdown"
                   align="end"
+                  className="navbar-user-dropdown"
                 >
-                  <NavDropdown.Item as={Link} to="/account">
-                    Account
-                  </NavDropdown.Item>
                   {!isChef && (
                     <>
+                      <NavDropdown.Item as={Link} to="/account">
+                        Account
+                      </NavDropdown.Item>
                       <NavDropdown.Item as={Link} to="/cart">
                         Cart
                       </NavDropdown.Item>
-
                     </>
                   )}
                   {isChef && (
                     <>
-                      <NavDropdown.Item as={Link} to="/reviews">
-                        Reviews
-                      </NavDropdown.Item>
-                      <NavDropdown.Divider />
                       <NavDropdown.Item
                         as={Link}
                         to="http://localhost:8080"
                         style={{
                           fontWeight: 'bold',
-                          backgroundColor: 'black',
-                          color: '#DAA520',
                         }}>
-                        Chef Dashboard
+                        Go to Chef Dashboard
                       </NavDropdown.Item>
                     </>
                   )}
                   <NavDropdown.Divider />
-                  <NavDropdown.Item onClick={handleLogout}>
+                  <NavDropdown.Item onClick={handleLogout}
+                      style={{
+                            fontWeight: 'bold',
+                            backgroundColor: 'black',
+                            color: '#DAA520',
+                            padding: '10px',
+                          }}>
                     Logout
                   </NavDropdown.Item>
                 </NavDropdown>
               )}
               {/* Add Cart Icon with Quantity */}
-              {!isChef && (
+                {!isChef && (
+                  <Nav.Link onClick={handleCheckout} className="cart-icon">
+                    <div style={{ position: "relative", display: "inline-block" }}>
+                      <Tooltip title={loginStatus ? "" : "Log in to view cart"} arrow >
+                        <i className="fas fa-shopping-cart" style={{ fontSize: "2rem", color: "#fff", marginRight:
+                            "20px", }}></i>
+                      </Tooltip>
+                      {totalQuantity > 0 && (
+                        <span
+                          style={{
+                            position: "absolute",
+                            top: "-10px",
+                            right: "5px",
+                            backgroundColor: "#DAA520",
+                            color: "white",
+                            borderRadius: "50%",
+                            padding: "5px 10px",
+                            fontSize: "0.75rem",
+                            fontWeight: "bold",
+                            opacity: 1,
+                          }}
+                        >
+                          {totalQuantity}
+                        </span>
+                      )}
+                    </div>
+                  </Nav.Link>
+                )}
 
-                <Nav.Link onClick={handleCheckout}  className="cart-icon">
-                  <div style={{ position: "relative", display: "inline-block" }}>
-                    <i className="fas fa-shopping-cart" style={{ fontSize: "1.5rem", color: "#fff" }}></i>
-                    {totalQuantity > 0 && (
-                      <span
-                        style={{
-                          position: "absolute",
-                          top: "-5px",
-                          right: "-10px",
-                          backgroundColor: "red",
-                          color: "white",
-                          borderRadius: "50%",
-                          padding: "3px 6px",
-                          fontSize: "0.75rem",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        {totalQuantity}
-                      </span>
-                    )}
-                  </div>
-                </Nav.Link>
-
-              )}
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -175,20 +181,23 @@ function NavBar() {
           <Route path="/" element={<Homepage />} />
           <Route path="/about" element={<About />} />
           <Route path="/account" element={<Account />} />
-          <Route path="/add_plate" element={<AddPlate />} />
-          <Route path="/admin" element={<Admin />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/menuitem" element={<MenuItem />} />
           <Route path="/register" element={<Register />} />
           <Route path="/order-complete" element={<OrderComplete />} />
-          <Route path="/reviews" element={<Reviews />} />
           <Route path="/plate/:plateId" element={<Plate />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/payment" element={<Elements stripe={stripePromise}><PaymentForm /></Elements>} />
+
           {/* Catch-all route for 404 page */}
           <Route path="*" element={<NotFound404 />} />
           <Route path="/chili" element={<ChiliDraft />} />
+
+{/* Deleted */}
+{/*         <Route path="/add_plate" element={<AddPlate />} /> */}
+{/*         <Route path="/admin" element={<Admin />} /> */}
+{/*         <Route path="/reviews" element={<Reviews />} /> */}
+{/*         <Route path="/menuitem" element={<MenuItem />} /> */}
 
         </Routes>
       </div>
