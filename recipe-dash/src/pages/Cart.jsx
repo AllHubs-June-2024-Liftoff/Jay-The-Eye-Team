@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Divider, Box, Grid, TextField, Button, Typography, Container } from "@mui/material";
 import { styled } from '@mui/system';
+import axios from "axios";
 
 import {
   selectCartItems,
@@ -46,7 +47,8 @@ const Cart = () => {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'flex-start',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
         padding: 1,
         margin: 0,
         height: '100vh',
@@ -56,12 +58,12 @@ const Cart = () => {
     >
       <Typography
         variant="h4"
-        component="h1"
         align="center"
         gutterBottom
         sx={{
           fontWeight: 'bold',
           color: '#DAA520',
+          marginBottom: 4,
         }}
       >
         Review Your Cart
@@ -86,9 +88,9 @@ const Cart = () => {
         </Grid>
       ) : (
         <>
-          <Grid container spacing={2} sx={{ padding: 1 }}>
+          <Grid container spacing={3} sx={{ padding: 1, alignItems: 'center'}}>
             <Grid item xs={2}>
-              <StyledHeaderTypography>Image</StyledHeaderTypography>
+              <StyledHeaderTypography> </StyledHeaderTypography>
             </Grid>
             <Grid item xs={3}>
               <StyledHeaderTypography>Name</StyledHeaderTypography>
@@ -97,44 +99,65 @@ const Cart = () => {
               <StyledHeaderTypography>Quantity</StyledHeaderTypography>
             </Grid>
             <Grid item xs={2}>
-              <StyledHeaderTypography>Price</StyledHeaderTypography>
+              <StyledHeaderTypography>Unit Price</StyledHeaderTypography>
             </Grid>
             <Grid item xs={2}>
               <StyledHeaderTypography>Total</StyledHeaderTypography>
             </Grid>
             <Grid item xs={1}>
-              <StyledHeaderTypography>Action</StyledHeaderTypography>
+              <StyledHeaderTypography></StyledHeaderTypography>
             </Grid>
           </Grid>
 
           {cartItems.map((item) => (
-            <Grid container spacing={2} key={item.plate_id} alignItems="center">
+
+            <Grid container spacing={2} key={item.plate_id} alignItems="center" marginBottom="10px">
               <Grid item xs={2}>
                 <img
                   src={item.plateImage || defaultPlaceholder}
                   alt={item.name}
-                  style={{ width: "50px", height: "50px", objectFit: "cover" }}
-                  onError={(e) => { e.target.src = defaultPlaceholder; }} 
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    objectFit: "cover",
+                    borderRadius: "20%",
+                  }}
+                  onError={(e) => { e.target.src = defaultPlaceholder; }}
                 />
               </Grid>
-              <Grid item xs={3}>
-                <Typography>{item.name}</Typography>
-              </Grid>
-              <Grid item xs={2}>
-                <TextField
-                  type="number"
-                  variant="outlined"
-                  size="small"
-                  value={item.quantity}
-                  onChange={(e) => handleQuantityChange(item.plate_id, Number(e.target.value))}
-                />
-              </Grid>
+
+                <Grid item xs={3}>
+                      <Typography align="left">{item.name}</Typography>
+                </Grid>
+
+                <Grid item xs={2}>
+                  <TextField
+                    type="number"
+                    variant="outlined"
+                    size="small"
+                    value={item.quantity}
+                    onChange={(e) => handleQuantityChange(item.plate_id, Number(e.target.value))}
+                    InputProps={{
+                      style: {
+                        textAlign: 'center',
+                      },
+                    }}
+                    inputProps={{
+                      style: {
+                        textAlign: 'center',
+                      },
+                    }}
+                  />
+                </Grid>
+
               <Grid item xs={2}>
                 <Typography>${item.price.toFixed(2)}</Typography>
               </Grid>
+
               <Grid item xs={2}>
-                <Typography>${(item.price * item.quantity).toFixed(2)}</Typography>
+                <Typography fontWeight="bold">${(item.price * item.quantity).toFixed(2)}</Typography>
               </Grid>
+
               <Grid item xs={1}>
                 <Button
                   variant="contained"
@@ -153,6 +176,7 @@ const Cart = () => {
                   Remove
                 </Button>
               </Grid>
+
             </Grid>
           ))}
 
@@ -160,9 +184,10 @@ const Cart = () => {
             marginTop: 4,
             borderWidth: 3,
             borderColor: 'black',
-            width: '100%',
+            width: '100vh',
             borderStyle: 'solid',
             opacity: 1,
+            alignItems: 'center',
           }} />
 
           <Grid container justifyContent="flex-end" sx={{ marginTop: 3 }}>

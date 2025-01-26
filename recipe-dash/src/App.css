@@ -82,3 +82,9 @@ a:hover {
   border-radius: 4px;
   background-color: #f9f9f9;
 }
+
+.navbar-user-dropdown {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
