@@ -16,6 +16,9 @@ const userSlice = createSlice({
   reducers: {
     login: (state, action) => {
       const { user_id, customer_id, email, nameFirst, nameLast, isChef, address, phone } = action.payload;
+
+
+
       state.loginStatus = true;
       state.user_id = user_id;
       state.customer_id = customer_id;
@@ -25,8 +28,14 @@ const userSlice = createSlice({
       state.isChef = isChef;
       state.address = address; // Update address
       state.phone = phone;     // Update phone
+
+      // Store user data in localStorage
+              localStorage.setItem("user", JSON.stringify(action.payload));
     },
     logout: (state) => {
+
+
+
       state.loginStatus = false;
       state.user_id = null;
       state.customer_id = null;
@@ -36,6 +45,9 @@ const userSlice = createSlice({
       state.isChef = false;
       state.address = ""; // Reset address
       state.phone = "";   // Reset phone
+
+      // Remove user data from localStorage
+                localStorage.removeItem("authData");
     },
   },
 });

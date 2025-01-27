@@ -40,7 +40,7 @@ public class LoginController {
                     response.put("email", user.getEmail());
                     response.put("isChef", customer.isChef());
                     response.put("customer_id", customer.getId());
-                    response.put("firstName", customer.getNameFirst());
+                    response.put("nameFirst", customer.getNameFirst());
                     response.put("lastName", customer.getNameLast());
                     response.put("address", customer.getAddress());
                     response.put("phone", customer.getPhone());

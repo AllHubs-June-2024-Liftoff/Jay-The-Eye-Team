@@ -47,6 +47,7 @@ function NavBar() {
  const navigate = useNavigate();
 
   const { loginStatus, email, nameFirst, isChef } = useSelector((state) => state.user) ;
+  console.log({ loginStatus, email, nameFirst, isChef });
   const totalQuantity = useSelector(selectCartTotalQuantity); // Fetch total quantity from cart
   const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
   const handleLogout = () => {
@@ -89,20 +90,10 @@ function NavBar() {
               </StyledNavLink>
             </Nav>
             <Nav className="ms-auto">
-              {!loginStatus ? (
-                <StyledNavLink
-                  as={Link}
-                  to="/login"
-                  sx={{ marginRight: '1rem' }}
-                >
-                  Login
-                </StyledNavLink>
-              ) : (
-                <NavDropdown
-                  title={`Hi, ${nameFirst}`}
-                  id="user-dropdown"
-                  align="end"
-                >
+              {loginStatus === false ? (
+                <StyledNavLink as={Link} to="/login">Login</StyledNavLink>
+              ) : loginStatus === true ? (
+                <NavDropdown title={`Hi, ${nameFirst || "Guest"}`} id="user-dropdown" align="end">
                   <NavDropdown.Item as={Link} to="/account">
                     Account
                   </NavDropdown.Item>
@@ -137,7 +128,7 @@ function NavBar() {
                     Logout
                   </NavDropdown.Item>
                 </NavDropdown>
-              )}
+              ) : null }
               {/* Add Cart Icon with Quantity */}
               {!isChef && (
 

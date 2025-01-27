@@ -1,4 +1,4 @@
-    import React, { useState } from "react";
+    import React, { useState, useEffect, dispatch, navigate } from "react";
     import { useDispatch } from "react-redux";
     import { useNavigate } from "react-router-dom";
     import { Divider, Box, Button, Checkbox, Container, FormControlLabel, Grid, Paper, TextField, Typography, useTheme, useMediaQuery } from "@mui/material";
@@ -26,7 +26,21 @@
       marginBottom: "1rem",
     }));
 
+
+
+    const handleLogout = () => {
+
+        dispatch(login({})); // Reset Redux store
+        localStorage.removeItem("authData");
+        navigate("/login"); // Redirect to login page
+    };
+
+
+
     const Login = () => {
+
+
+
         const [formData, setFormData] = useState({
             email: "",
             password: "",
@@ -35,6 +49,27 @@
         const [errorMessage, setErrorMessage] = useState("");
         const dispatch = useDispatch();
         const navigate = useNavigate();
+
+        useEffect(() => {
+                        const savedAuthData = localStorage.getItem("authData");
+                        if (savedAuthData) {
+                            const parsedData = JSON.parse(savedAuthData);
+                            dispatch(
+                                login({
+                                    user_id: parsedData.user_id,
+                                    customer_id: parsedData.customer_id,
+                                    email: parsedData.email,
+                                    nameFirst: parsedData.firstName,
+                                    nameLast: parsedData.lastName,
+                                    isChef: parsedData.isChef,
+                                    loginStatus: true,
+                                    address: parsedData.address,
+                                    phone: parsedData.phone,
+                                })
+                            );
+                            navigate("/"); // Redirect to the desired page if logged in
+                        }
+                    }, [dispatch, navigate]);
 
 
         const handleChefLogin = () => {
@@ -59,7 +94,10 @@
             console.log('Login API Response:', response.data);
 
             // Extract user and customer details
-            const { user_id, customer_id, email, firstName, lastName, isChef, address, phone } = response.data;
+            const { user_id, customer_id, email, nameFirst, nameLast, isChef, address, phone } = response.data;
+
+            // Save to localStorage
+                    localStorage.setItem("authData", JSON.stringify(response.data));
         
             // Update Redux store
             try {
@@ -69,7 +107,7 @@
                 customer_id,
                 email,
                 nameFirst: firstName,
-                nameLast: lastName,
+                nameLast,
                 isChef,
                 loginStatus: true,
                 address: address,

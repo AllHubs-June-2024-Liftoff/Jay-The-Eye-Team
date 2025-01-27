@@ -6,6 +6,8 @@ import { Box, Divider, Typography, TextField, FormControl, InputLabel, Select, M
 import { styled } from "@mui/system";
 import axios from "axios";
 import logoImage from '../assets/images/reciepe-dash-black-yellow.png';
+import { login } from "../store/userSlice";  // Adjust the path if needed
+
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
     width: '350px',
@@ -44,6 +46,16 @@ const Homepage = () => {
     const [searchQuery, setSearchQuery] = useState("");
      const [selectedCuisine, setSelectedCuisine] = useState("all");
     const [cuisines, setCuisines] = useState([{ id: "all", name: "All" }]);
+
+    useEffect(() => {
+        // Check if there's any user data in localStorage
+        const storedUser = localStorage.getItem("authData");
+
+        if (storedUser) {
+          // If user data exists, restore it to the Redux state
+          dispatch(login(JSON.parse(storedUser)));
+        }
+      }, [dispatch]);
 
 
     // Fetch the menu only if the state is empty
