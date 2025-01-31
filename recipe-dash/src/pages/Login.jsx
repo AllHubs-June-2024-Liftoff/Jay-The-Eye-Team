@@ -92,22 +92,23 @@
 
 
         return (
-            <div className="container">
+            <div className="container" style={{ display: 'flex', flexDirection: 'column', justifyContent:
+                'flex-start', height: '100vh', marginTop: '50px' }}>
 
             <Typography
               variant="h4"
               align="center"
-              gutterBottom
               sx={{
                 fontWeight: "bold",
                 color: "#DAA520",
                 marginBottom: 3,
+                justifyContent: 'flex-start',
               }}
             >
               {totalPrice > 0 ? "Login to View Cart" : "Login" }
             </Typography>
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} >
 
                     <Grid>
                         <StyledTextField
@@ -163,9 +164,9 @@
                                src={logoImage}
                                alt="Logo"
                                style={{
-                                   width: "150px",
+                                   width: "200px",
                                    display: "block",
-                                   marginTop: "60px",
+                                   marginTop: "150px",
                                }}
                            />
                        </Grid>
@@ -177,31 +178,6 @@
                            </div>
                        </Grid>
                    </Grid>
-
-                    <Grid container justifyContent="center" alignItems="center" direction="column" >
-                      <Grid item xs={12}>
-                        <Divider
-                          sx={{
-                            marginTop: 8,
-                            marginBottom: 1,
-                            borderWidth: 3,
-                            borderColor: '#FF00FF',
-                            width: '300px',
-                          }}
-                        />
-                      </Grid>
-
-                      <Grid item xs={12} sx={{ textAlign: 'center', width: '100%' }}>
-                        <p style={{ color: '#FF00FF', fontWeight: 'bold' }}>
-                          Public User Logins - For Demo Only
-                        </p>
-                      </Grid>
-
-                      <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
-                        <button onClick={handleChefLogin}>Log in as a chef</button>
-                        <button onClick={handleUserLogin}>Log in as a customer</button>
-                      </Grid>
-                    </Grid>
 
                 </form>
             </div>
