@@ -1,5 +1,6 @@
 package org.launchcode.springboot_backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -17,6 +18,7 @@ public class Favorite {
     private int id;
 
     @ManyToOne
+    @JsonIgnore
     private Customer customer;
 
     @ManyToOne
