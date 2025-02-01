@@ -92,7 +92,7 @@ const Account = () => {
 // Memoize the total points calculation
   const totalPoints = useMemo(() => {
     const totalCost = previousOrders.reduce((total, order) => total + order.total, 0);
-    return totalCost * 100; // 100 points for every dollar
+    return Math.round(totalCost * 100); // 100 points for every dollar
   }, [previousOrders]);
 
     const customerInfo = {
@@ -390,7 +390,7 @@ const Account = () => {
                                         </Button>
 
                                         <Typography style={{ fontSize: '15px', fontWeight: 'bold', color: 'grey', textAlign: 'right',}}>
-                                            Cart Total: ${order.total}
+                                            Cart Total: ${order.total.toFixed(2)}
                                         </Typography>
 
                                         <Divider
@@ -412,7 +412,7 @@ const Account = () => {
                                            order.items.map((item, index) => (
                                              <li key={index}>
                                                {item.name}
-                                               <span style={{ paddingLeft: '2em' }}> ${item.itemPrice}</span>
+                                               <span style={{ paddingLeft: '2em' }}> ${item.itemPrice.toFixed(2)}</span>
                                                <span style={{ paddingLeft: '2em' }}> x{item.quantity}</span>
                                              </li>
                                            ))
