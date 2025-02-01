@@ -4,7 +4,9 @@ import { Button, Divider, Container, Box, Card, CardContent, Grid, Typography } 
 import { styled } from '@mui/system';
 import axios from "axios";
 import { addToCart } from '../store/cartSlice';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import FavoritesList from '../components/FavoritesList';
+
 
 import logoImage from '../assets/images/reciepe-dash-black-yellow.png';
 import plateImage from '../assets/images/plate-243.png';
@@ -41,14 +43,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
   alignItems: 'flex-end',
 }));
 
-const favorites = [
-  'Beef Wellington',
-  'Cajun Crab',
-  'Chicken and Waffles',
-  'Jollof Rice',
-  'Shawarma',
-  'Wiener Schnitzel'
-];
+
 
 const dashboardData = {
   totalStuff1: 23,
@@ -261,25 +256,14 @@ const Account = () => {
             <Grid item xs={12} md={5}>
                 <Box>
                     <CardContent>
-                        <StyledHeaderTypography variant="h6">Favorites</StyledHeaderTypography>
-                        <ul
-                            style={{
-                                display: 'grid',
-                                gridTemplateColumns: 'repeat(2, 1fr)',
-                                gap: '5px',
-                                paddingLeft: '30px',
-                                textAlign: 'left',
-                            }}
-                        >
-                            {favorites.map((item, index) => (
-                                <li key={index} style={{ marginBottom: '0' }}>
-                                    {item}
-                                </li>
-                            ))}
-                        </ul>
+                    <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                        Favorites
+                    </Typography>
+                    <FavoritesList />
                     </CardContent>
                 </Box>
             </Grid>
+
         </Grid>
 
             {/* Dashboard Stats Section */}

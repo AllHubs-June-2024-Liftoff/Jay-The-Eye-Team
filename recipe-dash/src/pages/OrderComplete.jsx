@@ -1,10 +1,15 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Typography, Container, Box, Button } from "@mui/material";
 
 const OrderComplete = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const totalPrice = location.state?.totalPrice || 0; // Fallback to 0 if state is undefined
+
+  const handleRedirect = () => {
+    navigate("/"); // Use navigate instead of window.location.href to avoid a full page reload
+  };
 
   return (
     <Container
@@ -27,11 +32,7 @@ const OrderComplete = () => {
           The chef will begin preparing your order, and it will be on the way shortly.
         </Typography>
       </Box>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => window.location.href = "/"} // Redirect to home
-      >
+      <Button variant="contained" color="primary" onClick={handleRedirect}>
         Return to Home
       </Button>
     </Container>
