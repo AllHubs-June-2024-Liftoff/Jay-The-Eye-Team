@@ -30,8 +30,6 @@ import Cart from "../pages/Cart";
 import PaymentForm from "../pages/PaymentForm";
 import NotFound404 from "../pages/NotFound404";
 
-import ChiliDraft from "../pages/ChiliDraft";
-
 const StyledNavLink = styled(Nav.Link)`
   text-decoration: none;
   color: white;
@@ -198,7 +196,6 @@ function NavBar() {
 
           {/* Catch-all route for 404 page */}
           <Route path="*" element={<NotFound404 />} />
-          <Route path="/chili" element={<ChiliDraft />} />
 
         </Routes>
       </div>
