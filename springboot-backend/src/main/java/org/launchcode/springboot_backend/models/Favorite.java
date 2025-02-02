@@ -1,5 +1,6 @@
 package org.launchcode.springboot_backend.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -12,14 +13,18 @@ public class Favorite {
 //    user
 //    plate
 
+    // INDEPENDENT FIELDS
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    // RELATIONAL MAPPINGS
     @ManyToOne
+    @JsonManagedReference // Prevent recursion in api data
     private Customer customer;
 
     @ManyToOne
+    @JsonManagedReference
     private Plate plates;
 
     public Favorite() {}
@@ -32,7 +37,6 @@ public class Favorite {
     public Customer getUsers() {
         return customer;
     }
-
     public void setUsers(Customer customer) {
         this.customer = customer;
     }
@@ -40,7 +44,6 @@ public class Favorite {
     public Plate getPlates() {
         return plates;
     }
-
     public void setPlates(Plate plates) {
         this.plates = plates;
     }

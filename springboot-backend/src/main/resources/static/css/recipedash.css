@@ -290,6 +290,8 @@ button, input[type="submit"] {
     border-color: black;
     font-size: 1.15em;
     width: 125px;
+    background: black;
+    border-radius: 5px;
 }
 
 .button-api:hover {

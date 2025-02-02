@@ -6,6 +6,7 @@ import axios from "axios";
 import { addToCart } from '../store/cartSlice';
 import { useParams, useNavigate } from 'react-router-dom';
 
+import FavoritesList from '../components/FavoritesList';
 import logoImage from '../assets/images/reciepe-dash-black-yellow.png';
 import plateImage from '../assets/images/plate-243.png';
 import deliveryImage from '../assets/images/delivery-243.png';
@@ -40,15 +41,6 @@ const StyledCard = styled(Card)(({ theme }) => ({
   justifyContent: 'center',
   alignItems: 'flex-end',
 }));
-
-const favorites = [
-  'Beef Wellington',
-  'Cajun Crab',
-  'Chicken and Waffles',
-  'Jollof Rice',
-  'Shawarma',
-  'Wiener Schnitzel'
-];
 
 const dashboardData = {
   totalStuff1: 23,
@@ -92,7 +84,7 @@ const Account = () => {
 // Memoize the total points calculation
   const totalPoints = useMemo(() => {
     const totalCost = previousOrders.reduce((total, order) => total + order.total, 0);
-    return totalCost * 100; // 100 points for every dollar
+    return Math.round(totalCost * 100); // 100 points for every dollar
   }, [previousOrders]);
 
     const customerInfo = {
@@ -262,21 +254,7 @@ const Account = () => {
                 <Box>
                     <CardContent>
                         <StyledHeaderTypography variant="h6">Favorites</StyledHeaderTypography>
-                        <ul
-                            style={{
-                                display: 'grid',
-                                gridTemplateColumns: 'repeat(2, 1fr)',
-                                gap: '5px',
-                                paddingLeft: '30px',
-                                textAlign: 'left',
-                            }}
-                        >
-                            {favorites.map((item, index) => (
-                                <li key={index} style={{ marginBottom: '0' }}>
-                                    {item}
-                                </li>
-                            ))}
-                        </ul>
+                        <FavoritesList />
                     </CardContent>
                 </Box>
             </Grid>
@@ -349,7 +327,7 @@ const Account = () => {
                     <Typography>Loading previous orders...</Typography>
                 ) : previousOrders.length === 0 || error ? (
                           <Grid item xs={12}>
-                              <Card sx={{ padding: 2, backgroundColor: '#f9f9f9', textAlign: 'center', boxShadow: 2 }}>
+                              <Card sx={{ padding: 2, backgroundColor: '#f7f7f7', textAlign: 'center', boxShadow: 2 }}>
                                   <CardContent>
                                       <Typography variant="body1">
                                           {"No previous orders found."}
@@ -360,8 +338,9 @@ const Account = () => {
                 ) : (
                     <Grid container spacing={1}>
                         {previousOrders.map((order, index) => (
-                            <Grid item xs={12} md={6} key={index}>
-                                <Card sx={{ maxWidth: '350px', maxHeight: 'auto', overflow: 'visible', margin: 0 }}>
+                            <Grid item xs={12} sm={4} md={4} key={index}>
+                                <Card sx={{ maxWidth: '350px', maxHeight: '150px', overflow: 'auto', margin: 0,
+                                    backgroundColor: '#f7f7f7', }}>
                                     <CardContent>
 
                                         <Typography variant="body1" style={{fontWeight: 'bold' }}>
@@ -390,7 +369,7 @@ const Account = () => {
                                         </Button>
 
                                         <Typography style={{ fontSize: '15px', fontWeight: 'bold', color: 'grey', textAlign: 'right',}}>
-                                            Cart Total: ${order.total}
+                                            Cart Total: ${order.total.toFixed(2)}
                                         </Typography>
 
                                         <Divider
@@ -412,7 +391,7 @@ const Account = () => {
                                            order.items.map((item, index) => (
                                              <li key={index}>
                                                {item.name}
-                                               <span style={{ paddingLeft: '2em' }}> ${item.itemPrice}</span>
+                                               <span style={{ paddingLeft: '2em' }}> ${item.itemPrice.toFixed(2)}</span>
                                                <span style={{ paddingLeft: '2em' }}> x{item.quantity}</span>
                                              </li>
                                            ))
@@ -420,8 +399,6 @@ const Account = () => {
                                            <li>No items available</li>
                                          )}
                                        </ul>
-
-
 
                                     </CardContent>
                                 </Card>

@@ -4,6 +4,8 @@ import { Favorite, FavoriteBorder } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
+import {addFavoritePlate,removeFavoritePlate,fetchFavoritePlates,selectFavoritePlates} from '../store/favoritesSlice';
 import { fetchMenu, selectMenuItems, selectMenuStatus } from '../store/menuSlice';
 import { addToCart } from '../store/cartSlice';
 import NutritionBox from '../components/NutritionBox';
@@ -11,11 +13,11 @@ import ReviewList from '../components/reviews/ReviewList';
 import ReviewAddByCustomer from '../components/reviews/ReviewAddByCustomer';
 
 const dividerGoldStyle = {
-    marginTop: 2,
-    marginBottom: 2,
-    borderWidth: 3,
-    borderColor: '#DAA520',
-    width: '100%',
+  marginTop: 2,
+  marginBottom: 2,
+  borderWidth: 3,
+  borderColor: '#DAA520',
+  width: '100%',
 };
 
 const Plate = () => {
@@ -25,10 +27,11 @@ const Plate = () => {
 
   const plates = useSelector(selectMenuItems);
   const menuStatus = useSelector(selectMenuStatus);
+  const favoritePlates = useSelector(selectFavoritePlates);
+  const user = useSelector((state) => state.user);
+
   const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
-
-  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     if (menuStatus === 'idle') {
@@ -36,14 +39,20 @@ const Plate = () => {
     }
   }, [menuStatus, dispatch]);
 
+// Fetch and check if the plate is a favorite
   useEffect(() => {
     if (user?.customer_id) {
-      axios
-        .get(`http://localhost:8080/favorites/is-favorite?customerId=${user.customer_id}&plateId=${plateId}`)
-        .then((response) => setIsFavorite(response.data))
-        .catch((error) => console.error("Error checking favorite status:", error));
+      dispatch(fetchFavoritePlates(user.customer_id));
     }
-  }, [user, plateId]);
+  }, [user, dispatch]);
+
+  useEffect(() => {
+    if (favoritePlates.includes(parseInt(plateId, 10))) {
+      setIsFavorite(true);
+    } else {
+      setIsFavorite(false);
+    }
+  }, [favoritePlates, plateId]);
 
   const filteredPlate = useMemo(
     () => plates.find((plate) => plate.id === Number(plateId)),
@@ -64,38 +73,27 @@ const Plate = () => {
     }
   };
 
-  const toggleFavorite = async () => {
+  const toggleFavorite = () => {
     if (!user?.customer_id) {
       console.error("User not logged in");
       return;
     }
-  
-    const favoritePayload = {
-      customer_id: user.customer_id,
-      plate_id: plateId,
-    };
-  
-    try {
-      if (isFavorite) {
-        await axios.delete("http://localhost:8080/favorites/remove", {
-          params: {
-            customerId: user.customer_id,
-            plateId: plateId,
-          },
-        });
-        setIsFavorite(false);
-        console.log("Favorite removed successfully");
-      } else {
-        await axios.post("http://localhost:8080/favorites/add", favoritePayload);
-        setIsFavorite(true);
-        console.log("Favorite added successfully");
-      }
-    } catch (error) {
-      console.error("Error toggling favorite:", error.response?.data || error.message);
+
+    const plateIdNumber = parseInt(plateId, 10);
+
+    if (isFavorite) {
+      dispatch(removeFavoritePlate({ customerId: user.customer_id, plateId: plateIdNumber }))
+        .unwrap()
+        .then(() => setIsFavorite(false))
+        .catch((error) => console.error("Error removing favorite:", error));
+    } else {
+      dispatch(addFavoritePlate({ customerId: user.customer_id, plateId: plateIdNumber }))
+        .unwrap()
+        .then(() => setIsFavorite(true))
+        .catch((error) => console.error("Error adding favorite:", error));
     }
   };
-  
-  
+
   if (menuStatus === 'loading') {
     return <Typography variant="h6" align="center">Loading...</Typography>;
   }
@@ -119,22 +117,25 @@ const Plate = () => {
                       alt={`${filteredPlate.name}`}
                       style={{ width: '250px', height: '250px', objectFit: 'cover', borderRadius: '10px', display: 'block' }}
                     />
-                        <IconButton
-                          onClick={toggleFavorite}
-                          aria-label="Add to Favorites"
-                          sx={{
-                            '&:hover': {
-                              backgroundColor: 'black',
-                              color: '#DAA520',
-                            },
-                          }}
-                        >
-                          {isFavorite ? (
-                            <Favorite sx={{ color: 'red', fontSize: '50px' }} />
-                          ) : (
-                            <FavoriteBorder sx={{ color: '#DAA520', fontSize: '50px' }} />
-                          )}
-                        </IconButton>
+
+                    {user.loginStatus && (
+                      <IconButton
+                        onClick={toggleFavorite}
+                        aria-label={isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
+                        sx={{
+                          '&:hover': {
+                            backgroundColor: 'black',
+                            color: '#DAA520',
+                          },
+                        }}
+                      >
+                        {isFavorite ? (
+                          <Favorite sx={{ color: 'red', fontSize: '50px' }} />
+                        ) : (
+                          <FavoriteBorder sx={{ color: '#DAA520', fontSize: '50px' }} />
+                        )}
+                      </IconButton>
+                    )}
                   </Grid>
 
                   <Grid item xs={12}>

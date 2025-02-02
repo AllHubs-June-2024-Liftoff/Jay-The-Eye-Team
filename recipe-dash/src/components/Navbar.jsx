@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import { BrowserRouter, Link, Routes, Route, useNavigate } from "react-router-dom";
 
@@ -6,6 +6,8 @@ import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../store/userSlice";
 import { selectCartTotalQuantity } from "../store/cartSlice";
+import { fetchFavoritePlates, selectFavoritePlates } from "../store/favoritesSlice";
+
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { styled } from '@mui/system';
@@ -25,13 +27,8 @@ import Register from "../pages/Register";
 import OrderComplete from "../pages/OrderComplete";
 import Plate from "../pages/Plate";
 import Cart from "../pages/Cart";
-import PaymentForm from "../pages/PaymentForm"
+import PaymentForm from "../pages/PaymentForm";
 import NotFound404 from "../pages/NotFound404";
-
-// import AddPlate from "../pages/AddPlate";
-// import Admin from "../pages/Admin";
-// import Reviews from "../pages/Reviews";
-// import MenuItem from "../pages/MenuItem";
 
 import ChiliDraft from "../pages/ChiliDraft";
 
@@ -49,9 +46,19 @@ function NavBar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loginStatus, email, nameFirst, isChef } = useSelector((state) => state.user) ;
+  const { loginStatus, customer_id, nameFirst, isChef } = useSelector((state) => state.user);
   const totalQuantity = useSelector(selectCartTotalQuantity); // Fetch total quantity from cart
   const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+
+    useEffect(() => {
+      if (loginStatus && customer_id) {
+        // Fetch favorites when NavBar loads
+        dispatch(fetchFavoritePlates(customer_id));
+      }
+    }, [loginStatus, customer_id, dispatch]);
+
+  const favoritePlates = useSelector(selectFavoritePlates);
+
   const handleLogout = () => {
     dispatch(logout());
     window.location.href = '/';
@@ -192,12 +199,6 @@ function NavBar() {
           {/* Catch-all route for 404 page */}
           <Route path="*" element={<NotFound404 />} />
           <Route path="/chili" element={<ChiliDraft />} />
-
-{/* Deleted */}
-{/*         <Route path="/add_plate" element={<AddPlate />} /> */}
-{/*         <Route path="/admin" element={<Admin />} /> */}
-{/*         <Route path="/reviews" element={<Reviews />} /> */}
-{/*         <Route path="/menuitem" element={<MenuItem />} /> */}
 
         </Routes>
       </div>

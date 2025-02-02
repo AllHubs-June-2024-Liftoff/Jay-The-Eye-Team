@@ -32,6 +32,7 @@ public class Delivery {
       joinColumns = @JoinColumn(name = "delivery_id"),
       inverseJoinColumns = @JoinColumn(name = "plate_id")
     )
+    @JsonManagedReference
     private List<Plate> plates;
 
     // INDEPENDENT

@@ -5,6 +5,7 @@ import { selectCartTotalPrice, selectCartItems, clearCart } from "../store/cartS
 import axios from "axios";
 import { Container, Typography, Button, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import creditCardImage from '../assets/images/Credit-Card-Icon.png';
 
 const PaymentForm = () => {
   const stripe = useStripe();
@@ -116,37 +117,47 @@ const PaymentForm = () => {
         borderRadius: "8px",
         backgroundColor: "#f9f9f9",
         textAlign: "center",
-        maxWidth: "600px",
+        width: "750px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
       }}
     >
-      <Typography variant="h5" align="center" gutterBottom sx={{ fontWeight: "bold", color: "#DAA520" }}>
-        Enter Your Payment Details
+      <Typography variant="h5" align="center"
+        gutterBottom sx={{ fontWeight: "bold", color: "#DAA520", marginBottom: 1 }}>
+        Enter Your Payment Details Below
       </Typography>
+      <img
+         src={creditCardImage}
+         alt="creditCardImage"
+         style={{
+           width: "35%",
+           display: "block",
+           marginBottom: "50px",
+         }}
+       />
 
       <form onSubmit={handleSubmit}>
         <Box sx={{ marginBottom: 3 }}>
-          <Typography variant="h6" component="span" sx={{ marginRight: 2 }}>
-            Order Summary
-          </Typography>
-          <Typography component="span">Total: ${totalPrice.toFixed(2)}</Typography>
+          <Typography variant="h4" component="span"> Cart Total:</Typography>
+          <Typography component="span" variant="h4" fontWeight="bold"> ${totalPrice.toFixed(2)}</Typography>
         </Box>
 
         <Box sx={{ marginBottom: 3, textAlign: "left" }}>
-          <Typography variant="h6">Card Details</Typography>
           <Box
             sx={{
               padding: "12px",
               border: "1px solid #ccc",
               borderRadius: "4px",
               backgroundColor: "#fff",
-              width: "100%",
+              width: "600px",
             }}
           >
             <CardElement
               options={{
                 style: {
                   base: {
-                    fontSize: "16px",
+                    fontSize: "20px",
                     color: "#424770",
                     "::placeholder": {
                       color: "#aab7c4",
@@ -172,7 +183,13 @@ const PaymentForm = () => {
           </Typography>
         )}
 
-        <Button type="submit" variant="contained" color="primary" disabled={!stripe || isProcessing} sx={{ marginTop: 3 }}>
+        <Button type="submit" variant="contained" color="primary" disabled={!stripe || isProcessing}
+            sx={{ marginTop: 3,
+                backgroundColor: "#DAA520",
+                  "&:hover": {
+                    backgroundColor: "black",
+                  },
+              }}>
           {isProcessing ? "Processing..." : "Pay Now"}
         </Button>
       </form>

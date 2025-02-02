@@ -54,7 +54,7 @@ const About = () => {
         <img
           src={logoImage}
           alt="Logo"
-          style={{ width: "40%", marginLeft: "auto", marginRight: "auto", display: "block" }}
+          style={{ width: "40%", margin: "10px auto", display: "block" }}
         />
 
         <Typography variant="body1" paragraph align="left" style={{ fontSize: '1.2rem', lineHeight: '2' }}>

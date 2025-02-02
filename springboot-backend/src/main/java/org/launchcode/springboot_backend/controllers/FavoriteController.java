@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -44,7 +45,22 @@ public class FavoriteController {
 
         return ResponseEntity.ok("Favorite added successfully");
     }
+    @GetMapping("/{customerId}")
+    public ResponseEntity<?> getFavoritePlateIds(@PathVariable int customerId) {
+        Optional<Customer> customerOpt = customerRepository.findById(customerId);
 
+        if (customerOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found");
+        }
+
+        // Fetch the IDs of favorite plates for the customer
+        List<Integer> plateIds = favoriteRepository.findAllByCustomerId(customerId)
+                .stream()
+                .map(favorite -> favorite.getPlates().getId())
+                .toList();
+
+        return ResponseEntity.ok(plateIds);
+    }
     @DeleteMapping("/remove")
     public ResponseEntity<?> removeFavorite(@RequestParam int customerId, @RequestParam int plateId) {
         Optional<Favorite> favorite = favoriteRepository.findByCustomerIdAndPlatesId(customerId, plateId);
@@ -57,4 +73,3 @@ public class FavoriteController {
         }
     }
 }
-
