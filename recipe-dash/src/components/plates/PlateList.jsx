@@ -1,11 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Grid, CircularProgress, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
-// import { useSelector, useDispatch } from 'react-redux';
-// import { fetchMenu, selectMenuItems, selectMenuStatus } from '../../store/menuSlice';
 import PlateCard from './PlateCard';
 
-const PlateList = ( {plates, status}) => {
+const PlateList = ({ plates, status }) => {
 
   if (status === 'loading') {
     return (
@@ -35,9 +33,7 @@ const PlateList = ( {plates, status}) => {
     <Grid container spacing={4}>
       {plates.map((plate) => (
         <Grid item key={plate.id} xs={6} sm={3} md={3}>
-          <Link to={`/plate/${plate.id}`} style={{ textDecoration: 'none' }}>
-            <PlateCard plate={plate} />
-          </Link>
+          <PlateCard plate={plate} />
         </Grid>
       ))}
     </Grid>
@@ -45,5 +41,3 @@ const PlateList = ( {plates, status}) => {
 };
 
 export default PlateList;
-
-

@@ -1,187 +1,158 @@
-    import React, { useState } from "react";
-    import axios from "axios";
+import React, { useState } from "react";
+import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate, Link } from "react-router-dom";
+import { Grid, Button, TextField, Typography, Divider } from "@mui/material";
+import { login } from "../store/userSlice";
+import { selectCartTotalPrice } from "../store/cartSlice";
+import { styled } from "@mui/system";
+import logoImage from '../assets/images/reciepe-dash-black-yellow.png';
 
-    import { useSelector, useDispatch } from "react-redux";
-    import { useNavigate, Link } from "react-router-dom";
-    import { Divider, Box, Button, Checkbox, Container, FormControlLabel, Grid, Paper, TextField, Typography, useTheme, useMediaQuery } from "@mui/material";
-    import { styled } from "@mui/system";
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  "& .MuiInputLabel-root": {
+    color: "black", // default color
+    "&.Mui-focused": {
+      color: "#DAA520", // change label color when focused
+    },
+  },
+  "& .MuiOutlinedInput-root": {
+    "&:hover fieldset": {
+      borderColor: "#DAA520", // border color on hover
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#DAA520", // border color when focused
+    },
+  },
+  marginBottom: "1rem",
+}));
 
-    import { login } from "../store/userSlice"; // Import the login action from your Redux slice
-    import {selectCartTotalPrice} from "../store/cartSlice";
-    import logoImage from '../assets/images/reciepe-dash-black-yellow.png';
+const Login = () => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-    const StyledTextField = styled(TextField)(({ theme }) => ({
-      "& .MuiInputLabel-root": {
-        color: "black", // default color
-        "&.Mui-focused": {
-          color: "#DAA520", // change label color when focused
-        },
-      },
-      "& .MuiOutlinedInput-root": {
-        "&:hover fieldset": {
-          borderColor: "#DAA520", // border color on hover
-        },
-        "&.Mui-focused fieldset": {
-          borderColor: "#DAA520", // border color when focused
-        },
-      },
-      marginBottom: "1rem",
-    }));
+  const [errorMessage, setErrorMessage] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const totalPrice = useSelector(selectCartTotalPrice);
 
-    const Login = () => {
-        const [formData, setFormData] = useState({
-            email: "",
-            password: "",
-        });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
-        const [errorMessage, setErrorMessage] = useState("");
-        const dispatch = useDispatch();
-        const navigate = useNavigate();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErrorMessage("");
 
-        const loginStatus = useSelector((state) => state.user.loginStatus);
-        const totalPrice = useSelector(selectCartTotalPrice);
+    try {
+      const response = await axios.post("http://localhost:8080/api/login", formData);
+      const { user_id, customer_id, email, nameFirst, nameLast, isChef, address, phone } = response.data;
 
-        const handleChefLogin = () => {
-            dispatch(login({ nameFirst: "Chef", isChef: true }));
-            navigate("/");
-        };
-        const handleUserLogin = () => {
-            dispatch(login({ nameFirst: "John", isChef: false }));
-            navigate("/");
-        };
-        const handleChange = (e) => {
-            const { name, value } = e.target;
-            setFormData({ ...formData, [name]: value });
-        };
+      // Update Redux store
+      dispatch(login({
+        user_id,
+        customer_id,
+        email,
+        nameFirst,
+        nameLast,
+        isChef,
+        loginStatus: true,
+        address,
+        phone,
+      }));
 
-        const handleSubmit = async (e) => {
-          e.preventDefault();
-          setErrorMessage("");
+      // Save user data to localStorage
+      localStorage.setItem('userData', JSON.stringify({ user_id, customer_id, email, nameLast, nameFirst, isChef,
+          address, phone}));
 
-          try {
-            const response = await axios.post("http://localhost:8080/api/login", formData);
-            console.log('Login API Response:', response.data);
+      // Redirect to homepage
+      navigate("/");
+    } catch (error) {
+      setErrorMessage(error.response?.data || "Login failed. Please try again.");
+    }
+  };
 
-            // Extract user and customer details
-            const { user_id, customer_id, email, firstName, lastName, isChef, address, phone } = response.data;
+  const handleChefLogin = () => {
+    dispatch(login({ nameFirst: "Chef", isChef: true }));
+    navigate("/");
+  };
 
-            // Update Redux store
-            try {
-            dispatch(
-              login({
-                user_id,
-                customer_id,
-                email,
-                nameFirst: firstName,
-                nameLast: lastName,
-                isChef,
-                loginStatus: true,
-                address: address,
-                phone: phone,
-              }));
-          } catch (err) {
-              console.error("Dispatch error:", err);
-              }
+  const handleUserLogin = () => {
+    dispatch(login({ nameFirst: "John", isChef: false }));
+    navigate("/");
+  };
 
-            // Redirect to homepage
-            navigate("/");
-          } catch (error) {
-            setErrorMessage(error.response?.data || "Login failed. Please try again.");
-          }
-        };
+  return (
+    <div className="container">
+      <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: "bold", color: "#DAA520", marginBottom: 3 }}>
+        {totalPrice > 0 ? "Login to View Cart" : "Login"}
+      </Typography>
 
+      <form onSubmit={handleSubmit}>
+        <Grid>
+          <StyledTextField
+            fullWidth
+            label="E-mail"
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            variant="outlined"
+          />
+          <StyledTextField
+            fullWidth
+            label="Password"
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            variant="outlined"
+          />
+        </Grid>
 
-        return (
-            <div className="container" style={{ display: 'flex', flexDirection: 'column', justifyContent:
-                'flex-start', height: '100vh', marginTop: '50px' }}>
+        {errorMessage && <p className="text-danger">{errorMessage}</p>}
 
-            <Typography
-              variant="h4"
-              align="center"
-              sx={{
-                fontWeight: "bold",
-                color: "#DAA520",
-                marginBottom: 3,
-                justifyContent: 'flex-start',
-              }}
-            >
-              {totalPrice > 0 ? "Login to View Cart" : "Login" }
-            </Typography>
+        <Grid container spacing={1} justifyContent="center" alignItems="center" direction="row">
+          <Grid item>
+            <Button type="submit" variant="contained" sx={{ backgroundColor: "#DAA520", "&:hover": { backgroundColor: "black" } }} size="large">
+              Login
+            </Button>
+          </Grid>
+        </Grid>
 
-                <form onSubmit={handleSubmit} >
-
-                    <Grid>
-                        <StyledTextField
-                            fullWidth
-                            label="E-mail"
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                            variant="outlined"
-                        />
-                        <StyledTextField
-                            fullWidth
-                            label="Password"
-                            type="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                            variant="outlined"
-                        />
-                    </Grid >
-
-                    {errorMessage && <p className="text-danger">{errorMessage}</p>}
-
-                   <Grid container spacing={1} justifyContent="center" alignItems="center" direction="row">
-                       <Grid item>
-                           <Button
-                               type="submit"
-                               variant="contained"
-                               sx={{
-                                 backgroundColor: "#DAA520",
-                                 "&:hover": {
-                                   backgroundColor: "black",
-                                 },
-                               }}
-                               size="large"
-                               width="200px"
-                           >Login
-                           </Button>
-                       </Grid>
-                   </Grid>
-
-                   <Grid item
-                        container
-                        direction="column"
-                        alignItems="center"
-                        justifyContent="center"
-                   >
-                       <Grid item>
-                           <img
-                               src={logoImage}
-                               alt="Logo"
-                               style={{
-                                   width: "200px",
-                                   display: "block",
-                                   marginTop: "150px",
-                               }}
-                           />
-                       </Grid>
-                       <Grid item>
-                           <div className="mt-3">
-                               <p>
-                                   Don’t have an account? <Link to="/register">Register here</Link>
-                               </p>
-                           </div>
-                       </Grid>
-                   </Grid>
-
-                </form>
+        <Grid container direction="column" alignItems="center" justifyContent="center">
+          <Grid item>
+            <div className="mt-3">
+              <p>Don’t have an account? <Link to="/register">Register here</Link></p>
             </div>
-        );
-    };
+          </Grid>
+        </Grid>
 
-    export default Login;
+        <Grid container justifyContent="center" alignItems="center" direction="column">
+          <Grid item xs={12}>
+            <Divider sx={{ marginTop: 8, marginBottom: 1, borderWidth: 3, borderColor: '#FF00FF', width: '300px' }} />
+          </Grid>
+          <Grid item xs={12} sx={{ textAlign: 'center', width: '100%' }}>
+            <p style={{ color: '#FF00FF', fontWeight: 'bold' }}>Public User Logins - For Demo Only</p>
+          </Grid>
+          <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+            <button onClick={handleChefLogin}>Log in as a chef</button>
+            <button onClick={handleUserLogin}>Log in as a customer</button>
+          </Grid>
+        </Grid>
+      </form>
+
+      <Grid item container direction="column" alignItems="center" justifyContent="center">
+        <Grid item>
+          <img src={logoImage} alt="Logo" style={{ width: "150px", display: "block", marginTop: "60px" }} />
+        </Grid>
+      </Grid>
+    </div>
+  );
+};
+
+export default Login;

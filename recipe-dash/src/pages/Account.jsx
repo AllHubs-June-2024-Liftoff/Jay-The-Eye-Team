@@ -59,8 +59,23 @@ const Account = () => {
     const [error, setError] = useState(null);
     const [orderHistory, setOrderHistory] = useState([]);
 
-    const { loginStatus, email, nameFirst, nameLast, isChef, address, phone, customer_id } = useSelector((state) => state.user);
-    console.log('customer_id', customer_id);
+//  const { loginStatus, email, nameFirst, nameLast, isChef, address, phone, customer_id } = useSelector((state) => state.user);
+//  console.log('customer_id', customer_id);
+
+    // Get user data from localStorage
+    const storedUserData = JSON.parse(localStorage.getItem('userData'));
+
+    // Destructure user data from the storedUserData (fallback to empty object if not available)
+    const {
+      loginStatus = false,
+      email = '',
+      nameFirst = '',
+      nameLast = '',
+      isChef = false,
+      address = '',
+      phone = '',
+      customer_id = null,
+    } = storedUserData || {};
 
     // Memoize the unique meal count to avoid recalculating on every render
       const uniqueMealsCount = useMemo(() => {
@@ -105,7 +120,7 @@ const Account = () => {
                                 } else {
                 const platesResponse = await axios.get('http://localhost:8080/plates/api');
 
-                console.log('Redux State:', { address, phone, nameFirst, nameLast });
+//                 console.log('Redux State:', { address, phone, nameFirst, nameLast });
 
 
                 const platesMap = platesResponse.data.reduce((acc, plate) => {
@@ -126,8 +141,8 @@ const Account = () => {
                         const plateData = platesMap[plateId] || {};
                         const imageUrl = plateData.plateImage || '';
 
-                        console.log('Parsed plateStr:', plateStr);
-                        console.log('Generated item:', { plateId, name: plateName, itemPrice, quantity, imageUrl });
+//                         console.log('Parsed plateStr:', plateStr);
+//                         console.log('Generated item:', { plateId, name: plateName, itemPrice, quantity, imageUrl });
 
 
                         return { plateId, name: plateName, itemPrice, quantity, imageUrl };
@@ -139,7 +154,7 @@ const Account = () => {
                 }
                 setError(null);
             } catch (err) {
-                console.error('Error fetching previous orders:', err);
+//                 console.error('Error fetching previous orders:', err);
                 setPreviousOrders([]);
                 setError(null);
                 } finally {
@@ -151,9 +166,9 @@ const Account = () => {
     }, [customer_id]);
 
     const handleReorderItems = async (order) => {
-        console.log("Order:", order);
+//         console.log("Order:", order);
         order.items.forEach((item, index) => {
-            console.log(`Item ${index + 1}:`, item);
+//             console.log(`Item ${index + 1}:`, item);
         });
 
         order.items.map((item, index) => (
@@ -175,9 +190,9 @@ const Account = () => {
             try {
                 const response = await axios.get(`http://localhost:8080/deliveries/order-history/${userId}`);
                 setOrderHistory(response.data);
-                console.log("Order history fetched:", response.data);
+//                 console.log("Order history fetched:", response.data);
             } catch (err) {
-                console.error("Error fetching order history:", err);
+//                 console.error("Error fetching order history:", err);
                 setError(err.message);
             }
         };
@@ -195,6 +210,7 @@ const Account = () => {
              justifyContent: 'flex-start',
              alignItems: 'center',
              paddingTop: 0,
+             margin: 'auto',
              width: '90vw',
              maxWidth: '100%',
            }}
@@ -207,7 +223,7 @@ const Account = () => {
                 sx={{
                     fontWeight: 'bold',
                     color: '#DAA520',
-                    marginRight: 3,
+                    margin: 'auto',
                 }}
             >
                 Account Details
@@ -215,7 +231,7 @@ const Account = () => {
 
             <Divider
                 sx={{
-                    marginTop: 0,
+                    marginTop: 3,
                     marginBottom: 0,
                     borderWidth: 3,
                     borderColor: 'black',
@@ -261,7 +277,7 @@ const Account = () => {
         </Grid>
 
             {/* Dashboard Stats Section */}
-            <Grid container spacing={3} sx={{ marginBottom: 7, }}>
+            <Grid container spacing={3} sx={{ marginTop: 2, marginBottom: 7, }}>
 
                 <Grid item xs={12} md={4}>
                   <StyledCard style={{ backgroundColor: '#f7f7f7',}}>

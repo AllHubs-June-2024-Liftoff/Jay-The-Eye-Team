@@ -14,8 +14,9 @@ const userSlice = createSlice({
     phone: "",
   },
   reducers: {
+    // When login action is dispatched, persist the user data
     login: (state, action) => {
-      const { user_id, customer_id, email, nameFirst, nameLast, isChef, address, phone } = action.payload;
+      const { user_id, customer_id, email, nameFirst, nameLast, isChef, address, phone, loginStatus } = action.payload;
       state.loginStatus = true;
       state.user_id = user_id;
       state.customer_id = customer_id;
@@ -23,9 +24,11 @@ const userSlice = createSlice({
       state.nameFirst = nameFirst;
       state.nameLast = nameLast;
       state.isChef = isChef;
-      state.address = address; // Update address
-      state.phone = phone;     // Update phone
+      state.address = address;
+      state.phone = phone;
+
     },
+    // Logout will clear all user data and reset loginStatus
     logout: (state) => {
       state.loginStatus = false;
       state.user_id = null;
@@ -34,12 +37,14 @@ const userSlice = createSlice({
       state.nameFirst = "";
       state.nameLast = "";
       state.isChef = false;
-      state.address = ""; // Reset address
-      state.phone = "";   // Reset phone
+      state.address = "";
+      state.phone = "";
+      localStorage.clear();
     },
   },
 });
 
 export const { login, logout } = userSlice.actions;
 export const selectUser = (state) => state.user;
+
 export default userSlice.reducer;

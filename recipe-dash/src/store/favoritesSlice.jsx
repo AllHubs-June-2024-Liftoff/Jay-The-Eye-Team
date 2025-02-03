@@ -47,12 +47,14 @@ const favoritesSlice = createSlice({
   name: 'favorites',
   initialState: {
     favoritePlates: [], // List of plate IDs
+    isFavoritesFetched: false, // Flag to track whether favorites have been fetched
     status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
     error: null,
   },
   reducers: {
     resetFavoritesState: (state) => {
       state.favoritePlates = [];
+      state.isFavoritesFetched = false; // Reset the flag when resetting state
       state.status = 'idle';
       state.error = null;
     },
@@ -66,10 +68,12 @@ const favoritesSlice = createSlice({
       .addCase(fetchFavoritePlates.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.favoritePlates = action.payload;
+        state.isFavoritesFetched = true; // Set flag to true when data is fetched
       })
       .addCase(fetchFavoritePlates.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
+        state.isFavoritesFetched = false; // Reset the flag if fetching fails
       })
       // Add a favorite plate
       .addCase(addFavoritePlate.fulfilled, (state, action) => {
@@ -89,5 +93,6 @@ export const { resetFavoritesState } = favoritesSlice.actions;
 export const selectFavoritePlates = (state) => state.favorites.favoritePlates;
 export const selectFavoritesStatus = (state) => state.favorites.status;
 export const selectFavoritesError = (state) => state.favorites.error;
+export const selectIsFavoritesFetched = (state) => state.favorites.isFavoritesFetched;
 
 export default favoritesSlice.reducer;
