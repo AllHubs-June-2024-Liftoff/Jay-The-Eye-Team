@@ -108,7 +108,7 @@ const Homepage = () => {
               flexDirection: 'column',
               justifyContent: 'flex-start',
               alignItems: 'center',
-              height: '100vh',
+              minHeight: '100vh',
               paddingTop: '10px'
             }}
           >
